@@ -5,6 +5,7 @@ export default {
   corePlugins: {
     preflight: false,
   },
+  important: "#root",
   theme: {
     extend: {},
   },
