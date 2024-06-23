@@ -1,8 +1,15 @@
 import { CacheProvider } from "@emotion/react";
 
-import { CssBaseline, ThemeProvider } from "@mui/material";
-import theme from "./theme";
+import {
+  CssBaseline,
+  PaletteMode,
+  ThemeProvider,
+  useMediaQuery,
+} from "@mui/material";
+import initTheme from "./theme";
 import createCache from "@emotion/cache";
+import React, { useCallback, useMemo } from "react";
+import ColorModeContext from "./ColorModeContext";
 
 function createEmotionCache() {
   return createCache({ key: "css" });
@@ -11,12 +18,24 @@ function createEmotionCache() {
 export function MuiProvider({ children }: { children: React.ReactNode }) {
   const cache = createEmotionCache();
 
+  const prefersLight = useMediaQuery("(prefers-color-scheme: light)");
+  const [mode, setMode] = React.useState<PaletteMode>(
+    prefersLight ? "light" : "dark"
+  );
+  const toggleColorMode = useCallback(() => {
+    setMode((prev) => (prev === "dark" ? "light" : "dark"));
+    // @TODO save preferences
+  }, []);
+  const theme = useMemo(() => initTheme({ mode }), [mode]);
+
   return (
     <CacheProvider value={cache}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
+      <ColorModeContext.Provider value={{ toggleColorMode }}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline enableColorScheme />
+          {children}
+        </ThemeProvider>
+      </ColorModeContext.Provider>
     </CacheProvider>
   );
 }
