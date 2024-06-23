@@ -53,6 +53,9 @@ module.exports = {
     // Typescript
     {
       files: ["**/*.{ts,tsx}"],
+      rules: {
+        "@typescript-eslint/consistent-type-imports": "warning",
+      },
       plugins: ["@typescript-eslint", "import"],
       parser: "@typescript-eslint/parser",
       settings: {
