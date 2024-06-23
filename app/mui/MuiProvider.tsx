@@ -1,10 +1,6 @@
 import { CacheProvider } from "@emotion/react";
 
-import {
-  CssBaseline,
-  StyledEngineProvider,
-  ThemeProvider,
-} from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme";
 import createCache from "@emotion/cache";
 
@@ -16,15 +12,11 @@ export function MuiProvider({ children }: { children: React.ReactNode }) {
   const cache = createEmotionCache();
 
   return (
-    <>
-      <CacheProvider value={cache}>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            {children}
-          </ThemeProvider>
-        </StyledEngineProvider>
-      </CacheProvider>
-    </>
+    <CacheProvider value={cache}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
+    </CacheProvider>
   );
 }

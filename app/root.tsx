@@ -5,7 +5,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
-import "./tailwind.css";
 import { MuiMeta } from "./mui/MuiMeta";
 import { LinksFunction } from "@remix-run/node";
 import { getMuiLinks } from "./mui/getMuiLinks";
