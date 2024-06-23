@@ -21,8 +21,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <MuiMeta />
         <Links />
       </head>
-      <body id="root">
-        {children}
+      <body>
+        <div id="root">{children}</div>
         <ScrollRestoration />
         <Scripts />
       </body>

@@ -8,14 +8,66 @@ import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { MuiProvider } from "./mui/MuiProvider";
+function clearBrowserExtensionInjectionsBeforeHydration() {
+  document
+    .querySelectorAll(
+      [
+        "html > *:not(body, head)",
+        'script[src*="extension://"]',
+        'link[href*="extension://"]',
+      ].join(", ")
+    )
+    .forEach((s) => {
+      s.parentNode?.removeChild(s);
+    });
+
+  const $targets = {
+    html: {
+      $elm: document.querySelector("html")!,
+      allowedAttributes: ["lang", "dir", "class"],
+    },
+    head: {
+      $elm: document.querySelector("head")!,
+      allowedAttributes: [""],
+    },
+    body: {
+      $elm: document.querySelector("body")!,
+      allowedAttributes: ["class"],
+    },
+  };
+
+  Object.entries($targets).forEach(([, target]) => {
+    target.$elm.getAttributeNames().forEach((attr) => {
+      if (!target.allowedAttributes.includes(attr)) {
+        target.$elm.removeAttribute(attr);
+      }
+    });
+  });
+}
 
 startTransition(() => {
-  hydrateRoot(
+  clearBrowserExtensionInjectionsBeforeHydration();
+
+  const root = hydrateRoot(
     document,
     <StrictMode>
       <MuiProvider>
         <RemixBrowser />
       </MuiProvider>
-    </StrictMode>
+    </StrictMode>,
+    {
+      //Used to fix hydratation errors with extensions in case that our filter wont work
+      onRecoverableError: () => {
+        console.log("Hydration failed! Attempting recovery...");
+        root.render(
+          <StrictMode>
+            <MuiProvider>
+              <RemixBrowser />
+            </MuiProvider>
+          </StrictMode>
+        );
+        console.info("Recovery successful!");
+      },
+    }
   );
 });
