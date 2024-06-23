@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import type { MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
@@ -42,6 +43,7 @@ export default function Index() {
             Remix Docs
           </a>
         </li>
+        <Button className="bg-white">HOLA</Button>
       </ul>
     </div>
   );
