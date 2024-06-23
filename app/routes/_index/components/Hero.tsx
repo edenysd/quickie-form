@@ -41,9 +41,10 @@ export default function Hero() {
               alignSelf: "center",
               textAlign: "center",
               fontSize: "clamp(3.5rem, 10vw, 4rem)",
+              whiteSpace: "break-spaces",
             }}
           >
-            Our latest
+            Our latest{" "}
             <Typography
               component="span"
               variant="h1"
