@@ -7,7 +7,7 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { MuiMeta } from "./mui/MuiMeta";
-import { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import { getMuiLinks } from "./mui/getMuiLinks";
 import { createClient } from "@supabase/supabase-js";
 import SupabaseClientContext from "./supabase/SupabaseClientContext";

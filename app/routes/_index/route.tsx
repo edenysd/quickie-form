@@ -1,5 +1,5 @@
 import { Box, Divider } from "@mui/material";
-import { Theme } from "@mui/material/styles";
+import type { Theme } from "@mui/material/styles";
 import AppAppBar from "./components/AppAppBar";
 import Hero from "./components/Hero";
 import LogoCollection from "./components/LogoCollection";

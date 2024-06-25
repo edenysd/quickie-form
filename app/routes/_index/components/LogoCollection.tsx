@@ -1,5 +1,6 @@
 import { useTheme } from "@emotion/react";
-import { Box, Typography, Grid, Theme } from "@mui/material";
+import type { Theme } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 
 const whiteLogos = [
   "https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/6560628e8573c43893fe0ace_Sydney-white.svg",

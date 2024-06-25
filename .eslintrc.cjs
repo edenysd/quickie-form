@@ -54,7 +54,9 @@ module.exports = {
     {
       files: ["**/*.{ts,tsx}"],
       rules: {
-        "@typescript-eslint/consistent-type-imports": "warning",
+        "@typescript-eslint/consistent-type-imports": 1,
+        "react-hooks/rules-of-hooks": 2,
+        "react-hooks/exhaustive-deps": 1,
       },
       plugins: ["@typescript-eslint", "import"],
       parser: "@typescript-eslint/parser",

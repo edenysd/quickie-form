@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Menu } from "@mui/icons-material";
 import ToggleColorMode from "./ToggleColorMode";
+import type {
+  PaletteMode} from "@mui/material";
 import {
-  PaletteMode,
   AppBar,
   Container,
   Toolbar,

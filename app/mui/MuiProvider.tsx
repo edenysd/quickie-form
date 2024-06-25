@@ -1,8 +1,9 @@
 import { CacheProvider } from "@emotion/react";
 
+import type {
+  PaletteMode} from "@mui/material";
 import {
   CssBaseline,
-  PaletteMode,
   ThemeProvider,
   useMediaQuery,
 } from "@mui/material";
