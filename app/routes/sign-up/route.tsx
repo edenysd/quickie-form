@@ -11,6 +11,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
+import type { MetaFunction } from "@remix-run/react";
 import { Link, useNavigate } from "@remix-run/react";
 import Copyright from "~/components/Copyright";
 import z from "zod";
@@ -20,6 +21,16 @@ import type { FormEvent } from "react";
 import { useCallback, useContext, useReducer, useState } from "react";
 import SupabaseClientContext from "~/supabase/SupabaseClientContext";
 import { LoadingButton } from "@mui/lab";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Quickie Form | Sign up" },
+    {
+      name: "description",
+      content: "Sign up to Quickie Form",
+    },
+  ];
+};
 
 const formSchema = z.object({
   email: z

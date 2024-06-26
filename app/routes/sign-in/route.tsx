@@ -18,6 +18,17 @@ import { LoadingButton } from "@mui/lab";
 import z from "zod";
 import { getInputProps, useForm } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
+import type { MetaFunction } from "@remix-run/node";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Quickie Form | Sign in" },
+    {
+      name: "description",
+      content: "Sign in to Quickie Form",
+    },
+  ];
+};
 
 const formSchema = z.object({
   email: z

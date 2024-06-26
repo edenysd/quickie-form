@@ -12,6 +12,18 @@ import Footer from "./components/Footer";
 import { useTheme } from "@emotion/react";
 import { useContext } from "react";
 import ColorModeContext from "~/mui/ColorModeContext";
+import type { MetaFunction } from "@remix-run/react";
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: "Quickie Form | Landing" },
+    {
+      name: "description",
+      content:
+        "Welcome to Quickie Form a tool for boosting your form creation, delivery and processing.",
+    },
+  ];
+};
 
 export default function LandingPage() {
   const theme: Theme = useTheme() as Theme;
