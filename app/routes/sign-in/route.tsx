@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   Typography,
   Grid,
@@ -6,25 +5,76 @@ import {
   Box,
   Avatar,
   TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
-import { LockOutlined } from "@mui/icons-material";
-import { Link } from "@remix-run/react";
+import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Link, useNavigate } from "@remix-run/react";
 import Copyright from "~/components/Copyright";
+import type { FormEvent } from "react";
+import { useCallback, useContext, useReducer, useState } from "react";
+import SupabaseClientContext from "~/supabase/SupabaseClientContext";
+import { LoadingButton } from "@mui/lab";
+import z from "zod";
+import { getInputProps, useForm } from "@conform-to/react";
+import { getZodConstraint, parseWithZod } from "@conform-to/zod";
 
-export const action = () => {};
+const formSchema = z.object({
+  email: z
+    .string({ required_error: "Email is required" })
+    .email("Email is invalid"),
+  password: z.string({ required_error: "Password is required" }),
+});
 
 export default function SignInSide() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  const supabaseClient = useContext(SupabaseClientContext);
+  const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, toggleShowPassword] = useReducer((b) => !b, false);
+  const [loginErrorMessage, setLoginErrorMessage] = useState("");
+
+  const tryToSignIn = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const authData = {
+        email: data.get("email") as string,
+        password: data.get("password") as string,
+      };
+
+      try {
+        setIsLoading(true);
+        setLoginErrorMessage("");
+
+        const authResponse = await supabaseClient?.auth.signInWithPassword(
+          authData
+        );
+
+        if (authResponse?.error) {
+          setLoginErrorMessage(authResponse.error.message);
+        } else {
+          navigate("/home");
+        }
+      } catch (e) {
+        //@todo notify error
+        console.error(e);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [supabaseClient?.auth, navigate]
+  );
+
+  const [form, fields] = useForm({
+    constraint: getZodConstraint(formSchema),
+    // Then, revalidate field as user types again
+    shouldRevalidate: "onInput",
+    onSubmit: tryToSignIn,
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: formSchema });
+    },
+  });
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -61,43 +111,73 @@ export default function SignInSide() {
             Sign in
           </Typography>
           <Box
-            component="form"
             noValidate
-            onSubmit={handleSubmit}
+            width={"100%"}
+            display={"flex"}
+            flexDirection={"column"}
+            component="form"
+            name="sign-in"
+            id={form.id}
+            onSubmit={form.onSubmit}
             sx={{ mt: 1 }}
           >
             <TextField
-              margin="normal"
+              inputProps={{
+                ...getInputProps(fields.email, { type: "email" }),
+              }}
               required
+              error={!!fields.email.errors?.length}
+              helperText={fields.email.errors?.at(0)}
+              margin="normal"
               fullWidth
-              id="email"
               label="Email Address"
-              name="email"
               autoComplete="email"
+              // eslint-disable-next-line jsx-a11y/no-autofocus
               autoFocus
             />
             <TextField
-              margin="normal"
+              inputProps={{
+                ...getInputProps(fields.password, {
+                  type: showPassword ? "text" : "password",
+                }),
+              }}
               required
+              error={!!fields.password.errors?.length}
+              helperText={fields.password.errors?.at(0)}
+              margin="normal"
               fullWidth
-              name="password"
               label="Password"
-              type="password"
-              id="password"
               autoComplete="current-password"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={toggleShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
+            <Typography
+              variant="body1"
+              sx={{ visibility: loginErrorMessage ? "visible" : "hidden" }}
+              color={"error"}
+            >
+              {loginErrorMessage || "hidden text"}
+            </Typography>
+            <LoadingButton
+              loading={isLoading}
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
-            </Button>
+            </LoadingButton>
             <Grid container>
               <Grid item xs>
                 <Link to="#">Forgot password?</Link>
