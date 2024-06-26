@@ -180,7 +180,7 @@ export default function SignInSide() {
             </LoadingButton>
             <Grid container>
               <Grid item xs>
-                <Link to="#">Forgot password?</Link>
+                <Link to="/reset-password">Forgot password?</Link>
               </Grid>
               <Grid item>
                 <Link to="/sign-up">{"Don't have an account? Sign Up"}</Link>
