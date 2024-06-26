@@ -26,7 +26,7 @@ export default function NotFound404() {
     >
       <Typography variant="h1">404 NOT FOUND</Typography>
       <Link to="/">
-        <Button size="large">Go Home</Button>
+        <Button size="large">Go Back</Button>
       </Link>
     </Box>
   );
