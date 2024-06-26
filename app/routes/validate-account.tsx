@@ -1,14 +1,13 @@
 import { Box, Typography } from "@mui/material";
-import { json, type MetaFunction } from "@remix-run/node";
-
-export const loader = () => {
-  return json(null, { status: 404 });
-};
+import { type MetaFunction } from "@remix-run/node";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "404 Not Found" },
-    { name: "description", content: "Welcome to Example!" },
+    { title: "Verification Step" },
+    {
+      name: "description",
+      content: "Account created, please check your email",
+    },
   ];
 };
 
