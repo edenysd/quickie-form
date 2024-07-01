@@ -1,12 +1,11 @@
 import { createServerClient, serialize } from "@supabase/ssr";
-
 const supabaseServerClient = (
   cookies: Record<string, string>,
   headers: Headers
 ) =>
   createServerClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
+    process.env.PUBLIC_SUPABASE_URL!,
+    process.env.PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         get(key) {
