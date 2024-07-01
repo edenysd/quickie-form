@@ -70,7 +70,6 @@ export default function SignInSide() {
       } catch (e) {
         //@todo notify error
         console.error(e);
-      } finally {
         setIsLoading(false);
       }
     },
@@ -78,6 +77,7 @@ export default function SignInSide() {
   );
 
   const [form, fields] = useForm({
+    id: "sign-in",
     constraint: getZodConstraint(formSchema),
     // Then, revalidate field as user types again
     shouldRevalidate: "onInput",
@@ -133,6 +133,7 @@ export default function SignInSide() {
             sx={{ mt: 1 }}
           >
             <TextField
+              id="email"
               inputProps={{
                 ...getInputProps(fields.email, { type: "email" }),
               }}
@@ -147,6 +148,7 @@ export default function SignInSide() {
               autoFocus
             />
             <TextField
+              id="password"
               inputProps={{
                 ...getInputProps(fields.password, {
                   type: showPassword ? "text" : "password",
