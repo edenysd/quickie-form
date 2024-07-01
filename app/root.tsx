@@ -9,8 +9,8 @@ import {
 import { MuiMeta } from "./mui/MuiMeta";
 import type { LinksFunction } from "@remix-run/node";
 import { getMuiLinks } from "./mui/getMuiLinks";
-import { createClient } from "@supabase/supabase-js";
-import SupabaseClientContext from "./supabase/SupabaseClientContext";
+import { createBrowserClient } from "@supabase/ssr";
+import SupabaseBrowserClientContext from "./supabase/SupabaseBrowserClientContext";
 import { useMemo } from "react";
 
 export const links: LinksFunction = () => [...getMuiLinks()];
@@ -47,13 +47,13 @@ export default function App() {
   const { env } = useLoaderData<typeof loader>();
 
   const supabaseClient = useMemo(
-    () => createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY),
+    () => createBrowserClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY),
     [env.SUPABASE_ANON_KEY, env.SUPABASE_URL]
   );
 
   return (
-    <SupabaseClientContext.Provider value={supabaseClient}>
+    <SupabaseBrowserClientContext.Provider value={supabaseClient}>
       <Outlet />
-    </SupabaseClientContext.Provider>
+    </SupabaseBrowserClientContext.Provider>
   );
 }

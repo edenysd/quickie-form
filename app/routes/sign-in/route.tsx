@@ -13,7 +13,7 @@ import { Link, useNavigate } from "@remix-run/react";
 import Copyright from "~/components/Copyright";
 import type { FormEvent } from "react";
 import { useCallback, useContext, useReducer, useState } from "react";
-import SupabaseClientContext from "~/supabase/SupabaseClientContext";
+import SupabaseBrowserClientContext from "~/supabase/SupabaseBrowserClientContext";
 import { LoadingButton } from "@mui/lab";
 import z from "zod";
 import { getInputProps, useForm } from "@conform-to/react";
@@ -38,7 +38,7 @@ const formSchema = z.object({
 });
 
 export default function SignInSide() {
-  const supabaseClient = useContext(SupabaseClientContext);
+  const supabaseClient = useContext(SupabaseBrowserClientContext);
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
