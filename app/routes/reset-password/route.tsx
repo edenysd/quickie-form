@@ -26,7 +26,7 @@ export default function NotFound404() {
     >
       <Typography variant="h2">In working progress</Typography>
       <Typography variant="body1">Thank you for your patience</Typography>
-      <Link to="/">
+      <Link to="/sign-in">
         <Button size="large">Go Back</Button>
       </Link>
     </Box>
