@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Menu } from "@mui/icons-material";
-import ToggleColorMode from "./ToggleColorMode";
-import type {
-  PaletteMode} from "@mui/material";
+import ToggleColorMode from "../../../components/ToggleColorMode";
+import type { Theme } from "@mui/material";
 import {
   AppBar,
   Container,
@@ -13,8 +12,10 @@ import {
   Button,
   Drawer,
   Divider,
+  useTheme,
 } from "@mui/material";
 import { Link } from "@remix-run/react";
+import ColorModeContext from "~/mui/ColorModeContext";
 
 const logoStyle = {
   width: "140px",
@@ -22,12 +23,12 @@ const logoStyle = {
   cursor: "pointer",
 };
 
-interface AppAppBarProps {
-  mode: PaletteMode;
-  toggleColorMode: () => void;
-}
+function AppAppBar() {
+  const {
+    palette: { mode },
+  }: Theme = useTheme() as Theme;
+  const { toggleColorMode } = React.useContext(ColorModeContext);
 
-function AppAppBar({ mode, toggleColorMode }: AppAppBarProps) {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
