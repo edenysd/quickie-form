@@ -15,6 +15,7 @@ export function MuiProvider({ children }: { children: React.ReactNode }) {
   const cache = createEmotionCache();
 
   const prefersLight = useMediaQuery("(prefers-color-scheme: light)");
+  // @TODO load preferences
   const [mode, setMode] = React.useState<PaletteMode>(
     prefersLight ? "light" : "dark"
   );

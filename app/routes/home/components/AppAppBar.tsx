@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Menu } from "@mui/icons-material";
-import ToggleColorMode from "../../../components/ToggleColorMode";
+import ToggleColorMode from "../../../mui/ToggleColorMode";
 import type { Theme } from "@mui/material";
 import {
   AppBar,
