@@ -1,12 +1,7 @@
 import { CacheProvider } from "@emotion/react";
 
-import type {
-  PaletteMode} from "@mui/material";
-import {
-  CssBaseline,
-  ThemeProvider,
-  useMediaQuery,
-} from "@mui/material";
+import type { PaletteMode } from "@mui/material";
+import { CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
 import initTheme from "./theme";
 import createCache from "@emotion/cache";
 import React, { useCallback, useMemo } from "react";
