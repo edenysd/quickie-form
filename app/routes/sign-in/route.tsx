@@ -64,6 +64,7 @@ export default function SignInSide() {
 
         if (authResponse?.error) {
           setLoginErrorMessage(authResponse.error.message);
+          setIsLoading(false);
         } else {
           navigate("/home");
         }
