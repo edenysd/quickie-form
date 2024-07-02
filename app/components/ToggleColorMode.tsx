@@ -1,5 +1,5 @@
 import { ModeNightRounded, WbSunnyRounded } from "@mui/icons-material";
-import type { PaletteMode} from "@mui/material";
+import type { PaletteMode } from "@mui/material";
 import { Box, Button } from "@mui/material";
 import { startTransition } from "react";
 
