@@ -75,7 +75,7 @@ function AppAppBar() {
                 <Box display={"flex"}>
                   <FormControlLabel
                     label="Assisted Mode"
-                    control={<Switch defaultChecked color="success" />}
+                    control={<Switch disabled defaultChecked color="success" />}
                   />
                 </Box>
               </Box>
