@@ -1,7 +1,13 @@
 import { parseWithZod } from "@conform-to/zod";
-import { ArrowUpward } from "@mui/icons-material";
-import { Box, IconButton, TextField, useMediaQuery } from "@mui/material";
-import { Form, useSubmit } from "@remix-run/react";
+import { ArrowUpward, Stop } from "@mui/icons-material";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
+import { Form, useNavigation, useSubmit } from "@remix-run/react";
 import { formSchema } from "../route";
 import { getInputProps, useForm } from "@conform-to/react";
 import type { KeyboardEvent } from "react";
@@ -11,6 +17,8 @@ function ChatBox() {
   const isPhone = useMediaQuery("(min-width:600px)");
   const formRef = useRef(null);
   const submit = useSubmit();
+  const { formAction } = useNavigation();
+
   const [form, fields] = useForm({
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: formSchema });
@@ -38,6 +46,14 @@ function ChatBox() {
       onSubmit={form.onSubmit}
     >
       <TextField
+        disabled={!!formAction}
+        sx={(theme) => ({
+          bgcolor:
+            theme.palette.mode === "light"
+              ? "rgba(255, 255, 255, 0.4)"
+              : "rgba(0, 0, 0, 0.4)",
+          backdropFilter: "blur(24px)",
+        })}
         inputProps={{
           ...getInputProps(fields.prompt, { type: "text" }),
         }}
@@ -47,9 +63,13 @@ function ChatBox() {
         multiline
         onKeyDownCapture={submitOnEnterInLargeScreens}
         InputProps={{
-          endAdornment: (
-            <IconButton type="submit">
+          endAdornment: !formAction ? (
+            <IconButton type="submit" size="medium">
               <ArrowUpward />
+            </IconButton>
+          ) : (
+            <IconButton type="submit" disabled size="medium">
+              <CircularProgress size={24} />
             </IconButton>
           ),
         }}
