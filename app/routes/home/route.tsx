@@ -4,14 +4,15 @@ import { json, redirect, useLoaderData } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import AppAppBar from "./components/AppAppBar";
-import ChatBox from "./components/ChatBox";
+import ChatBox, { promptSchema } from "./components/ChatBox";
 import { parseWithZod } from "@conform-to/zod";
-import z from "zod";
 import {
   getChatSession,
   getLastMessageFromCachedChatSession,
 } from "./bot/chat";
 import type { Content } from "@google/generative-ai";
+import { generatedFormSchema } from "./bot/schemas";
+import FormAssistedPreview from "./components/FormAssistedPreview";
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,10 +23,6 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
-
-export const formSchema = z.object({
-  prompt: z.string({ required_error: "Prompt is required" }),
-});
 
 export async function action({ request }: LoaderFunctionArgs) {
   const headers = new Headers();
@@ -43,7 +40,7 @@ export async function action({ request }: LoaderFunctionArgs) {
   }
 
   const formData = await request.formData();
-  const data = parseWithZod(formData, { schema: formSchema });
+  const data = parseWithZod(formData, { schema: promptSchema });
   if (data.status !== "success") {
     return data.reply();
   }
@@ -80,18 +77,36 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   return json({
-    history: await getLastMessageFromCachedChatSession("1"),
+    formConfig: await getLastMessageFromCachedChatSession("1"),
   });
 }
 
 export default function Home() {
   const loaderData = useLoaderData<typeof loader>();
+  const validatedFormConfig = generatedFormSchema.safeParse(
+    loaderData.formConfig
+  );
+
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
       <AppAppBar />
       <ChatBox />
-      <Box pt={10} pb={12}>
-        {loaderData.history ? JSON.stringify(loaderData.history) : null}
+      <Box
+        pt={12}
+        pb={14}
+        width={"100%"}
+        display={"flex"}
+        justifyContent={"center"}
+        sx={(theme) => ({
+          px: 3,
+          [theme.breakpoints.down("sm")]: {
+            px: 1,
+          },
+        })}
+      >
+        {validatedFormConfig.success ? (
+          <FormAssistedPreview formConfig={validatedFormConfig.data} />
+        ) : null}
       </Box>
     </Box>
   );
