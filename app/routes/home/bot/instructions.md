@@ -117,7 +117,7 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
   "description": "Lista de secciones",
   "items": {
     "type": "object",
-    "description"
+    "description": "Seccion que agrupa campos de relacionados a un tema",
     "properties": {
       "type": {
         "type": "string",
@@ -154,7 +154,6 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
                 "time",
                 "checkbox",
                 "radio",
-                "options",
                 "range",
                 "file"
               ]
