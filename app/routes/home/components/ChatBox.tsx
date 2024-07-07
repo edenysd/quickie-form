@@ -1,5 +1,5 @@
 import { parseWithZod } from "@conform-to/zod";
-import { ArrowUpward, Stop } from "@mui/icons-material";
+import { ArrowUpward } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -8,10 +8,14 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { Form, useNavigation, useSubmit } from "@remix-run/react";
-import { formSchema } from "../route";
 import { getInputProps, useForm } from "@conform-to/react";
 import type { KeyboardEvent } from "react";
 import { useCallback, useRef } from "react";
+import { z } from "zod";
+
+export const promptSchema = z.object({
+  prompt: z.string({ required_error: "Prompt is required" }),
+});
 
 function ChatBox() {
   const isPhone = useMediaQuery("(min-width:600px)");
@@ -21,7 +25,7 @@ function ChatBox() {
 
   const [form, fields] = useForm({
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: formSchema });
+      return parseWithZod(formData, { schema: promptSchema });
     },
   });
 
@@ -39,7 +43,7 @@ function ChatBox() {
     <Box
       ref={formRef}
       width={"100%"}
-      sx={{ px: 2, position: "fixed", maxWidth: 500, bottom: 5 }}
+      sx={{ px: 2, position: "fixed", maxWidth: 500, bottom: 5, zIndex: 10 }}
       component={Form}
       id={form.id}
       method="post"
