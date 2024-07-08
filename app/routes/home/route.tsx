@@ -58,7 +58,7 @@ export async function action({ request }: LoaderFunctionArgs) {
     return (response.data?.history || []) as Content[];
   };
 
-  const chatSession = await getChatSession({ fetchHistory, id: "1" });
+  const chatSession = await getChatSession({ fetchHistory, id: "local-saved" });
   const result = await chatSession.sendMessage(prompt);
 
   return json(result);
@@ -77,7 +77,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   return json({
-    formConfig: await getLastMessageFromCachedChatSession("1"),
+    formConfig: await getLastMessageFromCachedChatSession("local-saved"),
   });
 }
 
