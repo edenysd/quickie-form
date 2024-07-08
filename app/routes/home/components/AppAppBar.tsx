@@ -40,7 +40,7 @@ function AppAppBar() {
           mt: 2,
         }}
       >
-        <Container maxWidth="xs">
+        <Container maxWidth="sm">
           <Toolbar
             variant="dense"
             sx={(theme) => ({
@@ -86,10 +86,12 @@ function AppAppBar() {
                   alignItems: "center",
                 }}
               >
+                <Button>Publish</Button>
                 <ToggleColorMode
                   mode={mode}
                   toggleColorMode={toggleColorMode}
                 />
+
                 <Divider orientation="vertical" flexItem />
               </Box>
             </Box>
