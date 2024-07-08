@@ -1,5 +1,4 @@
 import { Box, Divider } from "@mui/material";
-import type { Theme } from "@mui/material/styles";
 import AppAppBar from "./components/AppAppBar";
 import Hero from "./components/Hero";
 import LogoCollection from "./components/LogoCollection";
@@ -9,9 +8,6 @@ import Features from "./components/Features";
 import Testimonials from "./components/Testimonials";
 import FAQ from "./components/FAQ";
 import Footer from "./components/Footer";
-import { useTheme } from "@emotion/react";
-import { useContext } from "react";
-import ColorModeContext from "~/mui/ColorModeContext";
 import type { MetaFunction } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
@@ -26,12 +22,9 @@ export const meta: MetaFunction = () => {
 };
 
 export default function LandingPage() {
-  const theme: Theme = useTheme() as Theme;
-  const { toggleColorMode } = useContext(ColorModeContext);
-
   return (
     <Box>
-      <AppAppBar mode={theme.palette.mode} toggleColorMode={toggleColorMode} />
+      <AppAppBar />
       <Hero />
       <Box sx={{ bgcolor: "background.default" }}>
         <LogoCollection />
