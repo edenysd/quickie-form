@@ -1,8 +1,9 @@
 import type { Content, ChatSession } from "@google/generative-ai";
 import { model, GENERATION_CONFIG } from "./model";
 
+export type ChatHistory = Content[];
 interface ChatSessionProps {
-  fetchHistory: () => Promise<Content[]>;
+  fetchHistory: () => Promise<ChatHistory>;
   id: string;
 }
 
@@ -14,10 +15,13 @@ export function getCachedChatSession(id: string): ChatSession | undefined {
   return sesion;
 }
 
-export async function getChatSession({ fetchHistory, id }: ChatSessionProps) {
+export async function updateCachedChatSession({
+  fetchHistory,
+  id,
+}: ChatSessionProps) {
   const cachedSession = savedSessions.get(id);
   if (cachedSession) {
-    return cachedSession;
+    return;
   }
 
   const history = await fetchHistory();
@@ -26,7 +30,6 @@ export async function getChatSession({ fetchHistory, id }: ChatSessionProps) {
     history,
   });
   savedSessions.set(id, chatSession);
-  return chatSession;
 }
 
 export async function getLastMessageFromCachedChatSession(id: string) {

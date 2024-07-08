@@ -6,13 +6,16 @@ import supabaseServerClient from "~/supabase/supabaseServerClient";
 import AppAppBar from "./components/AppAppBar";
 import ChatBox, { promptSchema } from "./components/ChatBox";
 import { parseWithZod } from "@conform-to/zod";
+import type { ChatHistory } from "./bot/chat";
 import {
-  getChatSession,
+  getCachedChatSession,
+  updateCachedChatSession,
   getLastMessageFromCachedChatSession,
 } from "./bot/chat";
-import type { Content } from "@google/generative-ai";
 import { generatedFormSchema } from "./bot/schemas";
 import FormAssistedPreview from "./components/FormAssistedPreview";
+import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { z } from "zod";
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,6 +25,57 @@ export const meta: MetaFunction = () => {
       content: "Home section for Quickie Form service.",
     },
   ];
+};
+
+const getUserCachedId = (user: User | null) => `local-saved-${user?.id}`;
+
+const createHistoryFetcher = (supabase: SupabaseClient, user: User) => {
+  return async () => {
+    const response = await supabase
+      .from("Forms")
+      .select("history")
+      .eq("owner", user.id)
+      .eq("status", "draft")
+      .limit(1)
+      .maybeSingle();
+
+    if (response.error) throw response.error;
+    return (response.data?.history || []) as ChatHistory;
+  };
+};
+
+const saveHistory = async ({
+  supabaseClient,
+  history,
+  formConfig,
+  user,
+}: {
+  supabaseClient: SupabaseClient;
+  history: ChatHistory;
+  formConfig: z.infer<typeof generatedFormSchema>;
+  user: User;
+}) => {
+  const response = await supabaseClient
+    ?.from("Forms")
+    .update([
+      {
+        history,
+        config: formConfig,
+      },
+    ])
+    .eq("owner", user?.id)
+    .eq("status", "draft")
+    .select();
+
+  if (!response?.data?.length) {
+    await supabaseClient?.from("Forms").insert([
+      {
+        history: history,
+        config: formConfig,
+        owner: user?.id,
+      },
+    ]);
+  }
 };
 
 export async function action({ request }: LoaderFunctionArgs) {
@@ -45,21 +99,21 @@ export async function action({ request }: LoaderFunctionArgs) {
     return data.reply();
   }
   const prompt = data.value.prompt;
-
-  const fetchHistory = async () => {
-    const response = await supabase
-      .from("Forms")
-      .select("history")
-      .eq("owner", user.id)
-      .limit(1)
-      .maybeSingle();
-
-    if (response.error) throw response.error;
-    return (response.data?.history || []) as Content[];
-  };
-
-  const chatSession = await getChatSession({ fetchHistory, id: "local-saved" });
+  const fetchHistory = createHistoryFetcher(supabase, user);
+  await updateCachedChatSession({
+    fetchHistory,
+    id: getUserCachedId(user),
+  });
+  const chatSession = getCachedChatSession(getUserCachedId(user))!;
   const result = await chatSession.sendMessage(prompt);
+  saveHistory({
+    supabaseClient: supabase,
+    user,
+    history: await chatSession.getHistory(),
+    formConfig: await getLastMessageFromCachedChatSession(
+      getUserCachedId(user)
+    ),
+  });
 
   return json(result);
 }
@@ -70,14 +124,27 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const supabase = supabaseServerClient(cookies, headers);
 
-  const { error } = await supabase.auth.getUser();
+  const {
+    error,
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (error) {
+  if (error || !user) {
     return redirect("/sign-in");
   }
 
+  const fetchHistory = createHistoryFetcher(supabase, user);
+  await updateCachedChatSession({
+    fetchHistory,
+    id: getUserCachedId(user),
+  });
+
   return json({
-    formConfig: await getLastMessageFromCachedChatSession("local-saved"),
+    user,
+    formConfig: await getLastMessageFromCachedChatSession(
+      getUserCachedId(user)
+    ),
+    history: await getCachedChatSession(getUserCachedId(user))?.getHistory(),
   });
 }
 
