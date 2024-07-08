@@ -82,15 +82,15 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
   - **Descripción**: Campo para seleccionar una hora.
   - **Uso**: Para capturar horas con un selector de tiempo.
 - **checkbox**
-  - **Descripción**: Casilla de verificación.
-  - **Uso**: Para capturar valores booleanos (verdadero o falso), como aceptar términos y condiciones.
+  - **Descripción**: Grupo de casillas de verificación.
+  - **Uso**: Para capturar valores booleanos (verdadero o falso), como aceptar términos y condiciones, siempre necesita el grupo de opciones.
   - **Campos específicos:**
     - **options:** el campo options es una lista conformada por elementos con la siguiente configuración:
       - label: etiqueta para el campo, añade un poco de información de la opción
       - id: identificador generado en caso que el usuario no provea el mismo
 - **radio**
-  - **Descripción**: Botón de opción.
-  - **Uso**: Para seleccionar una única opción de un conjunto de opciones mutuamente excluyentes.
+  - **Descripción**: Grupo de botones de de opción.
+  - **Uso**: Para seleccionar una única opción de un conjunto de opciones mutuamente excluyentes, siempre necesita el grupo de opciones.
   - **Capos específicos:**
     - **options:** el campo options es una lista conformada por elementos con la siguiente configuración:
       - label: etiqueta para el campo, añade un poco de información de la opción
@@ -98,6 +98,9 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
 - **range**
   - **Descripción**: Control deslizante para seleccionar un valor numérico dentro de un rango.
   - **Uso**: Para capturar valores numéricos dentro de un rango específico mediante un control deslizante.
+- **rating**
+  - **Descripción**: Control deslizante para seleccionar un valor de satisfacción.
+  - **Uso**: Para capturar valores de satisfacción hasta de un rango de 1 a un límite específico generalmente de 5 puntos.
 - **file**
   - **Descripción**: Campo para la selección de archivos.
   - **Uso**: Para subir archivos desde el dispositivo del usuario.
@@ -154,8 +157,9 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
                 "time",
                 "checkbox",
                 "radio",
-                "range",
-                "file"
+                "file",
+                "rating",
+                "range"
               ]
             },
             "name": {
@@ -193,11 +197,11 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
             },
             "min": {
               "type": "number",
-              "description": "Valor mínimo para campos tipo 'number' o 'range'"
+              "description": "Valor mínimo para campos tipo 'number', 'rating' o 'range'"
             },
             "max": {
               "type": "number",
-              "description": "Valor máximo para campos tipo 'number' o 'range'"
+              "description": "Valor máximo para campos tipo 'number', 'rating' o 'range'"
             },
             "pattern": {
               "type": "string",
