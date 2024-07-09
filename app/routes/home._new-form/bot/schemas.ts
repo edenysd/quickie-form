@@ -8,6 +8,7 @@ const optionSchema = z.object({
 export const fieldSchema = z.object({
   type: z.enum([
     "text",
+    "textarea",
     "password",
     "email",
     "number",
@@ -19,6 +20,7 @@ export const fieldSchema = z.object({
     "radio",
     "file",
     "rating",
+    "slider",
     "range",
   ]),
   name: z.string(),

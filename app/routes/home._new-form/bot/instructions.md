@@ -55,6 +55,9 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
 - **text**
   - **Descripción**: Campo de texto de una sola línea.
   - **Uso**: Para cualquier tipo de entrada textual corta, como nombres, apellidos, o cualquier otra información de texto libre.
+- **textarea**
+  - **Descripción**: Campo de texto de múltiples líneas.
+  - **Uso**: Para cualquier tipo de entrada textual mediana o larga, como descripciones detalladas, preguntas muy abiertas, o cualquier otra información de texto libre que no sea una respuesta de corta de aproximadamente solo 5 palabras.
 - **section**
   - **Descripción**: Contiene o agrupa multiples campos.
   - **Uso**: Contiene o agrupa multiples campos en una seccion agrupando todos los que pertenecen de un mismo tema, un campo section no puede tener campo section como hijo y todo campo en la configuracion debe pertener a una seccion o ser una.
@@ -69,6 +72,9 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
 - **number**
   - **Descripción**: Campo para la entrada de números.
   - **Uso**: Para capturar datos numéricos, permitiendo configuraciones como rango mínimo y máximo.
+  - **Campos específicos:**
+    - **min:** mínimo permitido
+    - **max:** máximo permitido
 - **tel**
   - **Descripción**: Campo para la entrada de números de teléfono.
   - **Uso**: Para capturar números de teléfono, con validación del formato de número telefónico.
@@ -95,9 +101,18 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
     - **options:** el campo options es una lista conformada por elementos con la siguiente configuración:
       - label: etiqueta para el campo, añade un poco de información de la opción
       - id: identificador generado en caso que el usuario no provea el mismo
-- **range**
-  - **Descripción**: Control deslizante para seleccionar un valor numérico dentro de un rango.
+- **slider**
+  - **Descripción**: Control deslizante para seleccionar un y solo valor numérico dentro de un rango.
   - **Uso**: Para capturar valores numéricos dentro de un rango específico mediante un control deslizante.
+  - **Campos específicos:**
+    - **min:** mínimo permitido
+    - **max:** máximo permitido
+- **range**
+  - **Descripción**: Control deslizante para seleccionar exactamente 2 valores numéricos dentro de un rango, es decir, definir dicho rango.
+  - **Uso**: Para capturar 2 los cuales definen un rango específico mediante un control deslizante dentro de unos límites.
+  - **Campos específicos:**
+    - **min:** mínimo permitido
+    - **max:** máximo permitido
 - **rating**
   - **Descripción**: Control deslizante para seleccionar un valor de satisfacción.
   - **Uso**: Para capturar valores de satisfacción hasta de un rango de 1 a un límite específico generalmente de 5 puntos.
@@ -148,6 +163,7 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
               "type": "string",
               "enum": [
                 "text",
+                "textarea",
                 "password",
                 "email",
                 "number",
@@ -159,7 +175,8 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
                 "radio",
                 "file",
                 "rating",
-                "range"
+                "range",
+                "slider"
               ]
             },
             "name": {
@@ -197,11 +214,11 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
             },
             "min": {
               "type": "number",
-              "description": "Valor mínimo para campos tipo 'number', 'rating' o 'range'"
+              "description": "Valor mínimo para campos tipo 'number', 'rating', 'slider' o 'range'"
             },
             "max": {
               "type": "number",
-              "description": "Valor máximo para campos tipo 'number', 'rating' o 'range'"
+              "description": "Valor máximo para campos tipo 'number', 'rating', 'slider' o 'range'"
             },
             "pattern": {
               "type": "string",

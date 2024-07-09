@@ -47,6 +47,19 @@ function FormField({
           />
         </Grid>
       );
+    case "textarea":
+      return (
+        <Grid item xs={12} md={6}>
+          <TextField
+            multiline
+            minRows={3}
+            required={fieldConfig.required}
+            fullWidth
+            label={fieldConfig.label}
+            placeholder={fieldConfig.placeholder}
+          />
+        </Grid>
+      );
     case "radio":
       return (
         <Grid item xs={12} md={6}>
@@ -187,6 +200,22 @@ function FormField({
         </Grid>
       );
     case "range":
+      return (
+        <Grid item xs={12} md={6}>
+          <Typography component="legend">{fieldConfig.label}</Typography>
+          <Slider
+            name={fieldConfig.name}
+            aria-label={fieldConfig.label}
+            valueLabelDisplay="auto"
+            defaultValue={[fieldConfig.min || 0, fieldConfig.max || 0]}
+            // marks
+            // step={1}
+            min={fieldConfig.min || 0}
+            max={fieldConfig.max || 0}
+          />
+        </Grid>
+      );
+    case "slider":
       return (
         <Grid item xs={12} md={6}>
           <Typography component="legend">{fieldConfig.label}</Typography>
