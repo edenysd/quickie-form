@@ -46,6 +46,7 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const formData = await request.formData();
   const _action = formData.get("_action");
+  console.log(_action);
 
   if (_action === "add-prompt") {
     const data = parseWithZod(formData, { schema: promptSchema });
@@ -63,8 +64,6 @@ export async function action({ request }: LoaderFunctionArgs) {
     }
     return null;
   }
-
-  return null;
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {

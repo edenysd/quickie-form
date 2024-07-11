@@ -16,13 +16,15 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import ColorModeContext from "~/mui/ColorModeContext";
+import { Form } from "@remix-run/react";
+import { useFetcher } from "react-router-dom";
 
 function AppAppBar() {
   const {
     palette: { mode },
   }: Theme = useTheme() as Theme;
   const { toggleColorMode } = React.useContext(ColorModeContext);
-
+  const fetcher = useFetcher();
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -80,13 +82,18 @@ function AppAppBar() {
                 </Box>
               </Box>
               <Box
+                component={fetcher.Form}
+                method="POST"
                 sx={{
+                  m: 0,
                   display: "flex",
                   gap: 0.5,
                   alignItems: "center",
                 }}
               >
-                <Button>Publish</Button>
+                <Button name="_action" value="publish" type="submit">
+                  Publish
+                </Button>
                 <ToggleColorMode
                   mode={mode}
                   toggleColorMode={toggleColorMode}
