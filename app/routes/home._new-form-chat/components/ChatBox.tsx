@@ -10,7 +10,7 @@ import {
 import { useFetcher } from "@remix-run/react";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import type { KeyboardEvent } from "react";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { z } from "zod";
 
 export const promptSchema = z.object({
@@ -20,8 +20,9 @@ export const promptSchema = z.object({
 
 function ChatBox() {
   const isPhone = useMediaQuery("(min-width:600px)");
+
+  const formRef = useRef<HTMLFormElement>(null);
   const fetcher = useFetcher();
-  const formRef = useRef(null);
 
   const [form, fields] = useForm({
     onValidate({ formData }) {
@@ -33,17 +34,29 @@ function ChatBox() {
     (e: KeyboardEvent) => {
       if (e.key == "Enter" && e.shiftKey == false && isPhone) {
         e.preventDefault();
-        fetcher.submit(formRef.current);
+        formRef.current?.dispatchEvent(
+          new Event("submit", { cancelable: true, bubbles: true })
+        );
       }
     },
-    [fetcher, isPhone]
+    [isPhone]
   );
+
+  const isSubmitting =
+    fetcher.state === "submitting" &&
+    fetcher.formData?.get("_action") === "add-prompt";
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      formRef.current?.reset();
+    }
+  }, [isSubmitting]);
 
   return (
     <Box
+      ref={formRef}
       width={"100%"}
       component={fetcher.Form}
-      ref={formRef}
       method="post"
       {...getFormProps(form)}
       sx={{ px: 2, position: "fixed", maxWidth: 500, bottom: 5, zIndex: 10 }}
