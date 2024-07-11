@@ -3,7 +3,7 @@ import type {
   fieldSchema,
   generatedFormSchema,
   sectionSchema,
-} from "../bot/schemas";
+} from "../../../bot/schemas";
 import {
   Box,
   Checkbox,

@@ -7,21 +7,21 @@ import {
   TextField,
   useMediaQuery,
 } from "@mui/material";
-import { Form, useNavigation, useSubmit } from "@remix-run/react";
-import { getInputProps, useForm } from "@conform-to/react";
+import { useFetcher } from "@remix-run/react";
+import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import type { KeyboardEvent } from "react";
 import { useCallback, useRef } from "react";
 import { z } from "zod";
 
 export const promptSchema = z.object({
   prompt: z.string({ required_error: "Prompt is required" }),
+  _action: z.string({ required_error: "Action is required" }),
 });
 
 function ChatBox() {
   const isPhone = useMediaQuery("(min-width:600px)");
+  const fetcher = useFetcher();
   const formRef = useRef(null);
-  const submit = useSubmit();
-  const { formAction } = useNavigation();
 
   const [form, fields] = useForm({
     onValidate({ formData }) {
@@ -33,24 +33,23 @@ function ChatBox() {
     (e: KeyboardEvent) => {
       if (e.key == "Enter" && e.shiftKey == false && isPhone) {
         e.preventDefault();
-        submit(formRef.current);
+        fetcher.submit(formRef.current);
       }
     },
-    [submit, isPhone]
+    [fetcher, isPhone]
   );
 
   return (
     <Box
-      ref={formRef}
       width={"100%"}
-      sx={{ px: 2, position: "fixed", maxWidth: 500, bottom: 5, zIndex: 10 }}
-      component={Form}
-      id={form.id}
+      component={fetcher.Form}
+      ref={formRef}
       method="post"
-      onSubmit={form.onSubmit}
+      {...getFormProps(form)}
+      sx={{ px: 2, position: "fixed", maxWidth: 500, bottom: 5, zIndex: 10 }}
     >
       <TextField
-        disabled={!!formAction}
+        disabled={!!fetcher.formAction}
         sx={(theme) => ({
           bgcolor:
             theme.palette.mode === "light"
@@ -67,10 +66,13 @@ function ChatBox() {
         multiline
         onKeyDownCapture={submitOnEnterInLargeScreens}
         InputProps={{
-          endAdornment: !formAction ? (
-            <IconButton type="submit" size="medium">
-              <ArrowUpward />
-            </IconButton>
+          endAdornment: !fetcher.formAction ? (
+            <>
+              <input name="_action" value="add-prompt" type="hidden" />
+              <IconButton form={form.id} type="submit" size="medium">
+                <ArrowUpward />
+              </IconButton>
+            </>
           ) : (
             <IconButton type="submit" disabled size="medium">
               <CircularProgress size={24} />

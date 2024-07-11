@@ -1,5 +1,6 @@
 import type { Content, ChatSession } from "@google/generative-ai";
 import { model, GENERATION_CONFIG } from "./model";
+import type { User } from "@supabase/supabase-js";
 
 export type ChatHistory = Content[];
 interface ChatSessionProps {
@@ -8,6 +9,8 @@ interface ChatSessionProps {
 }
 
 const savedSessions = new Map<string, ChatSession>();
+
+export const getUserCachedId = (user: User | null) => `local-saved-${user?.id}`;
 
 //@TODO remove unused cached items
 export function getCachedChatSession(id: string): ChatSession | undefined {
