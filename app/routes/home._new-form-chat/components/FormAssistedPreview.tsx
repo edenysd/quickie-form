@@ -205,7 +205,7 @@ function FormField({
           <Typography component="legend">{fieldConfig.label}</Typography>
           <Slider
             name={fieldConfig.name}
-            aria-label={fieldConfig.label}
+            getAriaLabel={() => fieldConfig.label}
             valueLabelDisplay="auto"
             defaultValue={[fieldConfig.min || 0, fieldConfig.max || 0]}
             // marks
