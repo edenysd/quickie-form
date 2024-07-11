@@ -46,7 +46,6 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const formData = await request.formData();
   const _action = formData.get("_action");
-  console.log(_action);
 
   if (_action === "add-prompt") {
     const data = parseWithZod(formData, { schema: promptSchema });
@@ -54,7 +53,7 @@ export async function action({ request }: LoaderFunctionArgs) {
       return data.reply();
     }
     const prompt = data.value.prompt;
-    const result = processPrompt({ prompt, supabase, user });
+    const result = await processPrompt({ prompt, supabase, user });
 
     return json(result);
   } else if (_action === "publish") {
