@@ -35,6 +35,10 @@ export async function updateCachedChatSession({
   savedSessions.set(id, chatSession);
 }
 
+export async function removeCachedChatSession({ id }: { id: string }) {
+  return savedSessions.delete(id);
+}
+
 export async function getLastMessageFromCachedChatSession(id: string) {
   return JSON.parse(
     (await getCachedChatSession(id)?.getHistory())?.at(-1)?.parts[0].text ||
