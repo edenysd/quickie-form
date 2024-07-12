@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect, useLoaderData } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
@@ -11,6 +11,7 @@ import {
   updateCachedChatSession,
   getLastMessageFromCachedChatSession,
   getUserCachedId,
+  removeCachedChatSession,
 } from "../../bot/chat";
 import { generatedFormSchema } from "../../bot/schemas";
 import FormAssistedPreview from "./components/FormAssistedPreview";
@@ -18,6 +19,8 @@ import {
   createHistoryFetcher,
   processPrompt,
 } from "~/supabase/models/form/drafted/prompt";
+import { publishDraftedForm } from "~/supabase/models/form/drafted/publish";
+import { z } from "zod";
 
 export const meta: MetaFunction = () => {
   return [
@@ -57,11 +60,19 @@ export async function action({ request }: LoaderFunctionArgs) {
 
     return json(result);
   } else if (_action === "publish") {
-    const data = parseWithZod(formData, { schema: promptSchema });
+    const data = parseWithZod(formData, {
+      schema: z.object({ _action: z.string() }),
+    });
     if (data.status !== "success") {
       return data.reply();
     }
-    return null;
+    const result = await publishDraftedForm({
+      supabaseClient: supabase,
+      user,
+    });
+    removeCachedChatSession({ id: getUserCachedId(user) });
+
+    return json(result);
   }
 }
 
@@ -100,10 +111,11 @@ export default function Home() {
   const validatedFormConfig = generatedFormSchema.safeParse(
     loaderData.formConfig
   );
-
+  const existsFormConfig =
+    validatedFormConfig.success && validatedFormConfig.data.length > 0;
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
-      <AppAppBar />
+      <AppAppBar disablePublish={!existsFormConfig} />
       <ChatBox />
       <Box
         pt={12}
@@ -118,9 +130,26 @@ export default function Home() {
           },
         })}
       >
-        {validatedFormConfig.success ? (
+        {existsFormConfig ? (
           <FormAssistedPreview formConfig={validatedFormConfig.data} />
-        ) : null}
+        ) : (
+          <Box
+            component={Paper}
+            variant="outlined"
+            p={2}
+            display={"flex"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            flexDirection={"column"}
+            gap={1}
+            color={"InfoText"}
+          >
+            <Typography variant="h5">Welcome to Quickie Form</Typography>
+            <Typography variant="body1">
+              Simply type what you want and we will make it happens.
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   );
