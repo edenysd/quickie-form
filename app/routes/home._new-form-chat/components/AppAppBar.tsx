@@ -16,19 +16,32 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import ColorModeContext from "~/mui/ColorModeContext";
-import { useFetcher } from "react-router-dom";
+import PublishDialog from "./PublishDialog";
+import { useFetcher } from "@remix-run/react";
 
-function AppAppBar() {
+function AppAppBar({ disablePublish }: { disablePublish: boolean }) {
   const {
     palette: { mode },
   }: Theme = useTheme() as Theme;
   const { toggleColorMode } = React.useContext(ColorModeContext);
-  const fetcher = useFetcher();
-  const [open, setOpen] = React.useState(false);
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+  const [openDialog, setpenDialog] = React.useState(false);
+  const fetcher = useFetcher({ key: "publish" });
+  const isPublishing =
+    fetcher.state !== "idle" && fetcher.formData?.get("_action") === "publish";
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen);
-  };
+  const toggleDrawer = React.useCallback(
+    (newOpen: boolean) => () => {
+      setOpenDrawer(newOpen);
+    },
+    []
+  );
+  const toggleDialog = React.useCallback(
+    (newOpen: boolean) => () => {
+      setpenDialog(newOpen);
+    },
+    []
+  );
 
   return (
     <div>
@@ -81,8 +94,6 @@ function AppAppBar() {
                 </Box>
               </Box>
               <Box
-                component={fetcher.Form}
-                method="POST"
                 sx={{
                   m: 0,
                   display: "flex",
@@ -90,7 +101,10 @@ function AppAppBar() {
                   alignItems: "center",
                 }}
               >
-                <Button name="_action" value="publish" type="submit">
+                <Button
+                  disabled={isPublishing || disablePublish}
+                  onClick={toggleDialog(true)}
+                >
                   Publish
                 </Button>
                 <ToggleColorMode
@@ -111,7 +125,11 @@ function AppAppBar() {
               >
                 <Menu />
               </Button>
-              <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+              <Drawer
+                anchor="right"
+                open={openDrawer}
+                onClose={toggleDrawer(false)}
+              >
                 <Box
                   display={"flex"}
                   justifyContent={"space-between"}
@@ -143,6 +161,7 @@ function AppAppBar() {
             </Box>
           </Toolbar>
         </Container>
+        <PublishDialog handleClose={toggleDialog(false)} open={openDialog} />
       </AppBar>
     </div>
   );
