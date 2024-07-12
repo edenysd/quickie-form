@@ -20,9 +20,9 @@ export const promptSchema = z.object({
 
 function ChatBox() {
   const isPhone = useMediaQuery("(min-width:600px)");
-
   const formRef = useRef<HTMLFormElement>(null);
-  const fetcher = useFetcher();
+  const chatFetcher = useFetcher({ key: "chat" });
+  const publishFetcher = useFetcher({ key: "publish" });
 
   const [form, fields] = useForm({
     onValidate({ formData }) {
@@ -43,8 +43,12 @@ function ChatBox() {
   );
 
   const isSubmitting =
-    fetcher.state === "submitting" &&
-    fetcher.formData?.get("_action") === "add-prompt";
+    chatFetcher.state !== "submitting" &&
+    chatFetcher.formData?.get("_action") === "add-prompt";
+
+  const isPublishing =
+    publishFetcher.state !== "idle" &&
+    publishFetcher.formData?.get("_action") === "publish";
 
   useEffect(() => {
     if (!isSubmitting) {
@@ -56,13 +60,13 @@ function ChatBox() {
     <Box
       ref={formRef}
       width={"100%"}
-      component={fetcher.Form}
+      component={chatFetcher.Form}
       method="post"
       {...getFormProps(form)}
       sx={{ px: 2, position: "fixed", maxWidth: 500, bottom: 5, zIndex: 10 }}
     >
       <TextField
-        disabled={!!fetcher.formAction}
+        disabled={!!chatFetcher.formAction || isPublishing}
         sx={(theme) => ({
           bgcolor:
             theme.palette.mode === "light"
@@ -79,10 +83,15 @@ function ChatBox() {
         multiline
         onKeyDownCapture={submitOnEnterInLargeScreens}
         InputProps={{
-          endAdornment: !fetcher.formAction ? (
+          endAdornment: !chatFetcher.formAction ? (
             <>
               <input name="_action" value="add-prompt" type="hidden" />
-              <IconButton form={form.id} type="submit" size="medium">
+              <IconButton
+                form={form.id}
+                type="submit"
+                size="medium"
+                disabled={isPublishing}
+              >
                 <ArrowUpward />
               </IconButton>
             </>
