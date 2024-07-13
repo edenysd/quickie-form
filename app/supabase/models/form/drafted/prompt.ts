@@ -36,7 +36,8 @@ export const processPrompt = async ({
       `Please, fix the json format in your response, if there exits a case where you don't
        know how to fix a section remove it, this is the error message:\n ${formValidationTest.error}`
     );
-    (await chatSession.getHistory()).splice(-3, 2);
+    const tempFixMessages = (await chatSession.getHistory()).splice(-3, 2);
+    console.log("BAD FORMED MESSAGE", JSON.stringify(tempFixMessages));
   }
 
   saveHistory({
