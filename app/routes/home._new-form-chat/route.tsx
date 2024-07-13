@@ -73,6 +73,11 @@ export async function action({ request }: LoaderFunctionArgs) {
     removeCachedChatSession({ id: getUserCachedId(user) });
 
     return json(result);
+  } else if (_action === "logout") {
+    const result = await supabase.auth.signOut();
+    if (!result.error) {
+      return redirect("/");
+    }
   }
 }
 
@@ -97,11 +102,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     id: getUserCachedId(user),
   });
 
+  const formConfig = await getLastMessageFromCachedChatSession(
+    getUserCachedId(user)
+  );
+
   return json({
     user,
-    formConfig: await getLastMessageFromCachedChatSession(
-      getUserCachedId(user)
-    ),
+    formConfig,
     history: await getCachedChatSession(getUserCachedId(user))?.getHistory(),
   });
 }
@@ -113,6 +120,7 @@ export default function Home() {
   );
   const existsFormConfig =
     validatedFormConfig.success && validatedFormConfig.data.length > 0;
+  console.log(validatedFormConfig);
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
       <AppAppBar disablePublish={!existsFormConfig} />

@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import ColorModeContext from "~/mui/ColorModeContext";
 import PublishDialog from "./PublishDialog";
-import { useFetcher } from "@remix-run/react";
+import { Form, useFetcher } from "@remix-run/react";
 
 function AppAppBar({ disablePublish }: { disablePublish: boolean }) {
   const {
@@ -145,16 +145,18 @@ function AppAppBar({ disablePublish }: { disablePublish: boolean }) {
                     <MenuItem>Next</MenuItem>
                   </Box>
                   <MenuItem>
-                    <Button
-                      color="primary"
-                      variant="outlined"
-                      component="a"
-                      href="/material-ui/getting-started/templates/sign-in/"
-                      target="_blank"
-                      sx={{ width: "100%" }}
-                    >
-                      logout
-                    </Button>
+                    <Box component={Form} width={"100%"} m={0} method="POST">
+                      <Button
+                        color="primary"
+                        variant="outlined"
+                        name="_action"
+                        value="logout"
+                        type="submit"
+                        fullWidth
+                      >
+                        logout
+                      </Button>
+                    </Box>
                   </MenuItem>
                 </Box>
               </Drawer>
