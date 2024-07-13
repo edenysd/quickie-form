@@ -66,6 +66,8 @@ function ChatBox() {
       sx={{ px: 2, position: "fixed", maxWidth: 500, bottom: 5, zIndex: 10 }}
     >
       <TextField
+        {...getInputProps(fields.prompt, { type: "text" })}
+        key={fields.prompt.key}
         disabled={!!chatFetcher.formAction || isPublishing}
         sx={(theme) => ({
           bgcolor:
@@ -74,9 +76,6 @@ function ChatBox() {
               : "rgba(0, 0, 0, 0.4)",
           backdropFilter: "blur(24px)",
         })}
-        inputProps={{
-          ...getInputProps(fields.prompt, { type: "text" }),
-        }}
         maxRows={5}
         required
         fullWidth
