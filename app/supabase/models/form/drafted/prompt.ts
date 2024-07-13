@@ -6,6 +6,7 @@ import {
   updateCachedChatSession,
 } from "~/bot/chat";
 import { createHistoryFetcher, saveHistory } from "./history";
+import { generatedFormSchema } from "~/bot/schemas";
 
 export const processPrompt = async ({
   prompt,
@@ -22,7 +23,22 @@ export const processPrompt = async ({
     id: getUserCachedId(user),
   });
   const chatSession = getCachedChatSession(getUserCachedId(user))!;
-  const result = await chatSession.sendMessage(prompt);
+  let result = await chatSession.sendMessage(prompt);
+
+  const formConfigTest = await getLastMessageFromCachedChatSession(
+    getUserCachedId(user)
+  );
+  const formValidationTest = generatedFormSchema.safeParse(formConfigTest);
+
+  //Ask for fixes if we get a bad JSON config
+  if (formValidationTest.error) {
+    result = await chatSession.sendMessage(
+      `Please, fix the json format in your response, if there exits a case where you don't
+       know how to fix a section remove it, this is the error message:\n ${formValidationTest.error}`
+    );
+    (await chatSession.getHistory()).splice(-3, 2);
+  }
+
   saveHistory({
     supabaseClient: supabase,
     user,
@@ -31,6 +47,7 @@ export const processPrompt = async ({
       getUserCachedId(user)
     ),
   });
+
   return result;
 };
 export { createHistoryFetcher };
