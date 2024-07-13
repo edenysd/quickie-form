@@ -9,7 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Link, useNavigate } from "@remix-run/react";
+import { Link, redirect, useNavigate } from "@remix-run/react";
 import Copyright from "~/components/Copyright";
 import type { FormEvent } from "react";
 import { useCallback, useContext, useReducer, useState } from "react";
@@ -18,7 +18,9 @@ import { LoadingButton } from "@mui/lab";
 import z from "zod";
 import { getInputProps, useForm } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
-import type { MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import supabaseServerClient from "~/supabase/supabaseServerClient";
+import { parse } from "@supabase/ssr";
 
 export const meta: MetaFunction = () => {
   return [
@@ -29,6 +31,22 @@ export const meta: MetaFunction = () => {
     },
   ];
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const headers = new Headers();
+  const cookies = parse(request.headers.get("Cookie") ?? "");
+
+  const supabase = supabaseServerClient(cookies, headers);
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    return redirect("/home");
+  }
+  return null;
+}
 
 const formSchema = z.object({
   email: z
