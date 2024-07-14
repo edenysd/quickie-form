@@ -113,6 +113,10 @@ function FormField({
             fullWidth
             label={fieldConfig.label}
             placeholder={fieldConfig.placeholder}
+            inputProps={{
+              min: fieldConfig.min,
+              max: fieldConfig.max,
+            }}
           />
         </Grid>
       );
