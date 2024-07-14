@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import type { SlideProps } from "@mui/material";
 import {
   Slide,
@@ -31,6 +31,16 @@ export default function PublishDialog({
   const isPublishing =
     fetcher.state !== "idle" && fetcher.formData?.get("_action") === "publish";
 
+  //Save handleClose but bypass reactivity
+  const handleCloseRef = useRef(handleClose);
+  handleCloseRef.current = handleClose;
+
+  useEffect(() => {
+    if (!isPublishing) {
+      handleCloseRef.current();
+    }
+  }, [isPublishing]);
+
   return (
     <Dialog
       open={open}
@@ -61,6 +71,7 @@ export default function PublishDialog({
             value="publish"
             type="submit"
             loading={isPublishing}
+            onSubmit={handleClose}
           >
             Publish
           </LoadingButton>
