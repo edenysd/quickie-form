@@ -28,13 +28,17 @@ module.exports = {
     // React
     {
       files: ["**/*.{js,jsx,ts,tsx}"],
-      plugins: ["react", "jsx-a11y"],
+      plugins: ["react", "jsx-a11y", "no-floating-promise"],
       extends: [
         "plugin:react/recommended",
         "plugin:react/jsx-runtime",
         "plugin:react-hooks/recommended",
         "plugin:jsx-a11y/recommended",
       ],
+      rules: {
+        "react-hooks/rules-of-hooks": 2,
+        "no-floating-promise/no-floating-promise": 2,
+      },
       settings: {
         react: {
           version: "detect",
@@ -55,7 +59,6 @@ module.exports = {
       files: ["**/*.{ts,tsx}"],
       rules: {
         "@typescript-eslint/consistent-type-imports": 1,
-        "react-hooks/rules-of-hooks": 2,
         "react-hooks/exhaustive-deps": 1,
       },
       plugins: ["@typescript-eslint", "import"],
