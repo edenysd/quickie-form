@@ -58,7 +58,7 @@ startTransition(() => {
     {
       //Used to fix hydratation errors with extensions in case that our filter wont work
       onRecoverableError: () => {
-        console.log("Hydration failed! Attempting recovery...");
+        console.info("Hydration failed! Attempting recovery...");
         root.render(
           <StrictMode>
             <MuiProvider>
