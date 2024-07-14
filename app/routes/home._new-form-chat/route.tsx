@@ -120,7 +120,7 @@ export default function Home() {
   );
   const existsFormConfig =
     validatedFormConfig.success && validatedFormConfig.data.length > 0;
-  console.log(validatedFormConfig);
+
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
       <AppAppBar disablePublish={!existsFormConfig} />
