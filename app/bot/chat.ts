@@ -6,6 +6,7 @@ import type {
   CoreToolMessage,
   CoreUserMessage,
 } from "ai";
+import { generatedFormSchema } from "./schemas";
 
 export type MessageVariant =
   | CoreSystemMessage
@@ -51,42 +52,58 @@ export async function sendMessage({
   const history = await updateCachedChatHistory({ fetchHistory, id });
   const message: CoreUserMessage = { role: "user", content: messageContent };
 
-  let response;
+  let formConfig = [];
 
   try {
-    response = await generateForm({ history: history.concat(message) });
-
-    history.push(message);
-    history.push({
-      role: "assistant",
-      content: JSON.stringify(response.object),
-    });
+    const response = await generateForm({ history: history.concat(message) });
+    formConfig = response.object;
   } catch (e) {
-    if (e.cause) {
-      console.error(e);
-      response = await generateForm({
-        history: history
-          .concat(message)
-          .concat({ role: "assistant", content: JSON.stringify(e.value) })
-          .concat({
-            role: "user",
-            content: `Please, fix the json format in your response, if there exits a case where you don't
-          know how to fix a section remove it, this is the error message:\n ${JSON.stringify(
-            e.cause
-          )}`,
-          }),
-      });
-      history.push(message);
-      history.push({
-        role: "assistant",
-        content: JSON.stringify(response.object),
-      });
+    /* 
+      Manually checked validation errors because forced bifurcation in data source and errors.
+
+      Ex: When error name is "AI_APICallError" the Zod schema throw a non useful error
+      then we decide to manually extract the response and validate in a more lean process
+     */
+    let errorDataValue = null;
+    if (e.name === "AI_APICallError") {
+      errorDataValue = JSON.parse(e.responseBody).candidates[0].content.parts[0]
+        .text;
+      if (!errorDataValue || errorDataValue?.length == 0) errorDataValue = [];
+      console.log(errorDataValue, errorDataValue.length);
+    } else if (e.cause) {
+      errorDataValue = e.value;
     } else {
       throw e;
     }
+
+    const responseValidation = generatedFormSchema.safeParse(errorDataValue);
+    if (responseValidation.success) {
+      formConfig = responseValidation.data;
+    } else {
+      const response = await generateForm({
+        history: history
+          .concat(message)
+          .concat({
+            role: "assistant",
+            content: JSON.stringify(errorDataValue),
+          })
+          .concat({
+            role: "user",
+            content: `Please, fix the json format in your latest response, this is the error message:\n ${JSON.stringify(
+              e.cause
+            )}`,
+          }),
+      });
+
+      formConfig = response.object;
+    }
   }
 
-  const formConfig = response.object;
+  history.push(message);
+  history.push({
+    role: "assistant",
+    content: JSON.stringify(formConfig),
+  });
   return { formConfig, history };
 }
 
@@ -96,8 +113,8 @@ export async function removeCachedChatSession({ id }: { id: string }) {
 
 export async function getLastMessageFromCachedChatSession(
   id: string
-): Promise<MessageVariant | undefined> {
+): Promise<MessageVariant> {
   return JSON.parse(
-    (await getCachedChatHistory(id))?.at(-1)?.content as string
+    ((await getCachedChatHistory(id))?.at(-1)?.content as string) || "[]"
   );
 }
