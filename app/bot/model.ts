@@ -6,7 +6,7 @@ import type { ChatHistory } from "./chat";
 
 export const GENERATION_CONFIG = {
   topP: 0.95,
-  maxOutputTokens: 8192,
+  maxTokens: 2000,
   frequencyPenalty: 0,
 };
 
