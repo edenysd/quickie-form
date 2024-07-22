@@ -1,4 +1,4 @@
-import { model, systemInstruction } from "./model";
+import { generateForm } from "./model";
 import type { User } from "@supabase/supabase-js";
 import type {
   CoreAssistantMessage,
@@ -6,8 +6,6 @@ import type {
   CoreToolMessage,
   CoreUserMessage,
 } from "ai";
-import { generateObject } from "ai";
-import { generatedFormSchema } from "./schemas";
 
 export type MessageVariant =
   | CoreSystemMessage
@@ -56,13 +54,7 @@ export async function sendMessage({
   let response;
 
   try {
-    response = await generateObject({
-      mode: "json",
-      model,
-      schema: generatedFormSchema,
-      system: systemInstruction,
-      messages: history.concat(message),
-    });
+    response = await generateForm({ history: history.concat(message) });
 
     history.push(message);
     history.push({
@@ -71,12 +63,9 @@ export async function sendMessage({
     });
   } catch (e) {
     if (e.cause) {
-      response = await generateObject({
-        mode: "json",
-        model,
-        schema: generatedFormSchema,
-        system: systemInstruction,
-        messages: history
+      console.error(e);
+      response = await generateForm({
+        history: history
           .concat(message)
           .concat({ role: "assistant", content: JSON.stringify(e.value) })
           .concat({
