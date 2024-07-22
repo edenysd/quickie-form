@@ -1,47 +1,111 @@
-import type { Content, ChatSession } from "@google/generative-ai";
-import { model, GENERATION_CONFIG } from "./model";
+import { model, systemInstruction } from "./model";
 import type { User } from "@supabase/supabase-js";
+import type {
+  CoreAssistantMessage,
+  CoreSystemMessage,
+  CoreToolMessage,
+  CoreUserMessage,
+} from "ai";
+import { generateObject } from "ai";
+import { generatedFormSchema } from "./schemas";
 
-export type ChatHistory = Content[];
+export type MessageVariant =
+  | CoreSystemMessage
+  | CoreUserMessage
+  | CoreAssistantMessage
+  | CoreToolMessage;
+export type ChatHistory = Array<MessageVariant>;
 interface ChatSessionProps {
   fetchHistory: () => Promise<ChatHistory>;
   id: string;
 }
 
-const savedSessions = new Map<string, ChatSession>();
+const savedHistory = new Map<string, ChatHistory>();
 
 export const getUserCachedId = (user: User | null) => `local-saved-${user?.id}`;
 
-//@TODO remove unused cached items
-export function getCachedChatSession(id: string): ChatSession | undefined {
-  const sesion = savedSessions.get(id);
-  return sesion;
+//@TODO think about changing to a non memory hoisted variant
+export async function getCachedChatHistory(
+  id: string
+): Promise<ChatHistory | undefined> {
+  const history = savedHistory.get(id);
+  return history;
 }
 
-export async function updateCachedChatSession({
+export async function updateCachedChatHistory({
   fetchHistory,
   id,
 }: ChatSessionProps) {
-  const cachedSession = savedSessions.get(id);
-  if (cachedSession) {
-    return;
+  let history = await getCachedChatHistory(id);
+  if (!history) {
+    history = await fetchHistory();
+  }
+  savedHistory.set(id, history);
+
+  return history;
+}
+
+export async function sendMessage({
+  fetchHistory,
+  id,
+  messageContent,
+}: ChatSessionProps & { messageContent: string }) {
+  const history = await updateCachedChatHistory({ fetchHistory, id });
+  const message: CoreUserMessage = { role: "user", content: messageContent };
+
+  let response;
+
+  try {
+    response = await generateObject({
+      mode: "json",
+      model,
+      schema: generatedFormSchema,
+      system: systemInstruction,
+      messages: history.concat(message),
+    });
+    history.push(message);
+    history.push({
+      role: "assistant",
+      content: JSON.stringify(response.object),
+    });
+  } catch (e) {
+    if (e.cause) {
+      response = await generateObject({
+        mode: "json",
+        model,
+        schema: generatedFormSchema,
+        system: systemInstruction,
+        messages: history
+          .concat(message)
+          .concat({ role: "assistant", content: JSON.stringify(e.value) })
+          .concat({
+            role: "user",
+            content: `Please, fix the json format in your response, if there exits a case where you don't
+          know how to fix a section remove it, this is the error message:\n ${JSON.stringify(
+            e.cause
+          )}`,
+          }),
+      });
+      history.push(message);
+      history.push({
+        role: "assistant",
+        content: JSON.stringify(response.object),
+      });
+    } else {
+      throw e;
+    }
   }
 
-  const history = await fetchHistory();
-  const chatSession = model.startChat({
-    generationConfig: GENERATION_CONFIG,
-    history,
-  });
-  savedSessions.set(id, chatSession);
+  const formConfig = response.object;
+  return { formConfig, history };
 }
 
 export async function removeCachedChatSession({ id }: { id: string }) {
-  return savedSessions.delete(id);
+  return savedHistory.delete(id);
 }
 
-export async function getLastMessageFromCachedChatSession(id: string) {
-  return JSON.parse(
-    (await getCachedChatSession(id)?.getHistory())?.at(-1)?.parts[0].text ||
-      "[]"
-  );
+export async function getLastMessageFromCachedChatSession(
+  id: string
+): Promise<MessageVariant | undefined> {
+  return (await getCachedChatHistory(id))?.at(-1);
 }
