@@ -1,12 +1,6 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import {
-  getCachedChatSession,
-  getLastMessageFromCachedChatSession,
-  getUserCachedId,
-  updateCachedChatSession,
-} from "~/bot/chat";
+import { getUserCachedId, sendMessage } from "~/bot/chat";
 import { createHistoryFetcher, saveHistory } from "./history";
-import { generatedFormSchema } from "~/bot/schemas";
 
 export const processPrompt = async ({
   prompt,
@@ -18,37 +12,20 @@ export const processPrompt = async ({
   user: User;
 }) => {
   const fetchHistory = createHistoryFetcher(supabase, user);
-  await updateCachedChatSession({
+  const userCachedId = getUserCachedId(user);
+  const { formConfig, history } = await sendMessage({
     fetchHistory,
-    id: getUserCachedId(user),
+    id: userCachedId,
+    messageContent: prompt,
   });
-  const chatSession = getCachedChatSession(getUserCachedId(user))!;
-  let result = await chatSession.sendMessage(prompt);
-
-  const formConfigTest = await getLastMessageFromCachedChatSession(
-    getUserCachedId(user)
-  );
-  const formValidationTest = generatedFormSchema.safeParse(formConfigTest);
-
-  //Ask for fixes if we get a bad JSON config
-  if (formValidationTest.error) {
-    result = await chatSession.sendMessage(
-      `Please, fix the json format in your response, if there exits a case where you don't
-       know how to fix a section remove it, this is the error message:\n ${formValidationTest.error}`
-    );
-    const tempFixMessages = (await chatSession.getHistory()).splice(-3, 2);
-    console.log("BAD FORMED MESSAGE", JSON.stringify(tempFixMessages));
-  }
 
   saveHistory({
     supabaseClient: supabase,
     user,
-    history: await chatSession.getHistory(),
-    formConfig: await getLastMessageFromCachedChatSession(
-      getUserCachedId(user)
-    ),
+    history,
+    formConfig,
   });
 
-  return result;
+  return { formConfig, history };
 };
 export { createHistoryFetcher };
