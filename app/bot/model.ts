@@ -1,16 +1,28 @@
 import { google } from "@ai-sdk/google";
 import baseAgentInstruction from "./instructions.md?raw";
+import { generateObject } from "ai";
+import { generatedFormSchema } from "./schemas";
+import type { ChatHistory } from "./chat";
 
 export const GENERATION_CONFIG = {
-  temperature: 1,
   topP: 0.95,
-  topK: 64,
   maxOutputTokens: 8192,
-  responseMimeType: "application/json",
+  frequencyPenalty: 0,
 };
 
 export const systemInstruction = baseAgentInstruction;
 
 export const model = google("models/gemini-1.5-flash-latest", {
-  ...GENERATION_CONFIG,
+  topK: 64,
 });
+
+export const generateForm = async ({ history }: { history: ChatHistory }) => {
+  return await generateObject({
+    ...GENERATION_CONFIG,
+    mode: "json",
+    model,
+    schema: generatedFormSchema,
+    system: systemInstruction,
+    messages: history,
+  });
+};
