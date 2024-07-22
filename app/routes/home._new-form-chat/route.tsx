@@ -102,9 +102,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     id: getUserCachedId(user),
   });
 
-  const formConfig = (
-    await getLastMessageFromCachedChatSession(getUserCachedId(user))
-  )?.content;
+  const formConfig = await getLastMessageFromCachedChatSession(
+    getUserCachedId(user)
+  );
 
   return json({
     user,
@@ -120,7 +120,7 @@ export default function Home() {
   );
   const existsFormConfig =
     validatedFormConfig.success && validatedFormConfig.data.length > 0;
-  console.log({ ...loaderData });
+
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
       <AppAppBar disablePublish={!existsFormConfig} />

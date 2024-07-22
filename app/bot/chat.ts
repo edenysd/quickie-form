@@ -63,6 +63,7 @@ export async function sendMessage({
       system: systemInstruction,
       messages: history.concat(message),
     });
+
     history.push(message);
     history.push({
       role: "assistant",
@@ -107,5 +108,7 @@ export async function removeCachedChatSession({ id }: { id: string }) {
 export async function getLastMessageFromCachedChatSession(
   id: string
 ): Promise<MessageVariant | undefined> {
-  return (await getCachedChatHistory(id))?.at(-1);
+  return JSON.parse(
+    (await getCachedChatHistory(id))?.at(-1)?.content as string
+  );
 }
