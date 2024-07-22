@@ -7,11 +7,11 @@ import AppAppBar from "./components/AppAppBar";
 import ChatBox, { promptSchema } from "./components/ChatBox";
 import { parseWithZod } from "@conform-to/zod";
 import {
-  getCachedChatSession,
-  updateCachedChatSession,
+  getCachedChatHistory,
   getLastMessageFromCachedChatSession,
   getUserCachedId,
   removeCachedChatSession,
+  updateCachedChatHistory,
 } from "../../bot/chat";
 import { generatedFormSchema } from "../../bot/schemas";
 import FormAssistedPreview from "./components/FormAssistedPreview";
@@ -97,19 +97,19 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   const fetchHistory = createHistoryFetcher(supabase, user);
-  await updateCachedChatSession({
+  await updateCachedChatHistory({
     fetchHistory,
     id: getUserCachedId(user),
   });
 
-  const formConfig = await getLastMessageFromCachedChatSession(
-    getUserCachedId(user)
-  );
+  const formConfig = (
+    await getLastMessageFromCachedChatSession(getUserCachedId(user))
+  )?.content;
 
   return json({
     user,
     formConfig,
-    history: await getCachedChatSession(getUserCachedId(user))?.getHistory(),
+    history: await getCachedChatHistory(getUserCachedId(user)),
   });
 }
 
@@ -120,7 +120,7 @@ export default function Home() {
   );
   const existsFormConfig =
     validatedFormConfig.success && validatedFormConfig.data.length > 0;
-
+  console.log({ ...loaderData });
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
       <AppAppBar disablePublish={!existsFormConfig} />
