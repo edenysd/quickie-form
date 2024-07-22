@@ -60,7 +60,7 @@ El campo type describe solamente el tipo de valor que contiene dicha entrada. Lo
   - **Uso**: Para cualquier tipo de entrada textual mediana o larga, como descripciones detalladas, preguntas muy abiertas, o cualquier otra información de texto libre que no sea una respuesta de corta de aproximadamente solo 5 palabras.
 - **section**
   - **Descripción**: Contiene o agrupa multiples campos.
-  - **Uso**: Contiene o agrupa multiples campos en una seccion agrupando todos los que pertenecen de un mismo tema, un campo section no puede tener campo section como hijo y todo campo en la configuracion debe pertener a una seccion o ser una.
+  - **Uso**: Contiene o agrupa multiples campos en una seccion agrupando todos los que pertenecen de un mismo tema, un campo section no puede tener campo section como hijo y todo campo en la configuracion debe pertener a una seccion o ser una. Si se elimina la seccion se debe eliminar todos los campos que esta contiene.
   - **Campos específicos:**
     - **fields:** el campo fields es una lista conformada por elementos que representan los campos de cualquier tipo excepto secciones ya que estas no pueden anidarse.
 - **password**
