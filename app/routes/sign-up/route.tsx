@@ -63,7 +63,7 @@ export default function SignUp() {
         const authResponse = await supabaseClient?.auth.signUp({
           ...authData,
           options: {
-            emailRedirectTo: "https://quickieform.com/welcome",
+            emailRedirectTo: "https://quickieform.com/sign-in",
           },
         });
 
