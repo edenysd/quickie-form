@@ -172,9 +172,27 @@ function FormField({
       );
     case "file":
       return (
-        <Grid item container xs={12} spacing={2}>
+        <Grid item container xs={12} spacing={2} position={"relative"}>
+          {/* @TODO remove this overlay when file fields is enabled and remove disabled state*/}
+          <Grid
+            item
+            sx={{
+              backdropFilter: "blur(4px)",
+            }}
+            display={"flex"}
+            alignItems={"center"}
+            position={"absolute"}
+            width={"100%"}
+            height={"100%"}
+            zIndex={10}
+          >
+            <Typography variant="body1" color={"orange"}>
+              This field will be supported in upcomming releases
+            </Typography>
+          </Grid>
           <Grid item xs={6}>
             <TextField
+              disabled
               fullWidth
               type="file"
               name={fieldConfig.name}
