@@ -207,31 +207,35 @@ function FormField({
       return (
         <Grid item xs={12} md={6}>
           <Typography component="legend">{fieldConfig.label}</Typography>
-          <Slider
-            name={fieldConfig.name}
-            getAriaLabel={() => fieldConfig.label}
-            valueLabelDisplay="auto"
-            defaultValue={[fieldConfig.min || 0, fieldConfig.max || 0]}
-            // marks
-            // step={1}
-            min={fieldConfig.min || 0}
-            max={fieldConfig.max || 0}
-          />
+          <Box px={1}>
+            <Slider
+              name={fieldConfig.name}
+              getAriaLabel={() => fieldConfig.label}
+              valueLabelDisplay="auto"
+              defaultValue={[fieldConfig.min || 0, fieldConfig.max || 0]}
+              // marks
+              // step={1}
+              min={fieldConfig.min || 0}
+              max={fieldConfig.max || 0}
+            />
+          </Box>
         </Grid>
       );
     case "slider":
       return (
         <Grid item xs={12} md={6}>
           <Typography component="legend">{fieldConfig.label}</Typography>
-          <Slider
-            name={fieldConfig.name}
-            aria-label={fieldConfig.label}
-            valueLabelDisplay="auto"
-            // marks
-            // step={1}
-            min={fieldConfig.min || 0}
-            max={fieldConfig.max || 0}
-          />
+          <Box px={1}>
+            <Slider
+              name={fieldConfig.name}
+              aria-label={fieldConfig.label}
+              valueLabelDisplay="auto"
+              // marks
+              // step={1}
+              min={fieldConfig.min || 0}
+              max={fieldConfig.max || 0}
+            />
+          </Box>
         </Grid>
       );
   }
