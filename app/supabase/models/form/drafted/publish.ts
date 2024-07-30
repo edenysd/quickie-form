@@ -8,7 +8,7 @@ export const publishDraftedForm = async ({
   user: User;
 }) => {
   const response = await supabaseClient
-    ?.from("Forms")
+    ?.from("Form_Templates")
     .update([
       {
         status: "published",

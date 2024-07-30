@@ -6,7 +6,7 @@ import type { generatedFormSchema } from "~/bot/schemas";
 export const createHistoryFetcher = (supabase: SupabaseClient, user: User) => {
   return async () => {
     const response = await supabase
-      .from("Forms")
+      .from("Form_Templates")
       .select("history")
       .eq("owner", user.id)
       .eq("status", "draft")
@@ -30,7 +30,7 @@ export const saveHistory = async ({
   user: User;
 }) => {
   const response = await supabaseClient
-    ?.from("Forms")
+    ?.from("Form_Templates")
     .update([
       {
         history,
@@ -42,7 +42,7 @@ export const saveHistory = async ({
     .select();
 
   if (!response?.data?.length) {
-    await supabaseClient?.from("Forms").insert([
+    await supabaseClient?.from("Form_Templates").insert([
       {
         history: history,
         config: formConfig,
