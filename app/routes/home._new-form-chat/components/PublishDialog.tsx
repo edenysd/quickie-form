@@ -44,10 +44,6 @@ export default function PublishDialog({
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: publishDialogActionContent });
     },
-    onSubmit() {
-      handleClose();
-      form.reset();
-    },
   });
 
   const labelRef = useRef<HTMLInputElement>(null);
@@ -56,6 +52,22 @@ export default function PublishDialog({
       labelRef.current?.focus();
     }
   }, [open]);
+
+  // @TODO check for more explicit remix primitives for await actions executions
+  const handleCloseAction = useRef(() => {});
+  handleCloseAction.current = () => {
+    if (open) {
+      handleClose();
+      form.reset();
+    }
+  };
+
+  useEffect(() => {
+    if (!isPublishing) {
+      handleCloseAction.current();
+    }
+  }, [isPublishing]);
+
   return (
     <Dialog
       open={open}
@@ -79,8 +91,9 @@ export default function PublishDialog({
               Confirm that you want to publish current form.
             </DialogContentText>
             <TextField
-              inputRef={labelRef}
               {...getInputProps(fields.templateName, { type: "text" })}
+              key={fields.templateName.key}
+              inputRef={labelRef}
               label="Template Name"
               required
               helperText={fields.templateName.errors?.at(0)}
