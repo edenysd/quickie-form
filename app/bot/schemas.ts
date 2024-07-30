@@ -67,7 +67,8 @@ export const sectionSchema = z.object({
   placeholder: z.string().describe("Texto de ayuda dentro de la sección"),
   fields: z
     .array(fieldSchema)
-    .describe("Lista de campos agrupados en la seccion"),
+    .nonempty()
+    .describe("Lista de campos agrupados en la seccion")
 });
 
 export const generatedFormSchema = z
