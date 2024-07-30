@@ -9,15 +9,24 @@ import {
   DialogActions,
   Button,
   Box,
+  TextField,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useFetcher } from "@remix-run/react";
+import { z } from "zod";
+import { getFormProps, getInputProps, useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
 
 const Transition = React.forwardRef(function Transition(
   props: SlideProps,
   ref
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
+});
+
+export const publishDialogActionContent = z.object({
+  _action: z.literal("publish"),
+  templateName: z.string().min(3),
 });
 
 export default function PublishDialog({
@@ -31,16 +40,22 @@ export default function PublishDialog({
   const isPublishing =
     fetcher.state !== "idle" && fetcher.formData?.get("_action") === "publish";
 
-  //Save handleClose but bypass reactivity
-  const handleCloseRef = useRef(handleClose);
-  handleCloseRef.current = handleClose;
+  const [form, fields] = useForm({
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema: publishDialogActionContent });
+    },
+    onSubmit() {
+      handleClose();
+      form.reset();
+    },
+  });
 
+  const labelRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    if (!isPublishing) {
-      handleCloseRef.current();
+    if (open) {
+      labelRef.current?.focus();
     }
-  }, [isPublishing]);
-
+  }, [open]);
   return (
     <Dialog
       open={open}
@@ -49,23 +64,36 @@ export default function PublishDialog({
       onClose={!isPublishing ? handleClose : () => {}}
       aria-describedby="alert-dialog-slide-description"
     >
-      <DialogTitle>{"Publish Form"}</DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-slide-description">
-          Confirm that you want to publish current form.
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button disabled={isPublishing} onClick={handleClose}>
-          Disagree
-        </Button>
-        <Box
-          component={fetcher.Form}
-          method="POST"
-          sx={{
-            m: 0,
-          }}
-        >
+      <Box
+        {...getFormProps(form)}
+        component={fetcher.Form}
+        method="POST"
+        sx={{
+          m: 0,
+        }}
+      >
+        <DialogTitle>{"Publish Form"}</DialogTitle>
+        <DialogContent>
+          <Box display={"flex"} flexDirection={"column"} gap={2}>
+            <DialogContentText id="alert-dialog-slide-description">
+              Confirm that you want to publish current form.
+            </DialogContentText>
+            <TextField
+              inputRef={labelRef}
+              {...getInputProps(fields.templateName, { type: "text" })}
+              label="Template Name"
+              required
+              helperText={fields.templateName.errors?.at(0)}
+              error={!!fields.templateName.errors?.length}
+              fullWidth
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button disabled={isPublishing} onClick={handleClose}>
+            Disagree
+          </Button>
+
           <LoadingButton
             name="_action"
             value="publish"
@@ -75,8 +103,8 @@ export default function PublishDialog({
           >
             Publish
           </LoadingButton>
-        </Box>
-      </DialogActions>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 }

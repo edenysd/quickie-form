@@ -20,7 +20,7 @@ import {
   processPrompt,
 } from "~/supabase/models/form/drafted/prompt";
 import { publishDraftedForm } from "~/supabase/models/form/drafted/publish";
-import { z } from "zod";
+import { publishDialogActionContent } from "./components/PublishDialog";
 
 export const meta: MetaFunction = () => {
   return [
@@ -61,13 +61,14 @@ export async function action({ request }: LoaderFunctionArgs) {
     return json(result);
   } else if (_action === "publish") {
     const data = parseWithZod(formData, {
-      schema: z.object({ _action: z.string() }),
+      schema: publishDialogActionContent,
     });
     if (data.status !== "success") {
       return data.reply();
     }
     const result = await publishDraftedForm({
       supabaseClient: supabase,
+      templateName: data.value.templateName,
       user,
     });
     removeCachedChatSession({ id: getUserCachedId(user) });
@@ -79,6 +80,8 @@ export async function action({ request }: LoaderFunctionArgs) {
       return redirect("/");
     }
   }
+
+  return null;
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
