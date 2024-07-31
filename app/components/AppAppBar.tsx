@@ -1,19 +1,29 @@
 import * as React from "react";
-import { Menu } from "@mui/icons-material";
+import {
+  BookmarkOutlined,
+  FlashOnOutlined,
+  HomeOutlined,
+  InsightsOutlined,
+  Menu,
+} from "@mui/icons-material";
 import type { Theme } from "@mui/material";
 import {
   AppBar,
   Container,
   Toolbar,
   Box,
-  MenuItem,
   Button,
   Drawer,
   Divider,
   useTheme,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListItemIcon,
 } from "@mui/material";
 import ColorModeContext from "~/mui/ColorModeContext";
-import { Form } from "@remix-run/react";
+import { Form, Link } from "@remix-run/react";
 import ToggleColorMode from "~/mui/ToggleColorMode";
 
 function AppAppBar({ children }: React.PropsWithChildren) {
@@ -100,28 +110,68 @@ function AppAppBar({ children }: React.PropsWithChildren) {
           flexDirection={"column"}
           sx={{
             minWidth: "300px",
-            py: 2,
             backgroundColor: "background.paper",
             flexGrow: 1,
           }}
         >
-          <Box>
-            <MenuItem>Next</MenuItem>
-          </Box>
-          <MenuItem>
-            <Box component={Form} width={"100%"} m={0} method="POST">
-              <Button
-                color="primary"
-                variant="outlined"
-                name="_action"
-                value="logout"
-                type="submit"
-                fullWidth
+          <nav>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/home">
+                  <ListItemIcon>
+                    <HomeOutlined />
+                  </ListItemIcon>
+                  <ListItemText>Home</ListItemText>
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/templates">
+                  <ListItemIcon>
+                    <BookmarkOutlined />
+                  </ListItemIcon>
+                  <ListItemText>Templates</ListItemText>
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/ongoing">
+                  <ListItemIcon>
+                    <FlashOnOutlined />
+                  </ListItemIcon>
+                  <ListItemText>Ongoing</ListItemText>
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/reports">
+                  <ListItemIcon>
+                    <InsightsOutlined />
+                  </ListItemIcon>
+                  <ListItemText>Reports</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </nav>
+          <List>
+            <ListItem>
+              <Box
+                component={Form}
+                width={"100%"}
+                m={0}
+                method="POST"
+                action="/home"
               >
-                logout
-              </Button>
-            </Box>
-          </MenuItem>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  name="_action"
+                  value="logout"
+                  type="submit"
+                  fullWidth
+                >
+                  logout
+                </Button>
+              </Box>
+            </ListItem>
+          </List>
         </Box>
       </Drawer>
     </>
