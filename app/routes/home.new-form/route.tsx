@@ -112,7 +112,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
-export default function Home() {
+export default function NewForm() {
   const loaderData = useLoaderData<typeof loader>();
   const validatedFormConfig = generatedFormSchema.safeParse(
     loaderData.formConfig

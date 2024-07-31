@@ -13,7 +13,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export default function NotFound404() {
+export default function ResetPassword() {
   return (
     <Box
       width={"100%"}

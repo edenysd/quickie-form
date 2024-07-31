@@ -11,7 +11,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export default function NotFound404() {
+export default function ValidateAccount() {
   return (
     <Box
       width={"100%"}

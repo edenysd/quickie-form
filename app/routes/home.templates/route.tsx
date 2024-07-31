@@ -57,7 +57,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
 }
 
-export default function Home() {
+export default function Templates() {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
