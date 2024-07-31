@@ -125,7 +125,7 @@ function AppAppBar({ children }: React.PropsWithChildren) {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton component={Link} to="/templates">
+                <ListItemButton component={Link} to="/home/templates">
                   <ListItemIcon>
                     <BookmarkOutlined />
                   </ListItemIcon>
@@ -133,7 +133,7 @@ function AppAppBar({ children }: React.PropsWithChildren) {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton component={Link} to="/ongoing">
+                <ListItemButton component={Link} to="/home/ongoing">
                   <ListItemIcon>
                     <FlashOnOutlined />
                   </ListItemIcon>
@@ -141,7 +141,7 @@ function AppAppBar({ children }: React.PropsWithChildren) {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton component={Link} to="/reports">
+                <ListItemButton component={Link} to="/home/reports">
                   <ListItemIcon>
                     <InsightsOutlined />
                   </ListItemIcon>
