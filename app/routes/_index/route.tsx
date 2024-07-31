@@ -1,5 +1,5 @@
 import { Box, Divider } from "@mui/material";
-import AppAppBar from "./components/AppAppBar";
+import LandingAppBar from "./components/LandingAppBar";
 import Hero from "./components/Hero";
 import LogoCollection from "./components/LogoCollection";
 import Highlights from "./components/Highlights";
@@ -24,7 +24,7 @@ export const meta: MetaFunction = () => {
 export default function LandingPage() {
   return (
     <Box>
-      <AppAppBar />
+      <LandingAppBar />
       <Hero />
       <Box sx={{ bgcolor: "background.default" }}>
         <LogoCollection />

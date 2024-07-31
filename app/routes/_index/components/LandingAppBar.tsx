@@ -23,7 +23,7 @@ const logoStyle = {
   cursor: "pointer",
 };
 
-function AppAppBar() {
+function LandingAppBar() {
   const {
     palette: { mode },
   }: Theme = useTheme() as Theme;
@@ -244,4 +244,4 @@ function AppAppBar() {
   );
 }
 
-export default AppAppBar;
+export default LandingAppBar;
