@@ -3,7 +3,7 @@ import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect, useLoaderData } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
-import AppAppBar from "./components/AppAppBar";
+import AppAppBar from "./components/NewFormAppBar";
 import ChatBox, { promptSchema } from "./components/ChatBox";
 import { parseWithZod } from "@conform-to/zod";
 import {
