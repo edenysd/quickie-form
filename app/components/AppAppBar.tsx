@@ -23,8 +23,37 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import ColorModeContext from "~/mui/ColorModeContext";
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, useLocation } from "@remix-run/react";
 import ToggleColorMode from "~/mui/ToggleColorMode";
+
+interface Route {
+  path: string;
+  label: string;
+  icon: React.ReactNode;
+}
+
+export const AppAppBarRoutes: Route[] = [
+  {
+    path: "/home",
+    icon: <HomeOutlined />,
+    label: "Home",
+  },
+  {
+    path: "/home/templates",
+    icon: <BookmarkOutlined />,
+    label: "Templates",
+  },
+  {
+    path: "/home/ongoing",
+    icon: <FlashOnOutlined />,
+    label: "Ongoing",
+  },
+  {
+    path: "/home/reports",
+    icon: <InsightsOutlined />,
+    label: "Reports",
+  },
+];
 
 function AppAppBar({ children }: React.PropsWithChildren) {
   const {
@@ -32,7 +61,7 @@ function AppAppBar({ children }: React.PropsWithChildren) {
   }: Theme = useTheme() as Theme;
   const { toggleColorMode } = React.useContext(ColorModeContext);
   const [openDrawer, setOpenDrawer] = React.useState(false);
-
+  const currentLocation = useLocation();
   const toggleDrawer = React.useCallback(
     (newOpen: boolean) => () => {
       setOpenDrawer(newOpen);
@@ -123,38 +152,18 @@ function AppAppBar({ children }: React.PropsWithChildren) {
         >
           <nav>
             <List>
-              <ListItem disablePadding>
-                <ListItemButton component={Link} to="/home">
-                  <ListItemIcon>
-                    <HomeOutlined />
-                  </ListItemIcon>
-                  <ListItemText>Home</ListItemText>
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton component={Link} to="/home/templates">
-                  <ListItemIcon>
-                    <BookmarkOutlined />
-                  </ListItemIcon>
-                  <ListItemText>Templates</ListItemText>
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton component={Link} to="/home/ongoing">
-                  <ListItemIcon>
-                    <FlashOnOutlined />
-                  </ListItemIcon>
-                  <ListItemText>Ongoing</ListItemText>
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton component={Link} to="/home/reports">
-                  <ListItemIcon>
-                    <InsightsOutlined />
-                  </ListItemIcon>
-                  <ListItemText>Reports</ListItemText>
-                </ListItemButton>
-              </ListItem>
+              {AppAppBarRoutes.map((route) => (
+                <ListItem disablePadding key={route.path}>
+                  <ListItemButton
+                    component={Link}
+                    to={route.path}
+                    selected={currentLocation.pathname === route.path}
+                  >
+                    <ListItemIcon>{route.icon}</ListItemIcon>
+                    <ListItemText>{route.label}</ListItemText>
+                  </ListItemButton>
+                </ListItem>
+              ))}
             </List>
           </nav>
           <List>
