@@ -74,11 +74,6 @@ export async function action({ request }: LoaderFunctionArgs) {
     removeCachedChatSession({ id: getUserCachedId(user) });
 
     return json(result);
-  } else if (_action === "logout") {
-    const result = await supabase.auth.signOut();
-    if (!result.error) {
-      return redirect("/");
-    }
   }
 
   return null;
