@@ -24,10 +24,11 @@ import { publishDialogActionContent } from "./components/PublishDialog";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Home" },
+    { title: "Form Creation" },
     {
       name: "description",
-      content: "Home section for Quickie Form service.",
+      content:
+        "Template form creation tool for an eazy configuration and deployment.",
     },
   ];
 };
@@ -150,9 +151,9 @@ export default function Home() {
             gap={1}
             color={"InfoText"}
           >
-            <Typography variant="h5">Welcome to Quickie Form</Typography>
+            <Typography variant="h5">Template form creation tool</Typography>
             <Typography variant="body1">
-              Simply type what you want and we will make it happens.
+              Simply type what you want and then publish your form template.
             </Typography>
           </Box>
         )}

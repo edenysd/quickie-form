@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import AppAppBar from "~/components/AppAppBar";
 
-function DashboardAppBar() {
+function TemplatesAppBar() {
   return (
     <AppAppBar>
       <Box
@@ -10,10 +10,10 @@ function DashboardAppBar() {
         flexGrow={1}
         fontFamily={"Virgil"}
       >
-        Home
+        Templates
       </Box>
     </AppAppBar>
   );
 }
 
-export default DashboardAppBar;
+export default TemplatesAppBar;
