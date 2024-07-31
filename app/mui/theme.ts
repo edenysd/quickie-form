@@ -1,5 +1,5 @@
 import type { Theme, PaletteMode } from "@mui/material";
-import { createTheme, colors } from "@mui/material";
+import { createTheme, colors, responsiveFontSizes } from "@mui/material";
 import Virgil from "./fonts/virgil.woff2"
 
 // Create a theme instance.
@@ -8,7 +8,7 @@ const initTheme = ({
 }: {
   mode?: PaletteMode;
 } = {}): Theme =>
-  createTheme({
+  responsiveFontSizes(createTheme({
     palette: {
       mode: mode || "light",
       primary: {
@@ -35,5 +35,5 @@ const initTheme = ({
         `,
       }
     }
-  });
+  }));
 export default initTheme;
