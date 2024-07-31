@@ -56,6 +56,7 @@ function AppAppBar({ children }: React.PropsWithChildren) {
             variant="dense"
             sx={(theme) => ({
               display: "flex",
+              height: "60px",
               p: 1,
               gap: 0.5,
               alignItems: "center",
@@ -81,14 +82,20 @@ function AppAppBar({ children }: React.PropsWithChildren) {
               alignItems={"center"}
               justifyContent={"space-between"}
               width={"100%"}
+              height={"100%"}
             >
               <Box flexGrow={1}>{children}</Box>
-              <Box display={"flex"} alignItems={"center"} gap={1}>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                gap={1}
+                height={"100%"}
+              >
+                <Divider orientation="vertical" flexItem />
                 <ToggleColorMode
                   mode={mode}
                   toggleColorMode={toggleColorMode}
                 />
-                <Divider orientation="vertical" flexItem />
                 <Button
                   variant="text"
                   color="primary"
@@ -108,10 +115,10 @@ function AppAppBar({ children }: React.PropsWithChildren) {
           display={"flex"}
           justifyContent={"space-between"}
           flexDirection={"column"}
+          minWidth={"300px"}
+          flexGrow={1}
           sx={{
-            minWidth: "300px",
             backgroundColor: "background.paper",
-            flexGrow: 1,
           }}
         >
           <nav>
