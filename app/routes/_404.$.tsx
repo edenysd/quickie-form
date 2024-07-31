@@ -22,9 +22,13 @@ export default function NotFound404() {
       flexDirection={"column"}
       alignItems={"center"}
       justifyContent={"center"}
-      gap={2}
+      gap={1}
     >
-      <Typography variant="h1">404 NOT FOUND</Typography>
+      <Typography variant="h1" textAlign={"center"}>
+        404
+        <br />
+        NOT FOUND
+      </Typography>
       <Link to="/">
         <Button size="large">Go Back</Button>
       </Link>
