@@ -4,10 +4,6 @@ import { json, redirect, useLoaderData } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import DashboardAppBar from "./components/DashboardAppBar";
-import { parseWithZod } from "@conform-to/zod";
-import { getUserCachedId, removeCachedChatSession } from "../../bot/chat";
-import { processPrompt } from "~/supabase/models/form/drafted/prompt";
-import { publishDraftedForm } from "~/supabase/models/form/drafted/publish";
 
 export const meta: MetaFunction = () => {
   return [
@@ -36,37 +32,6 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const formData = await request.formData();
   const _action = formData.get("_action");
-
-  if (_action === "add-prompt") {
-    const data = parseWithZod(formData, { schema: promptSchema });
-    if (data.status !== "success") {
-      return data.reply();
-    }
-    const prompt = data.value.prompt;
-    const result = await processPrompt({ prompt, supabase, user });
-
-    return json(result);
-  } else if (_action === "publish") {
-    const data = parseWithZod(formData, {
-      schema: publishDialogActionContent,
-    });
-    if (data.status !== "success") {
-      return data.reply();
-    }
-    const result = await publishDraftedForm({
-      supabaseClient: supabase,
-      templateName: data.value.templateName,
-      user,
-    });
-    removeCachedChatSession({ id: getUserCachedId(user) });
-
-    return json(result);
-  } else if (_action === "logout") {
-    const result = await supabase.auth.signOut();
-    if (!result.error) {
-      return redirect("/");
-    }
-  }
 
   return null;
 }
