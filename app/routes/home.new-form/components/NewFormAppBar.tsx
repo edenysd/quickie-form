@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Box, Button, Switch, FormControlLabel } from "@mui/material";
+import { Box, Button, Checkbox } from "@mui/material";
 import PublishDialog from "./PublishDialog";
 import { useFetcher } from "@remix-run/react";
 import AppAppBar from "~/components/AppAppBar";
+import { AutoAwesomeOutlined } from "@mui/icons-material";
 
 function NewFormAppBar({ disablePublish }: { disablePublish: boolean }) {
   const [openDialog, setpenDialog] = React.useState(false);
@@ -27,9 +28,14 @@ function NewFormAppBar({ disablePublish }: { disablePublish: boolean }) {
           }}
         >
           <Box display={"flex"}>
-            <FormControlLabel
-              label="Assisted Mode"
-              control={<Switch disabled defaultChecked color="success" />}
+            <Checkbox
+              disabled
+              checked
+              checkedIcon={
+                <AutoAwesomeOutlined color="success" sx={{ opacity: 0.6 }} />
+              }
+              icon={<AutoAwesomeOutlined />}
+              color="success"
             />
           </Box>
         </Box>
