@@ -23,6 +23,7 @@ function ChatBox() {
   const formRef = useRef<HTMLFormElement>(null);
   const chatFetcher = useFetcher({ key: "chat" });
   const publishFetcher = useFetcher({ key: "publish" });
+  const resetFetcher = useFetcher({ key: "reset" });
 
   const [form, fields] = useForm({
     onValidate({ formData }) {
@@ -42,19 +43,17 @@ function ChatBox() {
     [isPhone]
   );
 
-  const isSubmitting =
-    chatFetcher.state !== "submitting" &&
-    chatFetcher.formData?.get("_action") === "add-prompt";
+  const isAddingPrompt = chatFetcher.state !== "submitting";
 
-  const isPublishing =
-    publishFetcher.state !== "idle" &&
-    publishFetcher.formData?.get("_action") === "publish";
+  const isPublishing = publishFetcher.state !== "idle";
+
+  const isReseting = resetFetcher.state !== "idle";
 
   useEffect(() => {
-    if (!isSubmitting) {
+    if (!isAddingPrompt) {
       formRef.current?.reset();
     }
-  }, [isSubmitting]);
+  }, [isAddingPrompt]);
 
   return (
     <Box
@@ -68,7 +67,7 @@ function ChatBox() {
       <TextField
         {...getInputProps(fields.prompt, { type: "text" })}
         key={fields.prompt.key}
-        disabled={!!chatFetcher.formAction || isPublishing}
+        disabled={!!chatFetcher.formAction || isPublishing || isReseting}
         sx={(theme) => ({
           bgcolor:
             theme.palette.mode === "light"
@@ -89,7 +88,7 @@ function ChatBox() {
                 form={form.id}
                 type="submit"
                 size="medium"
-                disabled={isPublishing}
+                disabled={isPublishing || isReseting}
               >
                 <ArrowUpward />
               </IconButton>
