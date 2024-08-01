@@ -6,7 +6,7 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import type { GridColDef, GridRowsProp } from "@mui/x-data-grid";
+import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid } from "@mui/x-data-grid";
 import type { MouseEventHandler } from "react";
 import { useState } from "react";
@@ -16,6 +16,8 @@ import {
   PresentToAllOutlined,
   PreviewOutlined,
 } from "@mui/icons-material";
+import type { loader } from "../route";
+import { useLoaderData } from "@remix-run/react";
 
 const GridActions = ({
   row,
@@ -55,7 +57,6 @@ const GridActions = ({
       justifyContent={"flex-end"}
       gap={1}
     >
-      <input name="formTemplateId" type="hidden" value={row.id} />
       <IconButton onClick={handleOpenMenu}>
         <MoreVert />
       </IconButton>
@@ -90,9 +91,14 @@ const GridActions = ({
 };
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", width: 80 },
-  { field: "name", headerName: "Name", flex: 0.5 },
-  { field: "updated_at", headerName: "Last Update", flex: 1, type: "dateTime" },
+  { field: "name", headerName: "Name", flex: 1 },
+  {
+    field: "updated_at",
+    headerName: "Last Update",
+    flex: 1,
+    valueGetter: (value) => new Date(value),
+    type: "dateTime",
+  },
   {
     field: "actions",
     headerName: "",
@@ -103,20 +109,14 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows: GridRowsProp = [
-  {
-    id: 1,
-    name: "Hello",
-    updated_at: new Date(),
-  },
-];
-
 export default function TemplatesDataGrid() {
+  const loaderData = useLoaderData<typeof loader>();
+  const rows = loaderData.userFormTemplates.data;
   return (
     <DataGrid
       sx={{ width: "100%" }}
       autoHeight
-      rows={rows}
+      rows={rows || undefined}
       columns={columns}
       disableAutosize
       disableColumnResize
