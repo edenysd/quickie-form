@@ -4,6 +4,7 @@ import { json, redirect, useLoaderData } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import TemplatesAppBar from "./components/TemplatesAppBar";
+import TemplatesDataGrid from "./components/TemplatesDataGrid";
 
 export const meta: MetaFunction = () => {
   return [
@@ -61,8 +62,28 @@ export default function Templates() {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
-    <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      pt={15}
+      width={"100%"}
+    >
       <TemplatesAppBar />
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        width={"100%"}
+        maxWidth={"1200px"}
+        sx={{
+          px: 1,
+        }}
+      >
+        <TemplatesDataGrid />
+      </Box>
     </Box>
   );
 }
