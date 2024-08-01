@@ -88,7 +88,7 @@ export default function PublishDialog({
         <DialogContent>
           <Box display={"flex"} flexDirection={"column"} gap={2}>
             <DialogContentText id="alert-dialog-slide-description">
-              Confirm that you want to publish current form.
+              Are you sure that you want to publish the current form template.
             </DialogContentText>
             <TextField
               {...getInputProps(fields.templateName, { type: "text" })}
@@ -104,7 +104,7 @@ export default function PublishDialog({
         </DialogContent>
         <DialogActions>
           <Button disabled={isPublishing} onClick={handleClose}>
-            Disagree
+            Cancel
           </Button>
 
           <LoadingButton
