@@ -68,14 +68,14 @@ export async function action({ request }: LoaderFunctionArgs) {
     if (data.status !== "success") {
       return data.reply();
     }
-    const result = await publishDraftedForm({
+    await publishDraftedForm({
       supabaseClient: supabase,
       templateName: data.value.templateName,
       user,
     });
     removeCachedChatSession({ id: getUserCachedId(user) });
 
-    return json(result);
+    return redirect("/home/templates");
   } else if (_action === "reset") {
     await resetDraftedForm({ supabaseClient: supabase, user });
     removeCachedChatSession({ id: getUserCachedId(user) });
@@ -109,7 +109,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const formConfig = await getLastMessageFromCachedChatSession(
     getUserCachedId(user)
   );
-
+  console.log(formConfig);
   return json({
     user,
     formConfig,
