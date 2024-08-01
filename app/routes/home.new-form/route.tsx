@@ -15,12 +15,13 @@ import {
 } from "../../bot/chat";
 import { generatedFormSchema } from "../../bot/schemas";
 import FormAssistedPreview from "./components/FormAssistedPreview";
-import {
-  createHistoryFetcher,
-  processPrompt,
-} from "~/supabase/models/form/drafted/prompt";
-import { publishDraftedForm } from "~/supabase/models/form/drafted/publish";
+import { processPrompt } from "~/supabase/models/form/drafted/prompt";
 import { publishDialogActionContent } from "./components/PublishDialog";
+import {
+  publishDraftedForm,
+  resetDraftedForm,
+} from "~/supabase/models/form/drafted/status";
+import { createHistoryFetcher } from "~/supabase/models/form/drafted/history";
 
 export const meta: MetaFunction = () => {
   return [
@@ -75,8 +76,12 @@ export async function action({ request }: LoaderFunctionArgs) {
     removeCachedChatSession({ id: getUserCachedId(user) });
 
     return json(result);
+  } else if (_action === "reset") {
+    await resetDraftedForm({ supabaseClient: supabase, user });
+    removeCachedChatSession({ id: getUserCachedId(user) });
+    return json({});
   }
-
+  await new Promise((resolve) => setTimeout(resolve, 4000));
   return null;
 }
 
