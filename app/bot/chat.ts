@@ -36,7 +36,7 @@ export async function updateCachedChatHistory({
   id,
 }: ChatSessionProps) {
   let history = await getCachedChatHistory(id);
-  if (!history) {
+  if (!history || !history.length) {
     history = await fetchHistory();
   }
   savedHistory.set(id, history);
