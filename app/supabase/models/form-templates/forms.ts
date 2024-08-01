@@ -17,3 +17,18 @@ export const removeFormTemplateById = async ({
     .select();
   return response;
 };
+
+export const getAllUserFormTemplates = async ({
+  supabaseClient,
+  user,
+}: {
+  supabaseClient: SupabaseClient;
+  user: User;
+}) => {
+  const response = await supabaseClient
+    ?.from("Form_Templates")
+    .select()
+    .neq("status", "draft")
+    .eq("owner", user?.id);
+  return response;
+};
