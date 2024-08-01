@@ -28,4 +28,3 @@ export const processPrompt = async ({
 
   return { formConfig, history };
 };
-export { createHistoryFetcher };
