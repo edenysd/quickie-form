@@ -112,6 +112,7 @@ function AppAppBar({ children }: React.PropsWithChildren) {
               justifyContent={"space-between"}
               width={"100%"}
               height={"100%"}
+              gap={1}
             >
               <Box flexGrow={1}>{children}</Box>
               <Box
