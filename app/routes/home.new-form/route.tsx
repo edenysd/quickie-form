@@ -15,13 +15,13 @@ import {
 } from "../../bot/chat";
 import { generatedFormSchema } from "../../bot/schemas";
 import FormAssistedPreview from "./components/FormAssistedPreview";
-import { processPrompt } from "~/supabase/models/form/drafted/prompt";
+import { processPrompt } from "~/supabase/models/form-templates/drafted/prompt";
 import { publishDialogActionContent } from "./components/PublishDialog";
 import {
   publishDraftedForm,
   resetDraftedForm,
-} from "~/supabase/models/form/drafted/status";
-import { createHistoryFetcher } from "~/supabase/models/form/drafted/history";
+} from "~/supabase/models/form-templates/drafted/status";
+import { createHistoryFetcher } from "~/supabase/models/form-templates/drafted/history";
 
 export const meta: MetaFunction = () => {
   return [
