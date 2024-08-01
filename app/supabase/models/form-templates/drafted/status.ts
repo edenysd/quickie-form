@@ -36,6 +36,7 @@ export const publishDraftedForm = async ({
       {
         status: "published",
         name: templateName,
+        updated_at: new Date().toUTCString(),
       },
     ])
     .eq("owner", user?.id)
