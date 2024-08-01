@@ -17,14 +17,34 @@ import {
   PreviewOutlined,
 } from "@mui/icons-material";
 
-const GridActions = (params) => {
+const GridActions = ({
+  row,
+}: {
+  row: {
+    id: string;
+    name: "string";
+    updated_at: string;
+  };
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
   const open = Boolean(anchorEl);
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+  const handleOpenMenu: MouseEventHandler<HTMLButtonElement> = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
+  };
+  const handleRunSurvey = () => {
+    handleCloseMenu();
+    console.log(row.id);
+  };
+  const handlePreview = () => {
+    handleCloseMenu();
+    console.log(row.id);
+  };
+  const handleRemove = () => {
+    handleCloseMenu();
+    console.log(row.id);
   };
   return (
     <Box
@@ -35,23 +55,30 @@ const GridActions = (params) => {
       justifyContent={"flex-end"}
       gap={1}
     >
-      <IconButton onClick={handleClick}>
+      <input name="formTemplateId" type="hidden" value={row.id} />
+      <IconButton onClick={handleOpenMenu}>
         <MoreVert />
       </IconButton>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem onClick={handleClose}>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleCloseMenu}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={handleRunSurvey}>
           <ListItemIcon>
             <PresentToAllOutlined color="primary" />
           </ListItemIcon>
           <ListItemText>Run Survey</ListItemText>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handlePreview}>
           <ListItemIcon>
             <PreviewOutlined color="info" />
           </ListItemIcon>
           <ListItemText>Preview</ListItemText>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleRemove}>
           <ListItemIcon>
             <DeleteOutline color="error" />
           </ListItemIcon>
@@ -70,8 +97,8 @@ const columns: GridColDef[] = [
     field: "actions",
     headerName: "",
     width: 60,
-    renderCell(params) {
-      return <GridActions {...params} />;
+    renderCell({ row }) {
+      return <GridActions row={row} />;
     },
   },
 ];
