@@ -85,7 +85,7 @@ function AppAppBar({ children }: React.PropsWithChildren) {
             variant="dense"
             sx={(theme) => ({
               display: "flex",
-              height: "60px",
+              height: "40px",
               p: 1,
               gap: 0.5,
               alignItems: "center",
