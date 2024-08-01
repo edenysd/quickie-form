@@ -1,15 +1,21 @@
 import * as React from "react";
 import { Box, Button, Checkbox, Divider, Typography } from "@mui/material";
 import PublishDialog from "./PublishDialog";
-import { useFetcher } from "@remix-run/react";
+import { Form, useFetcher, useLoaderData } from "@remix-run/react";
 import AppAppBar from "~/components/AppAppBar";
 import { AutoAwesomeOutlined, PublishOutlined } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 
 function NewFormAppBar({ disablePublish }: { disablePublish: boolean }) {
   const [openDialog, setpenDialog] = React.useState(false);
-  const fetcher = useFetcher({ key: "publish" });
+  const publishFetcher = useFetcher({ key: "publish" });
+  const resetFetcher = useFetcher({ key: "reset" });
   const isPublishing =
-    fetcher.state !== "idle" && fetcher.formData?.get("_action") === "publish";
+    publishFetcher.state !== "idle" &&
+    publishFetcher.formData?.get("_action") === "publish";
+  const isReseting =
+    resetFetcher.state !== "idle" &&
+    resetFetcher.formData?.get("_action") === "reset";
 
   const toggleDialog = React.useCallback(
     (newOpen: boolean) => () => {
@@ -46,16 +52,29 @@ function NewFormAppBar({ disablePublish }: { disablePublish: boolean }) {
             alignItems: "center",
           }}
         >
+          <Box component={resetFetcher.Form} method="POST" m={0}>
+            <LoadingButton
+              color="secondary"
+              name="_action"
+              value="reset"
+              type="submit"
+              loading={isReseting}
+              disabled={isPublishing || disablePublish || isReseting}
+            >
+              Reset
+            </LoadingButton>
+          </Box>
+
           <Button
-            disabled={isPublishing || disablePublish}
+            disabled={isPublishing || disablePublish || isReseting}
             onClick={toggleDialog(true)}
           >
             Publish
           </Button>
         </Box>
-
-        <PublishDialog handleClose={toggleDialog(false)} open={openDialog} />
       </Box>
+
+      <PublishDialog handleClose={toggleDialog(false)} open={openDialog} />
     </AppAppBar>
   );
 }
