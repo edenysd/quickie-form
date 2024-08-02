@@ -87,6 +87,7 @@ function AppAppBar({ children }: React.PropsWithChildren) {
               display: "flex",
               height: "40px",
               p: 1,
+              px: 1.5,
               gap: 0.5,
               alignItems: "center",
               justifyContent: "space-between",
