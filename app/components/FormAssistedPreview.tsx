@@ -3,7 +3,7 @@ import type {
   fieldSchema,
   generatedFormSchema,
   sectionSchema,
-} from "../../../bot/schemas";
+} from "~/bot/schemas";
 import {
   Box,
   Checkbox,
@@ -288,8 +288,9 @@ function FormSection({
 function FormAssistedPreview({
   formConfig = [],
 }: {
-  formConfig: z.infer<typeof generatedFormSchema>;
+  formConfig: z.infer<typeof generatedFormSchema> | null;
 }) {
+  if (!formConfig) return;
   return (
     <Paper elevation={3} sx={{ width: "100%", maxWidth: "900px" }}>
       <Box
