@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid } from "@mui/x-data-grid";
-import type { MouseEventHandler } from "react";
+import type { MouseEventHandler, ReactElement } from "react";
 import { useState } from "react";
 import {
   DeleteOutline,
@@ -18,6 +18,8 @@ import {
 } from "@mui/icons-material";
 import type { loader } from "../route";
 import { useLoaderData } from "@remix-run/react";
+import RemoveFormTemplateDialog from "./dialogs/RemoveFormTemplateDialog";
+import { calculateOriginCoordsPercentageFromElement } from "~/components/Animations";
 
 const GridActions = ({
   row,
@@ -29,6 +31,9 @@ const GridActions = ({
   };
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
+  const [currentOverlayAction, setCurrentOverlayAction] =
+    useState<ReactElement | null>(null);
+
   const open = Boolean(anchorEl);
   const handleOpenMenu: MouseEventHandler<HTMLButtonElement> = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,55 +43,76 @@ const GridActions = ({
   };
   const handleRunSurvey = () => {
     handleCloseMenu();
-    console.log(row.id);
   };
   const handlePreview = () => {
     handleCloseMenu();
     console.log(row.id);
   };
-  const handleRemove = () => {
+  const handleRemove: MouseEventHandler<HTMLLIElement> = (e) => {
+    const originElement = e.currentTarget;
+    const originCoordsPercentage = calculateOriginCoordsPercentageFromElement({
+      originElement,
+    });
+    setCurrentOverlayAction(
+      <RemoveFormTemplateDialog
+        open={true}
+        row={row}
+        originPercentage={originCoordsPercentage}
+        onClose={() =>
+          setCurrentOverlayAction(
+            <RemoveFormTemplateDialog
+              open={false}
+              row={row}
+              originPercentage={originCoordsPercentage}
+            />
+          )
+        }
+      />
+    );
     handleCloseMenu();
-    console.log(row.id);
   };
   return (
-    <Box
-      height={"100%"}
-      width={"100%"}
-      display={"flex"}
-      alignItems={"center"}
-      justifyContent={"flex-end"}
-      gap={1}
-    >
-      <IconButton onClick={handleOpenMenu}>
-        <MoreVert />
-      </IconButton>
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleCloseMenu}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+    <>
+      {currentOverlayAction}
+      <Box
+        height={"100%"}
+        width={"100%"}
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent={"flex-end"}
+        gap={1}
       >
-        <MenuItem onClick={handleRunSurvey}>
-          <ListItemIcon>
-            <PresentToAllOutlined color="primary" />
-          </ListItemIcon>
-          <ListItemText>Run Survey</ListItemText>
-        </MenuItem>
-        <MenuItem onClick={handlePreview}>
-          <ListItemIcon>
-            <PreviewOutlined color="info" />
-          </ListItemIcon>
-          <ListItemText>Preview</ListItemText>
-        </MenuItem>
-        <MenuItem onClick={handleRemove}>
-          <ListItemIcon>
-            <DeleteOutline color="error" />
-          </ListItemIcon>
-          <ListItemText>Remove</ListItemText>
-        </MenuItem>
-      </Menu>
-    </Box>
+        <IconButton onClick={handleOpenMenu}>
+          <MoreVert />
+        </IconButton>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleCloseMenu}
+          transformOrigin={{ horizontal: "right", vertical: "top" }}
+          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        >
+          <MenuItem onClick={handleRunSurvey}>
+            <ListItemIcon>
+              <PresentToAllOutlined color="primary" />
+            </ListItemIcon>
+            <ListItemText>Run Survey</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={handlePreview}>
+            <ListItemIcon>
+              <PreviewOutlined color="info" />
+            </ListItemIcon>
+            <ListItemText>Preview</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={handleRemove}>
+            <ListItemIcon>
+              <DeleteOutline color="error" />
+            </ListItemIcon>
+            <ListItemText>Remove</ListItemText>
+          </MenuItem>
+        </Menu>
+      </Box>
+    </>
   );
 };
 
