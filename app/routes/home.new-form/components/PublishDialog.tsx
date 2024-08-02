@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import type { GrowProps } from "@mui/material";
 import {
   Dialog,
@@ -9,7 +9,6 @@ import {
   Button,
   Box,
   TextField,
-  Grow,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useFetcher } from "@remix-run/react";
@@ -17,44 +16,24 @@ import { z } from "zod";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { useSnackbar } from "notistack";
-
-const Transition = React.forwardRef(function Transition(props: GrowProps, ref) {
-  const [origin, setOrigin] = useState<null | {
-    x: number;
-    y: number;
-  }>(null);
-
-  useEffect(() => {
-    const originElement = document.getElementById("publish-form-template");
-    if (!originElement) return;
-
-    const originCoords = {
-      x:
-        originElement.getBoundingClientRect().x /
-          originElement.getBoundingClientRect().width || 0 * 100,
-      y:
-        (originElement.getBoundingClientRect().y /
-          originElement.getBoundingClientRect().height) *
-        100,
-    };
-    setOrigin(originCoords);
-  }, []);
-
-  return (
-    <Grow
-      ref={ref}
-      {...props}
-      style={{
-        transformOrigin: origin ? `${origin.y}% ${origin.x}%` : "50% 50%",
-        offsetAnchor: "0 0",
-      }}
-    />
-  );
-});
+import { TransitionGrowFromElementId } from "~/components/Animations";
 
 export const publishDialogActionContent = z.object({
   _action: z.literal("publish"),
   templateName: z.string().min(3),
+});
+
+const CurrentTransition = forwardRef(function CurrentTransition(
+  props: GrowProps,
+  ref
+) {
+  return (
+    <TransitionGrowFromElementId
+      {...props}
+      ref={ref}
+      targetElementId="publish-form-template"
+    />
+  );
 });
 
 export default function PublishDialog({
@@ -104,7 +83,7 @@ export default function PublishDialog({
   return (
     <Dialog
       open={open}
-      TransitionComponent={Transition}
+      TransitionComponent={CurrentTransition}
       keepMounted
       onClose={!isPublishing ? handleClose : () => {}}
       aria-describedby="alert-dialog-slide-description"
