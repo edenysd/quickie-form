@@ -16,6 +16,7 @@ import { useFetcher } from "@remix-run/react";
 import { z } from "zod";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
+import { useSnackbar } from "notistack";
 
 const Transition = React.forwardRef(function Transition(
   props: SlideProps,
@@ -40,6 +41,8 @@ export default function PublishDialog({
   const isPublishing =
     fetcher.state !== "idle" && fetcher.formData?.get("_action") === "publish";
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const [form, fields] = useForm({
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: publishDialogActionContent });
@@ -59,6 +62,10 @@ export default function PublishDialog({
     if (open) {
       handleClose();
       form.reset();
+      enqueueSnackbar({
+        message: "New Form Template created",
+        variant: "success",
+      });
     }
   };
 
