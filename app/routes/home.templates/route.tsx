@@ -53,9 +53,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/sign-in");
   }
 
-  return json({
+  const userFormTemplates = await getAllUserFormTemplates({
+    supabaseClient: supabase,
     user,
   });
+
+  return json({ userFormTemplates, user });
 }
 
 export default function Templates() {
@@ -67,7 +70,7 @@ export default function Templates() {
       flexDirection={"column"}
       alignItems={"center"}
       justifyContent={"center"}
-      pt={15}
+      pt={10}
       width={"100%"}
     >
       <TemplatesAppBar />
