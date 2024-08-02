@@ -5,6 +5,10 @@ import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import TemplatesAppBar from "./components/TemplatesAppBar";
 import TemplatesDataGrid from "./components/TemplatesDataGrid";
+import {
+  getAllUserFormTemplates,
+  removeFormTemplateById,
+} from "~/supabase/models/form-templates/forms";
 
 export const meta: MetaFunction = () => {
   return [
@@ -33,8 +37,21 @@ export async function action({ request }: LoaderFunctionArgs) {
   }
 
   const formData = await request.formData();
-  const _action = formData.get("_action");
+  const _action = formData.get("_action") as string;
 
+  if (_action === "remove_by_id") {
+    const formTemplateId = formData.get("formTemplateId") as string;
+
+    if (formTemplateId) {
+      await removeFormTemplateById({
+        supabaseClient: supabase,
+        user,
+        formTemplateId,
+      });
+    } else {
+      throw TypeError("empty formTemplateId field not allowed");
+    }
+  }
   return null;
 }
 
@@ -62,8 +79,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Templates() {
-  const loaderData = useLoaderData<typeof loader>();
-
   return (
     <Box
       display={"flex"}
