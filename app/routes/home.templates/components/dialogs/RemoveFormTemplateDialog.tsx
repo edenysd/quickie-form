@@ -39,11 +39,7 @@ export default function RemoveFormTemplateDialog({
   );
 
   return (
-    <Dialog
-      {...params}
-      TransitionComponent={CurrentTransition}
-      transitionDuration={5000}
-    >
+    <Dialog {...params} TransitionComponent={CurrentTransition}>
       <Alert variant="filled" color="error">
         This action is not reversible
       </Alert>
