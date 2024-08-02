@@ -12,6 +12,9 @@ import { getMuiLinks } from "./mui/getMuiLinks";
 import { createBrowserClient } from "@supabase/ssr";
 import SupabaseBrowserClientContext from "./supabase/SupabaseBrowserClientContext";
 import { useMemo } from "react";
+import { closeSnackbar, SnackbarProvider } from "notistack";
+import { IconButton } from "@mui/material";
+import { CloseRounded } from "@mui/icons-material";
 
 export const links: LinksFunction = () => [...getMuiLinks()];
 
@@ -53,7 +56,16 @@ export default function App() {
 
   return (
     <SupabaseBrowserClientContext.Provider value={supabaseClient}>
-      <Outlet />
+      <SnackbarProvider
+        maxSnack={3}
+        action={(snackbarId) => (
+          <IconButton onClick={() => closeSnackbar(snackbarId)}>
+            <CloseRounded />
+          </IconButton>
+        )}
+      >
+        <Outlet />
+      </SnackbarProvider>
     </SupabaseBrowserClientContext.Provider>
   );
 }
