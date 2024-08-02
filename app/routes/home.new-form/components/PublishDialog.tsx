@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import type { GrowProps } from "@mui/material";
 import {
   Dialog,
@@ -16,7 +16,10 @@ import { z } from "zod";
 import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { useSnackbar } from "notistack";
-import { TransitionGrowFromElementId } from "~/components/Animations";
+import {
+  calculateOriginCoordsPercentageFromElement,
+  TransitionGrowFromElementId,
+} from "~/components/Animations";
 
 export const publishDialogActionContent = z.object({
   _action: z.literal("publish"),
@@ -27,11 +30,26 @@ const CurrentTransition = forwardRef(function CurrentTransition(
   props: GrowProps,
   ref
 ) {
+  const [origin, setOrigin] = useState<null | {
+    x: number;
+    y: number;
+  }>(null);
+
+  useEffect(() => {
+    const originElement = document.getElementById("publish-form-template");
+    if (!originElement) return;
+
+    const originCoordsPercentage = calculateOriginCoordsPercentageFromElement({
+      originElement,
+    });
+    setOrigin(originCoordsPercentage);
+  }, []);
+
   return (
     <TransitionGrowFromElementId
       {...props}
       ref={ref}
-      targetElementId="publish-form-template"
+      originPercentage={origin}
     />
   );
 });
