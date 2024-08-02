@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import type { SlideProps } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import type { GrowProps } from "@mui/material";
 import {
-  Slide,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -10,6 +9,7 @@ import {
   Button,
   Box,
   TextField,
+  Grow,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useFetcher } from "@remix-run/react";
@@ -18,11 +18,38 @@ import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { useSnackbar } from "notistack";
 
-const Transition = React.forwardRef(function Transition(
-  props: SlideProps,
-  ref
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
+const Transition = React.forwardRef(function Transition(props: GrowProps, ref) {
+  const [origin, setOrigin] = useState<null | {
+    x: number;
+    y: number;
+  }>(null);
+
+  useEffect(() => {
+    const originElement = document.getElementById("publish-form-template");
+    if (!originElement) return;
+
+    const originCoords = {
+      x:
+        originElement.getBoundingClientRect().x /
+          originElement.getBoundingClientRect().width || 0 * 100,
+      y:
+        (originElement.getBoundingClientRect().y /
+          originElement.getBoundingClientRect().height) *
+        100,
+    };
+    setOrigin(originCoords);
+  }, []);
+
+  return (
+    <Grow
+      ref={ref}
+      {...props}
+      style={{
+        transformOrigin: origin ? `${origin.y}% ${origin.x}%` : "50% 50%",
+        offsetAnchor: "0 0",
+      }}
+    />
+  );
 });
 
 export const publishDialogActionContent = z.object({
@@ -56,7 +83,6 @@ export default function PublishDialog({
     }
   }, [open]);
 
-  // @TODO check for more explicit remix primitives for await actions executions
   const handleCloseAction = useRef(() => {});
   handleCloseAction.current = () => {
     if (open) {
