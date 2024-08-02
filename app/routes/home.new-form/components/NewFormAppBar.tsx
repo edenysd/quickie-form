@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Box, Button, Checkbox, Divider, Typography } from "@mui/material";
+import { Box, Button, Checkbox } from "@mui/material";
 import PublishDialog from "./PublishDialog";
-import { Form, useFetcher, useLoaderData } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import AppAppBar from "~/components/AppAppBar";
-import { AutoAwesomeOutlined, PublishOutlined } from "@mui/icons-material";
+import { AutoAwesomeOutlined } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 
 function NewFormAppBar({ disablePublish }: { disablePublish: boolean }) {
@@ -66,6 +66,7 @@ function NewFormAppBar({ disablePublish }: { disablePublish: boolean }) {
           </Box>
 
           <Button
+            id="publish-form-template"
             disabled={isPublishing || disablePublish || isReseting}
             onClick={toggleDialog(true)}
           >
