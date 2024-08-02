@@ -13,8 +13,8 @@ export const removeFormTemplateById = async ({
     ?.from("Form_Templates")
     .delete()
     .eq("owner", user?.id)
-    .eq("id", formTemplateId)
-    .select();
+    .eq("id", formTemplateId);
+
   return response;
 };
 
@@ -29,6 +29,7 @@ export const getAllUserFormTemplates = async ({
     ?.from("Form_Templates")
     .select()
     .neq("status", "draft")
+    .order("updated_at", { ascending: false })
     .eq("owner", user?.id);
   return response;
 };
