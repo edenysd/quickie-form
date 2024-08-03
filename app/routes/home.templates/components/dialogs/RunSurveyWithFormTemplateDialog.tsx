@@ -16,6 +16,7 @@ import {
   DialogTitle,
   FormControl,
   InputLabel,
+  ListSubheader,
   MenuItem,
   Paper,
   Select,
@@ -28,19 +29,23 @@ import { TransitionGrowFromElementId } from "~/components/Animations";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 
 const SURVEY_CONFIGS = {
-  public_no_verification: "Public with no verification",
+  public_with_no_verification: "Public with no verification",
 };
+
 const DISABLED_SURVEY_CONFIGS = {
-  public_with_verification: "Public with verification",
+  public_with_single_use: "Public with a single use",
+  public_with_email_verification: "Public with email verification",
+  private_with_single_use: "Private with a single use and email verification",
+  private_email_list: "Private for email list",
 };
 
 export const surveySchema = z.object({
   formTemplateId: z.number({ required_error: "formTemplateId is required" }),
   surveyType: z
-    .enum(["public_no_verification", "public_with_verification"], {
+    .enum(["public_with_no_verification"], {
       required_error: "surveyType is required",
     })
-    .default("public_no_verification"),
+    .default("public_with_no_verification"),
   _action: z.literal("run_survey_with_form_template", {
     required_error: "Action is required",
   }),
@@ -112,6 +117,7 @@ export default function RunSurveyWithFormTemplateDialog({
                     {label}
                   </MenuItem>
                 ))}
+                <ListSubheader>Comming Soon</ListSubheader>
                 {Object.entries(DISABLED_SURVEY_CONFIGS).map(([id, label]) => (
                   <MenuItem key={id} value={id} disabled>
                     {label}
