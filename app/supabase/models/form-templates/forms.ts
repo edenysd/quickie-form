@@ -39,6 +39,7 @@ export const getAllUserFormTemplates = async ({
     .returns<FormTemplateRow[]>();
   return response;
 };
+
 export const getAllComunityFormTemplates = async ({
   supabaseClient,
 }: {

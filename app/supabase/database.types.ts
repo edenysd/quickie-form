@@ -77,6 +77,7 @@ export type Database = {
       }
       Surveys: {
         Row: {
+          closed_at: string | null
           created_at: string
           id: string
           owner: string | null
@@ -85,6 +86,7 @@ export type Database = {
           template_id: number | null
         }
         Insert: {
+          closed_at?: string | null
           created_at?: string
           id?: string
           owner?: string | null
@@ -93,6 +95,7 @@ export type Database = {
           template_id?: number | null
         }
         Update: {
+          closed_at?: string | null
           created_at?: string
           id?: string
           owner?: string | null
