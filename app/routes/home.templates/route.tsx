@@ -74,8 +74,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
     supabaseClient: supabase,
     user,
   });
+  const comunityFormTemplates = await getAllComunityFormTemplates({
+    supabaseClient: supabase,
+  });
 
-  return json({ userFormTemplates, user });
+  return json({ userFormTemplates, comunityFormTemplates, user });
 }
 
 export default function Templates() {
@@ -87,20 +90,42 @@ export default function Templates() {
       justifyContent={"center"}
       pt={10}
       width={"100%"}
+      gap={3}
     >
       <TemplatesAppBar />
       <Box
         display={"flex"}
         flexDirection={"column"}
-        alignItems={"center"}
+        // alignItems={"center"}
         justifyContent={"center"}
         width={"100%"}
         maxWidth={"1200px"}
+        gap={1}
         sx={{
           px: 1,
         }}
       >
+        <Typography variant="h4" fontFamily={"Virgil"}>
+          Private
+        </Typography>
         <TemplatesDataGrid />
+      </Box>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        // alignItems={"center"}
+        justifyContent={"center"}
+        width={"100%"}
+        maxWidth={"1200px"}
+        gap={1}
+        sx={{
+          px: 1,
+        }}
+      >
+        <Typography variant="h4" fontFamily={"Virgil"}>
+          Comunity
+        </Typography>
+        <ComunityTemplatesDataGrid />
       </Box>
     </Box>
   );
