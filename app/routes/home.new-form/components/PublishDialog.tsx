@@ -133,12 +133,13 @@ export default function PublishDialog({
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button disabled={isPublishing} onClick={handleClose}>
+          <Button disabled={isPublishing} onClick={handleClose} color="inherit">
             Cancel
           </Button>
 
           <LoadingButton
             name="_action"
+            variant="outlined"
             value="publish"
             type="submit"
             loading={isPublishing}
