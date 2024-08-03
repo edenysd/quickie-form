@@ -20,16 +20,10 @@ import type { loader } from "../route";
 import { useLoaderData } from "@remix-run/react";
 import RemoveFormTemplateDialog from "./dialogs/RemoveFormTemplateDialog";
 import { calculateOriginCoordsPercentageFromElement } from "~/components/Animations";
+import PreviewFormTemplateDialog from "./dialogs/PreviewFormTemplateDialog";
+import type { FormTemplateRow } from "~/supabase/supabase.types";
 
-const GridActions = ({
-  row,
-}: {
-  row: {
-    id: string;
-    name: "string";
-    updated_at: string;
-  };
-}) => {
+const GridActions = ({ row }: { row: FormTemplateRow }) => {
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
   const [currentOverlayAction, setCurrentOverlayAction] =
     useState<ReactElement | null>(null);
@@ -44,10 +38,31 @@ const GridActions = ({
   const handleRunSurvey = () => {
     handleCloseMenu();
   };
-  const handlePreview = () => {
+
+  const handlePreview: MouseEventHandler<HTMLLIElement> = (e) => {
+    const originElement = e.currentTarget;
+    const originCoordsPercentage = calculateOriginCoordsPercentageFromElement({
+      originElement,
+    });
+    setCurrentOverlayAction(
+      <PreviewFormTemplateDialog
+        open={true}
+        row={row}
+        originPercentage={originCoordsPercentage}
+        onClose={() =>
+          setCurrentOverlayAction(
+            <PreviewFormTemplateDialog
+              open={false}
+              row={row}
+              originPercentage={originCoordsPercentage}
+            />
+          )
+        }
+      />
+    );
     handleCloseMenu();
-    console.log(row.id);
   };
+
   const handleRemove: MouseEventHandler<HTMLLIElement> = (e) => {
     const originElement = e.currentTarget;
     const originCoordsPercentage = calculateOriginCoordsPercentageFromElement({
