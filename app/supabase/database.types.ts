@@ -81,6 +81,7 @@ export type Database = {
           created_at: string
           id: string
           owner: string | null
+          survey_label: string | null
           survey_status: Database["public"]["Enums"]["Survey Status"] | null
           survey_variant: Database["public"]["Enums"]["Survey Variants"] | null
           template_id: number | null
@@ -90,6 +91,7 @@ export type Database = {
           created_at?: string
           id?: string
           owner?: string | null
+          survey_label?: string | null
           survey_status?: Database["public"]["Enums"]["Survey Status"] | null
           survey_variant?: Database["public"]["Enums"]["Survey Variants"] | null
           template_id?: number | null
@@ -99,6 +101,7 @@ export type Database = {
           created_at?: string
           id?: string
           owner?: string | null
+          survey_label?: string | null
           survey_status?: Database["public"]["Enums"]["Survey Status"] | null
           survey_variant?: Database["public"]["Enums"]["Survey Variants"] | null
           template_id?: number | null
