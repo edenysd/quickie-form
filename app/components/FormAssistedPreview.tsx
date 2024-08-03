@@ -292,7 +292,7 @@ function FormAssistedPreview({
 }) {
   if (!formConfig) return;
   return (
-    <Paper elevation={3} sx={{ width: "100%", maxWidth: "900px" }}>
+    <Paper elevation={3} sx={{ width: "100%" }}>
       <Box
         display={"flex"}
         width={"100%"}
