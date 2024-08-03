@@ -11,17 +11,14 @@ import {
 import { Form } from "@remix-run/react";
 import { forwardRef, useMemo } from "react";
 import { TransitionGrowFromElementId } from "~/components/Animations";
+import type { FormTemplateRow } from "~/supabase/supabase.types";
 
 export default function RemoveFormTemplateDialog({
   row,
   originPercentage,
   ...params
 }: DialogProps & {
-  row: {
-    id: string;
-    name: "string";
-    updated_at: string;
-  };
+  row: FormTemplateRow;
   originPercentage: { x: number; y: number };
 }) {
   const CurrentTransition = useMemo(
