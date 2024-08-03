@@ -5,8 +5,6 @@ import type { ChatHistory } from "~/bot/chat";
 import type { z } from "zod";
 import type { generatedFormSchema } from "~/bot/schemas";
 
-export type asdf1 =
-  DatabaseGenerated["public"]["Tables"]["Form_Templates"]["Update"]["history"];
 type InjectionTypesToFormTemplates = {
   config: z.infer<typeof generatedFormSchema>;
   history: ChatHistory;
@@ -30,7 +28,9 @@ export type Database = MergeDeep<
 
 export type FormTemplateRow =
   Database["public"]["Tables"]["Form_Templates"]["Row"];
-export type asdf =
-  Database["public"]["Tables"]["Form_Templates"]["Update"]["history"];
+
+export type SurveyVariant = Database["public"]["Enums"]["Survey Variants"];
+
+export type SurveyStatus = Database["public"]["Enums"]["Survey Status"];
 
 export type MySupabaseClient = SupabaseClient<Database>;
