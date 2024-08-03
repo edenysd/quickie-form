@@ -133,11 +133,11 @@ export default function NewForm() {
         pt={12}
         pb={14}
         width={"100%"}
+        maxWidth={"md"}
         display={"flex"}
         justifyContent={"center"}
         sx={(theme) => ({
-          px: 3,
-          [theme.breakpoints.down("sm")]: {
+          [theme.breakpoints.down("md")]: {
             px: 1,
           },
         })}

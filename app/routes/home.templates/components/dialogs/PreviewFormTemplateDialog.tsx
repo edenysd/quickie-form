@@ -31,16 +31,14 @@ export default function PreviewFormTemplateDialog({
     <Dialog
       {...params}
       TransitionComponent={CurrentTransition}
-      scroll="paper"
-      maxWidth="lg"
+      maxWidth={"md"}
+      fullWidth
     >
       <Alert variant="filled" severity="info">
         This is a preview form templatea in safe enviroment
       </Alert>
       <DialogContent sx={{ p: 0 }}>
-        <Paper>
-          <FormAssistedPreview formConfig={row.config} />
-        </Paper>
+        <FormAssistedPreview formConfig={row.config} />
       </DialogContent>
     </Dialog>
   );
