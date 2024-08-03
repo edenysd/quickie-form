@@ -1,16 +1,21 @@
-import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
+
+import type {
+  FormTemplateRow,
+  MySupabaseClient,
+} from "~/supabase/supabase.types";
 
 export const removeFormTemplateById = async ({
   supabaseClient,
   user,
   formTemplateId,
 }: {
-  supabaseClient: SupabaseClient;
+  supabaseClient: MySupabaseClient;
   user: User;
   formTemplateId: string;
 }) => {
   const response = await supabaseClient
-    ?.from("Form_Templates")
+    .from("Form_Templates")
     .delete()
     .eq("owner", user?.id)
     .eq("id", formTemplateId);
@@ -22,7 +27,7 @@ export const getAllUserFormTemplates = async ({
   supabaseClient,
   user,
 }: {
-  supabaseClient: SupabaseClient;
+  supabaseClient: MySupabaseClient;
   user: User;
 }) => {
   const response = await supabaseClient
@@ -30,6 +35,7 @@ export const getAllUserFormTemplates = async ({
     .select()
     .neq("status", "draft")
     .order("updated_at", { ascending: false })
-    .eq("owner", user?.id);
+    .eq("owner", user?.id)
+    .returns<FormTemplateRow[]>();
   return response;
 };
