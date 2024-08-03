@@ -39,3 +39,18 @@ export const getAllUserFormTemplates = async ({
     .returns<FormTemplateRow[]>();
   return response;
 };
+export const getAllComunityFormTemplates = async ({
+  supabaseClient,
+}: {
+  supabaseClient: MySupabaseClient;
+}) => {
+  const response = await supabaseClient
+    ?.from("Form_Templates")
+    .select()
+    // .neq("status", "draft")
+    .is("owner", null);
+  // .order("updated_at", { ascending: false })
+  // .returns<FormTemplateRow[]>();
+  console.log(response);
+  return response;
+};
