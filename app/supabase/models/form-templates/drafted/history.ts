@@ -44,7 +44,7 @@ export const saveHistory = async ({
     .select();
 
   if (!response?.data?.length) {
-    await supabaseClient?.from("Form_Templates").insert([
+    return await supabaseClient?.from("Form_Templates").insert([
       {
         history: history,
         config: formConfig,
@@ -52,4 +52,6 @@ export const saveHistory = async ({
       },
     ]);
   }
+
+  return response;
 };
