@@ -22,6 +22,7 @@ import RemoveFormTemplateDialog from "./dialogs/RemoveFormTemplateDialog";
 import { calculateOriginCoordsPercentageFromElement } from "~/components/Animations";
 import PreviewFormTemplateDialog from "./dialogs/PreviewFormTemplateDialog";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
+import RunSurveyWithFormTemplateDialog from "./dialogs/RunSurveyWithFormTemplateDialog";
 
 const GridActions = ({ row }: { row: FormTemplateRow }) => {
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
@@ -35,7 +36,27 @@ const GridActions = ({ row }: { row: FormTemplateRow }) => {
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
-  const handleRunSurvey = () => {
+  const handleRunSurvey: MouseEventHandler<HTMLLIElement> = (e) => {
+    const originElement = e.currentTarget;
+    const originCoordsPercentage = calculateOriginCoordsPercentageFromElement({
+      originElement,
+    });
+    setCurrentOverlayAction(
+      <RunSurveyWithFormTemplateDialog
+        open={true}
+        row={row}
+        originPercentage={originCoordsPercentage}
+        onClose={() =>
+          setCurrentOverlayAction(
+            <RunSurveyWithFormTemplateDialog
+              open={false}
+              row={row}
+              originPercentage={originCoordsPercentage}
+            />
+          )
+        }
+      />
+    );
     handleCloseMenu();
   };
 
