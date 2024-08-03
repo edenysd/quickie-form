@@ -1,9 +1,10 @@
 import { createServerClient, serialize } from "@supabase/ssr";
+import type { Database } from "./supabase.types";
 const supabaseServerClient = (
   cookies: Record<string, string>,
   headers: Headers
 ) =>
-  createServerClient(
+  createServerClient<Database>(
     process.env.PUBLIC_SUPABASE_URL!,
     process.env.PUBLIC_SUPABASE_ANON_KEY!,
     {
