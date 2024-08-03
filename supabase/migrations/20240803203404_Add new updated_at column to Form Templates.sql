@@ -1,0 +1,1 @@
+alter table "public"."Form_Templates" add column "updated_at" timestamp with time zone default now();
