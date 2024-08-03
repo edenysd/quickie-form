@@ -65,7 +65,57 @@ export type Database = {
           status?: Database["public"]["Enums"]["Form Status"] | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "Form_Templates_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Surveys: {
+        Row: {
+          created_at: string
+          id: string
+          owner: string | null
+          survey_status: Database["public"]["Enums"]["Survey Status"] | null
+          survey_variant: Database["public"]["Enums"]["Survey Variants"] | null
+          template_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          owner?: string | null
+          survey_status?: Database["public"]["Enums"]["Survey Status"] | null
+          survey_variant?: Database["public"]["Enums"]["Survey Variants"] | null
+          template_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          owner?: string | null
+          survey_status?: Database["public"]["Enums"]["Survey Status"] | null
+          survey_variant?: Database["public"]["Enums"]["Survey Variants"] | null
+          template_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Surveys_1_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Surveys_1_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "Form_Templates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -76,7 +126,13 @@ export type Database = {
     }
     Enums: {
       "Form Status": "draft" | "published" | "closed"
-      "Publish Type": "open-public" | "secure-public"
+      "Survey Status": "open" | "closed"
+      "Survey Variants":
+        | "public_with_no_verification"
+        | "public_with_single_use"
+        | "public_with_email_verification"
+        | "private_with_single_use"
+        | "private_email_list"
     }
     CompositeTypes: {
       [_ in never]: never
