@@ -14,7 +14,6 @@ import {
   updateCachedChatHistory,
 } from "../../bot/chat";
 import { generatedFormSchema } from "../../bot/schemas";
-import FormAssistedPreview from "./components/FormAssistedPreview";
 import { processPrompt } from "~/supabase/models/form-templates/drafted/prompt";
 import { publishDialogActionContent } from "./components/PublishDialog";
 import {
@@ -22,6 +21,7 @@ import {
   resetDraftedForm,
 } from "~/supabase/models/form-templates/drafted/status";
 import { createHistoryFetcher } from "~/supabase/models/form-templates/drafted/history";
+import FormAssistedPreview from "~/components/FormAssistedPreview";
 
 export const meta: MetaFunction = () => {
   return [
