@@ -1,9 +1,13 @@
-import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { User } from "@supabase/supabase-js";
 import type { z } from "zod";
 import type { ChatHistory } from "~/bot/chat";
 import type { generatedFormSchema } from "~/bot/schemas";
+import type { MySupabaseClient } from "~/supabase/supabase.types";
 
-export const createHistoryFetcher = (supabase: SupabaseClient, user: User) => {
+export const createHistoryFetcher = (
+  supabase: MySupabaseClient,
+  user: User
+) => {
   return async () => {
     const response = await supabase
       .from("Form_Templates")
@@ -24,19 +28,17 @@ export const saveHistory = async ({
   formConfig,
   user,
 }: {
-  supabaseClient: SupabaseClient;
+  supabaseClient: MySupabaseClient;
   history: ChatHistory;
   formConfig: z.infer<typeof generatedFormSchema>;
   user: User;
 }) => {
   const response = await supabaseClient
-    ?.from("Form_Templates")
-    .update([
-      {
-        history,
-        config: formConfig,
-      },
-    ])
+    .from("Form_Templates")
+    .update({
+      history,
+      config: formConfig,
+    })
     .eq("owner", user?.id)
     .eq("status", "draft")
     .select();
