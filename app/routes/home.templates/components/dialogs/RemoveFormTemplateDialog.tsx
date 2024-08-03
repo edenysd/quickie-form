@@ -37,7 +37,7 @@ export default function RemoveFormTemplateDialog({
 
   return (
     <Dialog {...params} TransitionComponent={CurrentTransition}>
-      <Alert variant="filled" color="error">
+      <Alert variant="filled" severity="error">
         This action is not reversible
       </Alert>
       <DialogTitle>Remove Form Template</DialogTitle>
