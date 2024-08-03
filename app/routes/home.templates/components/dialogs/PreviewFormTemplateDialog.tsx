@@ -1,5 +1,5 @@
 import type { DialogProps, GrowProps } from "@mui/material";
-import { Dialog } from "@mui/material";
+import { Alert, Dialog, DialogContent, Paper } from "@mui/material";
 import { forwardRef, useMemo } from "react";
 import { TransitionGrowFromElementId } from "~/components/Animations";
 import FormAssistedPreview from "~/components/FormAssistedPreview";
@@ -34,7 +34,14 @@ export default function PreviewFormTemplateDialog({
       scroll="paper"
       maxWidth="lg"
     >
-      <FormAssistedPreview formConfig={row.config} />
+      <Alert variant="filled" severity="info">
+        This is a preview form templatea in safe enviroment
+      </Alert>
+      <DialogContent sx={{ p: 0 }}>
+        <Paper>
+          <FormAssistedPreview formConfig={row.config} />
+        </Paper>
+      </DialogContent>
     </Dialog>
   );
 }
