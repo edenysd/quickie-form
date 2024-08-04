@@ -79,7 +79,7 @@ export async function action({ request }: LoaderFunctionArgs) {
     if (response.error) {
       return null;
     }
-    return redirect(`/home/ongoing/${response.data?.at(0)?.id}`);
+    return redirect(`/home/ongoing/survey/${response.data?.at(0)?.id}`);
   }
   return null;
 }
