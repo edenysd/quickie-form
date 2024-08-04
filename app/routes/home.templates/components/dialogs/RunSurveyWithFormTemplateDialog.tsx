@@ -5,6 +5,7 @@ import {
   useForm,
 } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
+import { LoadingButton } from "@mui/lab";
 import type { DialogProps, GrowProps } from "@mui/material";
 import {
   Alert,
@@ -22,8 +23,9 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import { Form } from "@remix-run/react";
-import { forwardRef, useMemo } from "react";
+import { Form, useNavigation } from "@remix-run/react";
+import { useSnackbar } from "notistack";
+import { forwardRef, useEffect, useMemo } from "react";
 import { z } from "zod";
 import { TransitionGrowFromElementId } from "~/components/Animations";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
@@ -39,6 +41,8 @@ const DISABLED_SURVEY_CONFIGS = {
   private_email_list: "Private for email list",
 };
 
+export const RUN_SURVEY_ACTION = "run_survey_with_form_template";
+
 export const surveySchema = z.object({
   formTemplateId: z.number({ required_error: "formTemplateId is required" }),
   surveyType: z
@@ -46,7 +50,7 @@ export const surveySchema = z.object({
       required_error: "surveyType is required",
     })
     .default("public_with_no_verification"),
-  _action: z.literal("run_survey_with_form_template", {
+  _action: z.literal(RUN_SURVEY_ACTION, {
     required_error: "Action is required",
   }),
   surveyLabel: z.string().min(4),
@@ -60,6 +64,24 @@ export default function RunSurveyWithFormTemplateDialog({
   row: FormTemplateRow;
   originPercentage: { x: number; y: number };
 }) {
+  const navigation = useNavigation();
+  const { enqueueSnackbar } = useSnackbar();
+  const isLoadingRunSurveyAction =
+    navigation.formData?.get("_action") === RUN_SURVEY_ACTION;
+
+  const isRedirectionToNewSurvey =
+    isLoadingRunSurveyAction &&
+    navigation.location?.pathname.startsWith("/home/ongoing/");
+
+  useEffect(() => {
+    if (isRedirectionToNewSurvey) {
+      enqueueSnackbar({
+        message: `New survey created`,
+        variant: "success",
+      });
+    }
+  }, [enqueueSnackbar, isRedirectionToNewSurvey]);
+
   const [form, fields] = useForm({
     onValidate({ formData }) {
       const result = parseWithZod(formData, { schema: surveySchema });
@@ -148,14 +170,15 @@ export default function RunSurveyWithFormTemplateDialog({
           >
             Cancel
           </Button>
-          <Button
+          <LoadingButton
+            loading={isLoadingRunSurveyAction}
             variant="outlined"
             type="submit"
             name="_action"
-            value="run_survey_with_form_template"
+            value={RUN_SURVEY_ACTION}
           >
             Run survey
-          </Button>
+          </LoadingButton>
         </DialogActions>
       </Box>
     </Dialog>
