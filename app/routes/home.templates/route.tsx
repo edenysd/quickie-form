@@ -1,14 +1,23 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect, useLoaderData } from "@remix-run/react";
+import { json, redirect } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import TemplatesAppBar from "./components/TemplatesAppBar";
 import TemplatesDataGrid from "./components/TemplatesDataGrid";
 import {
+  getAllComunityFormTemplates,
   getAllUserFormTemplates,
   removeFormTemplateById,
 } from "~/supabase/models/form-templates/forms";
+import { parseWithZod } from "@conform-to/zod";
+import {
+  RUN_SURVEY_ACTION,
+  surveySchema,
+} from "./components/dialogs/RunSurveyWithFormTemplateDialog";
+import ComunityTemplatesDataGrid from "./components/ComunityTemplatesDataGrid";
+import { insertSurvey } from "~/supabase/models/surveys/surveys";
+import { REMOVE_FORM_TEMPLATE_BY_ID_ACTION } from "./components/dialogs/RemoveFormTemplateDialog";
 
 export const meta: MetaFunction = () => {
   return [
@@ -16,7 +25,7 @@ export const meta: MetaFunction = () => {
     {
       name: "description",
       content:
-        "Control all your templates configuration, surveys and creation.",
+        "Control all your form templates configuration and surveys creation",
     },
   ];
 };
@@ -39,7 +48,7 @@ export async function action({ request }: LoaderFunctionArgs) {
   const formData = await request.formData();
   const _action = formData.get("_action") as string;
 
-  if (_action === "remove_by_id") {
+  if (_action === REMOVE_FORM_TEMPLATE_BY_ID_ACTION) {
     const formTemplateId = formData.get("formTemplateId") as string;
 
     if (formTemplateId) {
@@ -51,6 +60,26 @@ export async function action({ request }: LoaderFunctionArgs) {
     } else {
       throw TypeError("empty formTemplateId field not allowed");
     }
+  }
+  if (_action === RUN_SURVEY_ACTION) {
+    const data = parseWithZod(formData, {
+      schema: surveySchema,
+    });
+    if (data.status !== "success") {
+      return data.reply();
+    }
+    const newSurveyData = data.value;
+    const response = await insertSurvey({
+      surveyLabel: newSurveyData.surveyLabel,
+      templateId: newSurveyData.formTemplateId,
+      surveyVariant: newSurveyData.surveyType,
+      supabaseClient: supabase,
+      user,
+    });
+    if (response.error) {
+      return null;
+    }
+    return redirect(`/home/ongoing/${response.data?.at(0)?.id}`);
   }
   return null;
 }
@@ -96,7 +125,6 @@ export default function Templates() {
       <Box
         display={"flex"}
         flexDirection={"column"}
-        // alignItems={"center"}
         justifyContent={"center"}
         width={"100%"}
         maxWidth={"1200px"}
