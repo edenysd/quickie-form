@@ -46,3 +46,21 @@ export const insertSurvey = async ({
 
   return response;
 };
+
+export const getSurveyById = async ({
+  surveyId,
+  supabaseClient,
+  user,
+}: {
+  surveyId: string;
+  supabaseClient: MySupabaseClient;
+  user: User;
+}) => {
+  const response = await supabaseClient
+    ?.from("Surveys")
+    .select()
+    .eq("id", surveyId)
+    .eq("owner", user?.id)
+    .single();
+  return response;
+};
