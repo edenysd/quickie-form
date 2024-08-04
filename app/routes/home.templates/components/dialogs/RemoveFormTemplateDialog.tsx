@@ -13,6 +13,8 @@ import { forwardRef, useMemo } from "react";
 import { TransitionGrowFromElementId } from "~/components/Animations";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 
+export const REMOVE_FORM_TEMPLATE_BY_ID_ACTION = "remove_by_id";
+
 export default function RemoveFormTemplateDialog({
   row,
   originPercentage,
@@ -58,7 +60,7 @@ export default function RemoveFormTemplateDialog({
             variant="outlined"
             type="submit"
             name="_action"
-            value="remove_by_id"
+            value={REMOVE_FORM_TEMPLATE_BY_ID_ACTION}
           >
             Remove
           </Button>
