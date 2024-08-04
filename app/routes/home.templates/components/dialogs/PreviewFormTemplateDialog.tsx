@@ -1,5 +1,5 @@
 import type { DialogProps, GrowProps } from "@mui/material";
-import { Alert, Dialog, DialogContent, Paper } from "@mui/material";
+import { Alert, Dialog, DialogContent } from "@mui/material";
 import { forwardRef, useMemo } from "react";
 import { TransitionGrowFromElementId } from "~/components/Animations";
 import FormAssistedPreview from "~/components/FormAssistedPreview";
