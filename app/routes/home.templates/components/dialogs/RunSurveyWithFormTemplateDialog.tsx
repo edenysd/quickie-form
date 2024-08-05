@@ -71,7 +71,7 @@ export default function RunSurveyWithFormTemplateDialog({
 
   const isRedirectionToNewSurvey =
     isLoadingRunSurveyAction &&
-    navigation.location?.pathname.startsWith("/home/ongoing/survey/");
+    navigation.location?.pathname.startsWith("/home/surveys/");
 
   useEffect(() => {
     if (isRedirectionToNewSurvey) {
