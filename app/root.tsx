@@ -21,8 +21,8 @@ export const links: LinksFunction = () => [...getMuiLinks()];
 export async function loader() {
   return {
     env: {
-      SUPABASE_URL: process.env.PUBLIC_SUPABASE_URL!,
-      SUPABASE_ANON_KEY: process.env.PUBLIC_SUPABASE_ANON_KEY!,
+      SUPABASE_URL: process.env.SUPABASE_URL!,
+      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY!,
     },
   };
 }
