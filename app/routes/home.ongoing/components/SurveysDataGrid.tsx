@@ -31,7 +31,7 @@ import { calculateOriginCoordsPercentageFromElement } from "~/components/Animati
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 import { SURVEY_CONFIGS } from "~/routes/home.templates/components/dialogs/RunSurveyWithFormTemplateDialog";
 import { useSnackbar } from "notistack";
-import CloseSurveyDialog from "./dialogs/CloseSurveyDialog";
+import CloseSurveyDialog from "../../../components/CloseSurveyDialog";
 
 const GridActions = ({ row }: { row: FormTemplateRow }) => {
   const navigate = useNavigate();
@@ -166,7 +166,7 @@ const GridActions = ({ row }: { row: FormTemplateRow }) => {
             <ListItemIcon>
               <DoneAllOutlined color="primary" />
             </ListItemIcon>
-            <ListItemText>Finish Survey</ListItemText>
+            <ListItemText>Close Survey</ListItemText>
           </MenuItem>
           <MenuItem onClick={handleDetails}>
             <ListItemIcon>
