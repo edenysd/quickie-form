@@ -9,7 +9,7 @@ import {
   closeSurveyById,
   getAllUserRunningSurveys,
 } from "~/supabase/models/surveys/surveys";
-import { CLOSE_SURVEY_BY_ID_ACTION } from "./components/dialogs/CloseSurveyDialog";
+import { CLOSE_SURVEY_BY_ID_ACTION } from "../../components/CloseSurveyDialog";
 
 export const meta: MetaFunction = () => {
   return [
