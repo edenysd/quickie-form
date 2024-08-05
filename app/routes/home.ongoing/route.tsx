@@ -1,9 +1,11 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect, useLoaderData } from "@remix-run/react";
+import { json, redirect } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import OngoingAppBar from "./components/OngoingAppBar";
+import SurveysDataGrid from "./components/SurveysDataGrid";
+import { getAllUserRunningSurveys } from "~/supabase/models/surveys/surveys";
 
 export const meta: MetaFunction = () => {
   return [
@@ -52,17 +54,45 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/sign-in");
   }
 
+  const userRunningSurveys = await getAllUserRunningSurveys({
+    supabaseClient: supabase,
+    user,
+  });
+
   return json({
     user,
+    userRunningSurveys,
   });
 }
 
 export default function Ongoing() {
-  const loaderData = useLoaderData<typeof loader>();
-
   return (
-    <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      pt={10}
+      width={"100%"}
+      gap={3}
+    >
       <OngoingAppBar />
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        justifyContent={"center"}
+        width={"100%"}
+        maxWidth={"1200px"}
+        gap={1}
+        sx={{
+          px: 1,
+        }}
+      >
+        <Typography variant="h4" fontFamily={"Virgil"}>
+          Private
+        </Typography>
+        <SurveysDataGrid />
+      </Box>
     </Box>
   );
 }
