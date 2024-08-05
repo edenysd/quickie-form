@@ -6,11 +6,11 @@ import FormAssistedPreview from "~/components/FormAssistedPreview";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 
 export default function PreviewFormTemplateDialog({
-  row,
+  formTemplateRow,
   originPercentage,
   ...params
 }: DialogProps & {
-  row: FormTemplateRow;
+  formTemplateRow: FormTemplateRow;
   originPercentage: { x: number; y: number };
 }) {
   const CurrentTransition = useMemo(
@@ -38,7 +38,7 @@ export default function PreviewFormTemplateDialog({
         This is a preview form templatea in safe enviroment
       </Alert>
       <DialogContent sx={{ p: 0 }}>
-        <FormAssistedPreview formConfig={row.config} />
+        <FormAssistedPreview formConfig={formTemplateRow.config} />
       </DialogContent>
     </Dialog>
   );
