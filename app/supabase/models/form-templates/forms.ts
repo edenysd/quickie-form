@@ -50,8 +50,26 @@ export const getAllComunityFormTemplates = async ({
     .select()
     .neq("status", "draft")
     .is("owner", null)
-    .order("updated_at", { ascending: false })
-    .returns<FormTemplateRow[]>();
+    .order("updated_at", { ascending: false });
 
+  return response;
+};
+
+export const getFormTemplateById = async ({
+  templateId,
+  supabaseClient,
+  user,
+}: {
+  templateId: string;
+  supabaseClient: MySupabaseClient;
+  user: User;
+}) => {
+  const response = await supabaseClient
+    ?.from("Form_Templates")
+    .select()
+    .eq("id", templateId)
+    .eq("owner", user?.id)
+    .returns<FormTemplateRow[]>()
+    .single();
   return response;
 };
