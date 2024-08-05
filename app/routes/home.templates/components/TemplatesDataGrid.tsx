@@ -20,7 +20,7 @@ import type { loader } from "../route";
 import { useLoaderData } from "@remix-run/react";
 import RemoveFormTemplateDialog from "./dialogs/RemoveFormTemplateDialog";
 import { calculateOriginCoordsPercentageFromElement } from "~/components/Animations";
-import PreviewFormTemplateDialog from "./dialogs/PreviewFormTemplateDialog";
+import PreviewFormTemplateDialog from "../../../components/PreviewFormTemplateDialog";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 import RunSurveyWithFormTemplateDialog from "./dialogs/RunSurveyWithFormTemplateDialog";
 
@@ -68,13 +68,13 @@ const GridActions = ({ row }: { row: FormTemplateRow }) => {
     setCurrentOverlayAction(
       <PreviewFormTemplateDialog
         open={true}
-        row={row}
+        formTemplateRow={row}
         originPercentage={originCoordsPercentage}
         onClose={() =>
           setCurrentOverlayAction(
             <PreviewFormTemplateDialog
               open={false}
-              row={row}
+              formTemplateRow={row}
               originPercentage={originCoordsPercentage}
             />
           )
