@@ -109,7 +109,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const formConfig = await getLastMessageFromCachedChatSession(
     getUserCachedId(user)
   );
-  console.log(formConfig);
+
   return json({
     user,
     formConfig,
