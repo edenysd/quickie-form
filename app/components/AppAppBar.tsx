@@ -49,9 +49,9 @@ export const AppAppBarRoutes: Route[] = [
     label: "Ongoing",
   },
   {
-    path: "/home/reports",
+    path: "/home/past-reports",
     icon: <InsightsOutlined />,
-    label: "Reports",
+    label: "Past Reports",
   },
 ];
 
