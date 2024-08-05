@@ -5,6 +5,7 @@ import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import SurveyDetailAppBar from "./components/SurveyDetailAppBar";
 import { getSurveyById } from "~/supabase/models/surveys/surveys";
+import { SURVEY_CONFIGS } from "../home.templates/components/dialogs/RunSurveyWithFormTemplateDialog";
 
 export const meta: MetaFunction = () => {
   return [
@@ -86,13 +87,17 @@ export default function Templates() {
         maxWidth={"1200px"}
         gap={1}
         sx={{
-          px: 1,
+          px: {
+            md: 5,
+            sm: 3,
+            xs: 1,
+          },
         }}
       >
-        <Box display={"flex"} gap={2}>
-          <Typography variant="h4" fontFamily={"Virgil"}>
-            {loaderData.surveyDetails.data?.survey_label}{" "}
-          </Typography>
+        <Typography variant="h4" fontFamily={"Virgil"}>
+          {loaderData.surveyDetails.data?.survey_label}{" "}
+        </Typography>
+        <Box display={"flex"} gap={1}>
           <Chip
             color={
               loaderData.surveyDetails.data!.survey_status == "open"
@@ -104,6 +109,14 @@ export default function Templates() {
               loaderData.surveyDetails.data!.survey_status == "open"
                 ? "Open"
                 : "Closed"
+            }
+          />
+          <Chip
+            variant="outlined"
+            label={
+              SURVEY_CONFIGS[
+                loaderData.surveyDetails.data!.survey_variant! as never
+              ]
             }
           />
         </Box>
