@@ -112,6 +112,7 @@ enable_confirmations = true
 max_frequency = "1s"
 
 # Use a production-ready SMTP server
+
 [auth.email.smtp]
 host = "smtp.resend.com"
 port = 465
