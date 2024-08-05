@@ -6,7 +6,7 @@ import { KeyboardArrowLeftOutlined } from "@mui/icons-material";
 
 export default function HeaderSurveyDetail() {
   const loaderData = useLoaderData<typeof loader>();
-
+  const isSurveyOpen = loaderData.surveyDetails.data!.survey_status === "open";
   return (
     <Box
       display={"flex"}
@@ -35,17 +35,9 @@ export default function HeaderSurveyDetail() {
       <Box display={"flex"} justifyContent={"space-between"}>
         <Box display={"flex"} gap={1}>
           <Chip
-            color={
-              loaderData.surveyDetails.data!.survey_status == "open"
-                ? "success"
-                : "error"
-            }
+            color={isSurveyOpen ? "success" : "error"}
             variant="filled"
-            label={
-              loaderData.surveyDetails.data!.survey_status == "open"
-                ? "Open"
-                : "Closed"
-            }
+            label={isSurveyOpen ? "Open" : "Closed"}
           />
           <Chip
             variant="outlined"
@@ -54,15 +46,22 @@ export default function HeaderSurveyDetail() {
             }
           />
         </Box>
+
         <Button
           size="small"
+          sx={{
+            display: {
+              xs: "none",
+              sm: "flex",
+            },
+          }}
           startIcon={<KeyboardArrowLeftOutlined />}
           color="secondary"
           variant="outlined"
           component={Link}
-          to="/home/ongoing"
+          to={isSurveyOpen ? "/home/ongoing" : "/home/records"}
         >
-          go to Ongoing
+          {isSurveyOpen ? "Go to Ongoing" : "Go to Records"}
         </Button>
       </Box>
       <Typography variant="body1">
@@ -71,6 +70,16 @@ export default function HeaderSurveyDetail() {
           {new Date(loaderData.surveyDetails.data!.created_at).toLocaleString()}
         </b>
       </Typography>
+      {!isSurveyOpen ? (
+        <Typography variant="body1">
+          Closed at{" "}
+          <b>
+            {new Date(
+              loaderData.surveyDetails.data!.closed_at!
+            ).toLocaleString()}
+          </b>
+        </Typography>
+      ) : null}
     </Box>
   );
 }
