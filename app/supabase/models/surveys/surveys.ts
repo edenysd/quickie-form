@@ -64,3 +64,22 @@ export const getSurveyById = async ({
     .single();
   return response;
 };
+export const closeSurveyById = async ({
+  surveyId,
+  supabaseClient,
+  user,
+}: {
+  surveyId: string;
+  supabaseClient: MySupabaseClient;
+  user: User;
+}) => {
+  const response = await supabaseClient
+    ?.from("Surveys")
+    .update({
+      survey_status: "closed",
+    })
+    .eq("id", surveyId)
+    .eq("owner", user?.id);
+
+  return response;
+};
