@@ -13,10 +13,11 @@ import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import { getSurveyById } from "~/supabase/models/surveys/surveys";
 import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
-import { MouseEventHandler, ReactElement, useState } from "react";
+import type { MouseEventHandler, ReactElement } from "react";
+import { useState } from "react";
 import { calculateOriginCoordsPercentageFromElement } from "~/components/Animations";
 import PreviewFormTemplateDialog from "~/components/PreviewFormTemplateDialog";
-import { FormTemplateRow } from "~/supabase/supabase.types";
+import type { FormTemplateRow } from "~/supabase/supabase.types";
 
 export const meta: MetaFunction = () => {
   return [
