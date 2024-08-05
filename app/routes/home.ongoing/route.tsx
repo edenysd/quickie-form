@@ -5,7 +5,11 @@ import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import OngoingAppBar from "./components/OngoingAppBar";
 import SurveysDataGrid from "./components/SurveysDataGrid";
-import { getAllUserRunningSurveys } from "~/supabase/models/surveys/surveys";
+import {
+  closeSurveyById,
+  getAllUserRunningSurveys,
+} from "~/supabase/models/surveys/surveys";
+import { CLOSE_SURVEY_BY_ID_ACTION } from "./components/dialogs/CloseSurveyDialog";
 
 export const meta: MetaFunction = () => {
   return [
@@ -35,6 +39,32 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const formData = await request.formData();
   const _action = formData.get("_action");
+
+  if (_action === CLOSE_SURVEY_BY_ID_ACTION) {
+    const surveyId = formData.get("surveyId") as string;
+
+    if (surveyId) {
+      const response = await closeSurveyById({
+        surveyId,
+        supabaseClient: supabase,
+        user,
+      });
+
+      return json({
+        error: response.error,
+        sucess: true,
+        _action: CLOSE_SURVEY_BY_ID_ACTION,
+        surveyId,
+      });
+    } else {
+      return json({
+        error: TypeError("empty surveyId field not allowed"),
+        sucess: false,
+        _action: CLOSE_SURVEY_BY_ID_ACTION,
+        surveyId,
+      });
+    }
+  }
 
   return null;
 }
