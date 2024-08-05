@@ -19,6 +19,21 @@ export const getAllUserRunningSurveys = async ({
     .eq("owner", user?.id);
   return response;
 };
+export const getAllUserClosedSurveys = async ({
+  supabaseClient,
+  user,
+}: {
+  supabaseClient: MySupabaseClient;
+  user: User;
+}) => {
+  const response = await supabaseClient
+    ?.from("Surveys")
+    .select()
+    .eq("survey_status", "closed")
+    .order("created_at", { ascending: false })
+    .eq("owner", user?.id);
+  return response;
+};
 
 export const insertSurvey = async ({
   surveyLabel,
