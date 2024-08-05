@@ -33,6 +33,11 @@ export async function action({ request }: LoaderFunctionArgs) {
   const formData = await request.formData();
   const _action = formData.get("_action");
 
+  if (_action == "logout") {
+    await supabase.auth.signOut();
+    redirect("/sign-in");
+  }
+
   return null;
 }
 
