@@ -8,10 +8,12 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { Form } from "@remix-run/react";
-import { forwardRef, useMemo } from "react";
+import { Form, useActionData } from "@remix-run/react";
+import { forwardRef, useEffect, useMemo } from "react";
 import { TransitionGrowFromElementId } from "~/components/Animations";
 import type { SurveyRow } from "~/supabase/supabase.types";
+import type { action } from "../../route";
+import { useSnackbar } from "notistack";
 
 export const CLOSE_SURVEY_BY_ID_ACTION = "close_survey_by_id";
 
@@ -23,6 +25,20 @@ export default function CloseSurveyDialog({
   row: SurveyRow;
   originPercentage: { x: number; y: number };
 }) {
+  const actionData = useActionData<typeof action>();
+  const { enqueueSnackbar } = useSnackbar();
+  useEffect(() => {
+    if (
+      actionData?._action === CLOSE_SURVEY_BY_ID_ACTION &&
+      actionData?.surveyId === row.id
+    ) {
+      if (actionData?.sucess)
+        enqueueSnackbar({ message: "Survey closed", variant: "success" });
+      else
+        enqueueSnackbar({ message: "Error closing survey", variant: "error" });
+    }
+  }, [actionData, enqueueSnackbar, row.id]);
+
   const CurrentTransition = useMemo(
     () =>
       forwardRef(function CurrentTransition(props: GrowProps, ref) {
@@ -49,7 +65,7 @@ export default function CloseSurveyDialog({
       </DialogContent>
       <DialogActions>
         <Box method="POST" component={Form} display={"flex"} gap={1} m={0}>
-          <input type="hidden" name="formTemplateId" value={row.id} />
+          <input type="hidden" name="surveyId" value={row.id} />
           <Button
             color="inherit"
             onClick={() => params.onClose!({}, "backdropClick")}
@@ -57,6 +73,7 @@ export default function CloseSurveyDialog({
             Cancel
           </Button>
           <Button
+            onClick={() => params.onClose!({}, "backdropClick")}
             color="secondary"
             variant="outlined"
             type="submit"
