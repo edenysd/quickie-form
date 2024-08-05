@@ -89,7 +89,7 @@ export default function Ongoing() {
         }}
       >
         <Typography variant="h4" fontFamily={"Virgil"}>
-          Private
+          Ongoing Surveys
         </Typography>
         <SurveysDataGrid />
       </Box>
