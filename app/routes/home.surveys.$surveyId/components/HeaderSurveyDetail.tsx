@@ -52,11 +52,7 @@ export default function HeaderSurveyDetail() {
         />
         <Chip
           variant="outlined"
-          label={
-            SURVEY_CONFIGS[
-              loaderData.surveyDetails.data!.survey_variant! as never
-            ]
-          }
+          label={SURVEY_CONFIGS[loaderData.surveyDetails.data!.survey_variant!]}
         />
       </Box>
       <Typography variant="body1">
