@@ -30,7 +30,7 @@ import { z } from "zod";
 import { TransitionGrowFromElementId } from "~/components/Animations";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 
-export const SURVEY_CONFIGS = {
+const ENABLED_SURVEY_CONFIGS = {
   public_with_no_verification: "Public with no verification",
 };
 
@@ -39,6 +39,11 @@ const DISABLED_SURVEY_CONFIGS = {
   public_with_email_verification: "Public with email verification",
   private_with_single_use: "Private with a single use and email verification",
   private_email_list: "Private for email list",
+};
+
+export const SURVEY_CONFIGS = {
+  ...ENABLED_SURVEY_CONFIGS,
+  ...DISABLED_SURVEY_CONFIGS,
 };
 
 export const RUN_SURVEY_ACTION = "run_survey_with_form_template";
@@ -130,11 +135,11 @@ export default function RunSurveyWithFormTemplateDialog({
               <Select
                 {...getSelectProps(fields.surveyType)}
                 labelId="label-survey-variant"
-                defaultValue={Object.keys(SURVEY_CONFIGS)[0]}
+                defaultValue={Object.keys(ENABLED_SURVEY_CONFIGS)[0]}
                 fullWidth
                 label={"Survey Variant"}
               >
-                {Object.entries(SURVEY_CONFIGS).map(([id, label]) => (
+                {Object.entries(ENABLED_SURVEY_CONFIGS).map(([id, label]) => (
                   <MenuItem key={id} value={id}>
                     {label}
                   </MenuItem>
