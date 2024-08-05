@@ -8,7 +8,6 @@ import PastSurveysDataGrid from "./components/PastSurveysDataGrid";
 import {
   closeSurveyById,
   getAllUserClosedSurveys,
-  getAllUserRunningSurveys,
 } from "~/supabase/models/surveys/surveys";
 import { CLOSE_SURVEY_BY_ID_ACTION } from "../../components/CloseSurveyDialog";
 
