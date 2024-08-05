@@ -40,7 +40,7 @@ export default function CloseSurveyDialog({
   return (
     <Dialog {...params} TransitionComponent={CurrentTransition}>
       <Alert variant="filled" severity="warning">
-        Closed surveys can't be reopen
+        {"Closed surveys can't be reopen"}
       </Alert>
       <DialogTitle>Close Survey</DialogTitle>
       <DialogContent>
