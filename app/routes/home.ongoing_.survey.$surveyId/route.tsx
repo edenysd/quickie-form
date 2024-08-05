@@ -1,11 +1,15 @@
-import { Alert, Box, Chip, Typography } from "@mui/material";
+import {
+  Box
+} from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect, useLoaderData } from "@remix-run/react";
+import { json, redirect } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import SurveyDetailAppBar from "./components/SurveyDetailAppBar";
 import { getSurveyById } from "~/supabase/models/surveys/surveys";
-import { SURVEY_CONFIGS } from "../home.templates/components/dialogs/RunSurveyWithFormTemplateDialog";
+import HeaderSurveyDetail from "./components/HeaderSurveyDetail";
+import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
+import FormTemplateCard from "./components/FormTemplateCard";
 
 export const meta: MetaFunction = () => {
   return [
@@ -62,12 +66,16 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     surveyId: params.surveyId!,
   });
 
-  return json({ surveyDetails, user });
+  const formTemplate = await getFormTemplateById({
+    supabaseClient: supabase,
+    user,
+    templateId: surveyDetails.data!.template_id!.toString(),
+  });
+
+  return json({ surveyDetails, formTemplate, user });
 }
 
 export default function Templates() {
-  const loaderData = useLoaderData<typeof loader>();
-
   return (
     <Box
       display={"flex"}
@@ -85,7 +93,7 @@ export default function Templates() {
         justifyContent={"center"}
         width={"100%"}
         maxWidth={"1200px"}
-        gap={1}
+        gap={3}
         sx={{
           px: {
             md: 5,
@@ -94,40 +102,8 @@ export default function Templates() {
           },
         }}
       >
-        <Typography variant="h4" fontFamily={"Virgil"}>
-          {loaderData.surveyDetails.data?.survey_label}{" "}
-        </Typography>
-        <Box display={"flex"} gap={1}>
-          <Chip
-            color={
-              loaderData.surveyDetails.data!.survey_status == "open"
-                ? "success"
-                : "error"
-            }
-            variant="filled"
-            label={
-              loaderData.surveyDetails.data!.survey_status == "open"
-                ? "Open"
-                : "Closed"
-            }
-          />
-          <Chip
-            variant="outlined"
-            label={
-              SURVEY_CONFIGS[
-                loaderData.surveyDetails.data!.survey_variant! as never
-              ]
-            }
-          />
-        </Box>
-        <Typography variant="body1">
-          Created at{" "}
-          <b>
-            {new Date(
-              loaderData.surveyDetails.data!.created_at
-            ).toLocaleString()}
-          </b>
-        </Typography>
+        <HeaderSurveyDetail />
+        <FormTemplateCard />
       </Box>
     </Box>
   );
