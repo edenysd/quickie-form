@@ -121,10 +121,11 @@ export default function FormTemplateCard() {
         <Grid item xs={12} md={6}>
           <Card>
             <CardHeader
+              sx={{ overflow: "hidden" }}
               title={loaderData.formTemplate.data?.name}
               subheader="Template"
             />
-            <CardContent>
+            <CardContent sx={{ py: 0 }}>
               <Typography variant="caption">
                 Last Update{" "}
                 {new Date(
