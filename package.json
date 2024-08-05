@@ -26,6 +26,7 @@
     "@remix-run/serve": "^2.9.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.5",
+    "@vercel/remix": "^2.11.1",
     "ai": "^3.2.32",
     "dayjs": "^1.11.11",
     "isbot": "^4.1.0",
