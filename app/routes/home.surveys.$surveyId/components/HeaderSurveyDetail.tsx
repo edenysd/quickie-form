@@ -16,44 +16,54 @@ export default function HeaderSurveyDetail() {
       gap={1}
     >
       <Box
+        width={"100%"}
         display={"flex"}
         justifyContent={"space-between"}
         alignItems={"center"}
+        flexWrap={"wrap"}
       >
-        <Typography variant="h3" fontFamily={"Virgil"}>
+        <Typography
+          variant="h3"
+          fontFamily={"Virgil"}
+          overflow={"hidden"}
+          textOverflow={"ellipsis"}
+        >
           {loaderData.surveyDetails.data?.survey_label}{" "}
         </Typography>
-        <Box>
-          <Button
-            startIcon={<KeyboardArrowLeftOutlined />}
-            color="secondary"
-            variant="outlined"
-            component={Link}
-            to="/home/ongoing"
-            sx={{ borderRadius: "30px" }}
-          >
-            Go to Ongoing
-          </Button>
-        </Box>
       </Box>
-      <Box display={"flex"} gap={1}>
-        <Chip
-          color={
-            loaderData.surveyDetails.data!.survey_status == "open"
-              ? "success"
-              : "error"
-          }
-          variant="filled"
-          label={
-            loaderData.surveyDetails.data!.survey_status == "open"
-              ? "Open"
-              : "Closed"
-          }
-        />
-        <Chip
+
+      <Box display={"flex"} justifyContent={"space-between"}>
+        <Box display={"flex"} gap={1}>
+          <Chip
+            color={
+              loaderData.surveyDetails.data!.survey_status == "open"
+                ? "success"
+                : "error"
+            }
+            variant="filled"
+            label={
+              loaderData.surveyDetails.data!.survey_status == "open"
+                ? "Open"
+                : "Closed"
+            }
+          />
+          <Chip
+            variant="outlined"
+            label={
+              SURVEY_CONFIGS[loaderData.surveyDetails.data!.survey_variant!]
+            }
+          />
+        </Box>
+        <Button
+          size="small"
+          startIcon={<KeyboardArrowLeftOutlined />}
+          color="secondary"
           variant="outlined"
-          label={SURVEY_CONFIGS[loaderData.surveyDetails.data!.survey_variant!]}
-        />
+          component={Link}
+          to="/home/ongoing"
+        >
+          go to Ongoing
+        </Button>
       </Box>
       <Typography variant="body1">
         Created at{" "}
