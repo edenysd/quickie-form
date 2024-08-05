@@ -12,7 +12,7 @@ import { Form, useActionData } from "@remix-run/react";
 import { forwardRef, useEffect, useMemo } from "react";
 import { TransitionGrowFromElementId } from "~/components/Animations";
 import type { SurveyRow } from "~/supabase/supabase.types";
-import type { action } from "../../route";
+import type { action } from "../routes/home.ongoing/route";
 import { useSnackbar } from "notistack";
 
 export const CLOSE_SURVEY_BY_ID_ACTION = "close_survey_by_id";
