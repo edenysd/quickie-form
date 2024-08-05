@@ -58,17 +58,14 @@ export const getAllComunityFormTemplates = async ({
 export const getFormTemplateById = async ({
   templateId,
   supabaseClient,
-  user,
 }: {
   templateId: string;
   supabaseClient: MySupabaseClient;
-  user: User;
 }) => {
   const response = await supabaseClient
     ?.from("Form_Templates")
     .select()
     .eq("id", templateId)
-    .eq("owner", user?.id)
     .returns<FormTemplateRow[]>()
     .single();
   return response;

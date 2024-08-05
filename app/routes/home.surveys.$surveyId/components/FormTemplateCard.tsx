@@ -70,13 +70,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
   const surveyDetails = await getSurveyById({
     supabaseClient: supabase,
-    user,
     surveyId: params.surveyId!,
   });
 
   const formTemplate = await getFormTemplateById({
     supabaseClient: supabase,
-    user,
     templateId: surveyDetails.data!.template_id!.toString(),
   });
 
