@@ -30,7 +30,7 @@ export const getAllUserClosedSurveys = async ({
     ?.from("Surveys")
     .select()
     .eq("survey_status", "closed")
-    .order("created_at", { ascending: false })
+    .order("closed_at", { ascending: false })
     .eq("owner", user?.id);
   return response;
 };
@@ -92,6 +92,7 @@ export const closeSurveyById = async ({
     ?.from("Surveys")
     .update({
       survey_status: "closed",
+      closed_at: new Date().toUTCString(),
     })
     .eq("id", surveyId)
     .eq("owner", user?.id);
