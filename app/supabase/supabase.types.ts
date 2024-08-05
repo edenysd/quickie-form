@@ -29,6 +29,8 @@ export type Database = MergeDeep<
 export type FormTemplateRow =
   Database["public"]["Tables"]["Form_Templates"]["Row"];
 
+export type SurveyRow = Database["public"]["Tables"]["Surveys"]["Row"];
+
 export type SurveyVariant = Database["public"]["Enums"]["Survey Variants"];
 
 export type SurveyStatus = Database["public"]["Enums"]["Survey Status"];
