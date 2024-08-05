@@ -87,7 +87,7 @@ export default function FormTemplateCard() {
   const loaderData = useLoaderData<typeof loader>();
   const [currentOverlayAction, setCurrentOverlayAction] =
     useState<ReactElement | null>(null);
-  console.log(loaderData.formTemplate.data);
+
   const handlePreview: MouseEventHandler<HTMLButtonElement> = (e) => {
     const originElement = e.currentTarget;
     const originCoordsPercentage = calculateOriginCoordsPercentageFromElement({
