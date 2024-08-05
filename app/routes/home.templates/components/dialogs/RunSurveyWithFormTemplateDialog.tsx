@@ -30,7 +30,7 @@ import { z } from "zod";
 import { TransitionGrowFromElementId } from "~/components/Animations";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 
-const SURVEY_CONFIGS = {
+export const SURVEY_CONFIGS = {
   public_with_no_verification: "Public with no verification",
 };
 
