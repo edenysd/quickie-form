@@ -15,6 +15,7 @@ import { CLOSE_SURVEY_BY_ID_ACTION } from "~/components/CloseSurveyDialog";
 import { getSurveySummaryBySurveyId } from "~/supabase/models/survey-summaries/surveysSummaries";
 import TotalSurveyCard from "./components/cards/TotalSurveyCard";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
+import LastCompletedCard from "./components/cards/LastCompletedCard";
 
 export const meta: MetaFunction = () => {
   return [
@@ -143,6 +144,7 @@ export default function Templates() {
         <Grid container spacing={2}>
           <FormTemplateCard />
           <TotalSurveyCard />
+          <LastCompletedCard />
         </Grid>
       </Box>
     </Box>
