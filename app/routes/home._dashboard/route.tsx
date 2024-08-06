@@ -101,7 +101,16 @@ export default function Home() {
   const loaderData = useLoaderData<typeof loader>();
 
   return (
-    <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      pt={10}
+      pb={6}
+      width={"100%"}
+      gap={3}
+    >
       <DashboardAppBar />
     </Box>
   );
