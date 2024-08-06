@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, useLoaderData } from "@remix-run/react";
+import { json, redirect, useLoaderData } from "@remix-run/react";
 import { getSurveyById } from "~/supabase/models/surveys/surveys";
 import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
@@ -12,6 +12,7 @@ import { createSummaryFormObject } from "~/utils/createSummaryFormObject";
 import { addFormObjectToSummaryObject } from "~/utils/addFormObjectToSummaryObject";
 import { insertSurveyResponse } from "~/supabase/models/survey-responses/surveysResponses";
 import type { Json } from "~/supabase/database.types";
+import { insertSurveySummary } from "~/supabase/models/survey-summaries/surveysSummaries";
 
 export const meta: MetaFunction = () => {
   return [
@@ -62,13 +63,21 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       dataEntry: structuredFormData as Json,
       supabaseClient: privateSupabase,
     });
-    const baseSummaryFormObject = createSummaryFormObject(formConfig!);
 
+    const;
+
+    const baseSummaryFormObject = createSummaryFormObject(formConfig!);
     const updatedSumaryFormObjectFrequencies = addFormObjectToSummaryObject(
       formConfig!,
       baseSummaryFormObject,
       structuredFormData
     );
+
+    insertSurveySummary({
+      surveyId: params.surveyId!,
+      dataResume: baseSummaryFormObject as Json,
+      supabaseClient: privateSupabase,
+    });
 
     console.log(JSON.stringify(updatedSumaryFormObjectFrequencies));
   }
@@ -92,6 +101,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   const surveyLabel = surveyDetails.data?.survey_label;
 
+  if (surveyDetails.data?.survey_status == "closed") {
+    redirect;
+  }
   return json({ formConfig, surveyLabel });
 }
 
