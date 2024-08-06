@@ -36,18 +36,20 @@ export const createFormValidationSchema = (
                 validation = z.string();
                 validation.max(fieldConfigSchema.max || 300);
                 break;
-              case "radio":
-                if (fieldConfigSchema.options!.length > 0)
-                  validation = z.enum(
-                    fieldConfigSchema.options!.map((option) => option.id)
-                  );
+              case "radio": {
+                const variants = z.enum(
+                  fieldConfigSchema.options!.map((option) => option.id)
+                );
+                validation = variants;
                 break;
-              case "checkbox":
-                validation = z
-                  .array(z.string())
-                  .or(z.string())
-                  .or(z.undefined());
+              }
+              case "checkbox": {
+                const variants = z.enum(
+                  fieldConfigSchema.options!.map((option) => option.id)
+                );
+                validation = z.array(variants).or(variants).or(z.undefined());
                 break;
+              }
               case "number":
                 validation = z.number();
                 validation.max(
