@@ -6,11 +6,21 @@ import type {
   sectionSchema,
 } from "~/bot/schemas";
 import { getFinalFieldName } from "./createFormSchema";
-
+export type StructuredFormDataEntry = {
+  [k: string]: {
+    [k: string]:
+      | string
+      | number
+      | dayjs.Dayjs
+      | number[]
+      | (string | undefined)[]
+      | undefined;
+  };
+};
 export const fromFormPlainNamesToObject = (
   formData: Record<string, string | string[] | undefined>,
   formConfigSchema: z.infer<typeof generatedFormSchema>
-) => {
+): StructuredFormDataEntry => {
   const formStructuredData = Object.fromEntries(
     formConfigSchema.map(
       (sectionConfigSchema: z.infer<typeof sectionSchema>) => {
