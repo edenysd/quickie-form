@@ -25,7 +25,7 @@ import FormAssistedPreview from "~/components/FormAssistedPreview";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Form Creation" },
+    { title: "Template Form Creation" },
     {
       name: "description",
       content:
