@@ -18,7 +18,7 @@ import { Link } from "@remix-run/react";
 import ColorModeContext from "~/mui/ColorModeContext";
 
 const logoStyle = {
-  width: "140px",
+  width: "40px",
   height: "auto",
   cursor: "pointer",
 };
@@ -85,6 +85,7 @@ function LandingAppBar() {
           >
             <Box
               sx={{
+                position: "relative",
                 flexGrow: 1,
                 display: "flex",
                 alignItems: "center",
@@ -93,9 +94,8 @@ function LandingAppBar() {
               }}
             >
               <img
-                src={
-                  "https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg"
-                }
+                width={"100%"}
+                src={"/public/logo.svg"}
                 style={logoStyle}
                 alt="logo of sitemark"
               />
