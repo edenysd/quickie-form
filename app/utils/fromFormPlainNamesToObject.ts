@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import type { z } from "zod";
 import type {
   fieldSchema,
@@ -6,17 +5,18 @@ import type {
   sectionSchema,
 } from "~/bot/schemas";
 import { getFinalFieldName } from "./createFormSchema";
+
 export type StructuredFormDataEntry = {
   [k: string]: {
     [k: string]:
       | string
       | number
-      | dayjs.Dayjs
       | number[]
       | (string | undefined)[]
       | undefined;
   };
 };
+
 export const fromFormPlainNamesToObject = (
   formData: Record<string, string | string[] | undefined>,
   formConfigSchema: z.infer<typeof generatedFormSchema>
@@ -45,11 +45,9 @@ export const fromFormPlainNamesToObject = (
                   case "url":
                   case "radio":
                   case "time":
+                  case "date":
                   case "text":
                     value = content;
-                    break;
-                  case "date":
-                    value = dayjs(content);
                     break;
                   case "number":
                     value = Number.parseFloat(content);
