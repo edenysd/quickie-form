@@ -14,7 +14,7 @@ import { calculateOriginCoordsPercentageFromElement } from "~/components/Animati
 import PreviewFormTemplateDialog from "~/components/PreviewFormTemplateDialog";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 import dayjs from "dayjs";
-import type { loader } from "../route";
+import type { loader } from "../../route";
 
 export default function FormTemplateCard() {
   const loaderData = useLoaderData<typeof loader>();
