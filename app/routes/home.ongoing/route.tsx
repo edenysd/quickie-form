@@ -102,7 +102,8 @@ export default function Ongoing() {
       flexDirection={"column"}
       alignItems={"center"}
       justifyContent={"center"}
-      py={10}
+      pt={10}
+      pb={6}
       width={"100%"}
       gap={3}
     >
