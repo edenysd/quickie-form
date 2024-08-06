@@ -8,7 +8,7 @@ import {
 import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
 import { CLOSE_SURVEY_BY_ID_ACTION } from "~/components/CloseSurveyDialog";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
-import FullFormComponent from "./components/FullFormComponent";
+import FullFormComponent from "../../components/FullFormComponent";
 
 export const meta: MetaFunction = () => {
   return [
