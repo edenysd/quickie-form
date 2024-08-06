@@ -75,6 +75,35 @@ export type Database = {
           },
         ]
       }
+      Survey_Responses: {
+        Row: {
+          created_at: string
+          data_entry: Json | null
+          id: number
+          survey_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          data_entry?: Json | null
+          id?: number
+          survey_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          data_entry?: Json | null
+          id?: number
+          survey_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Survey_Response_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "Surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Surveys: {
         Row: {
           closed_at: string | null
