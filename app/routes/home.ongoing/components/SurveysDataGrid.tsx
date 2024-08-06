@@ -42,8 +42,7 @@ const GridActions = ({ row }: { row: FormTemplateRow }) => {
   const [currentOverlayAction, setCurrentOverlayAction] =
     useState<ReactElement | null>(null);
   const { enqueueSnackbar } = useSnackbar();
-  const surveyShareLink =
-    window.location.origin + `/home/surveys/answer/${row.id}`;
+  const surveyShareLink = window.location.origin + `/surveys/answer/${row.id}`;
 
   const open = Boolean(anchorEl);
   const handleOpenMenu: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -56,7 +55,7 @@ const GridActions = ({ row }: { row: FormTemplateRow }) => {
 
   const handleDetails: MouseEventHandler<HTMLLIElement> = (e) => {
     handleCloseMenu();
-    navigate(`/home/surveys/${row.id}`);
+    navigate(`/surveys/${row.id}`);
   };
 
   useEffect(() => {
