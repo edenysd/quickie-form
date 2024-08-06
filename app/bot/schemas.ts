@@ -33,6 +33,7 @@ export const fieldSchema = z
       .describe("Indica si el campo es obligatorio"),
     options: z
       .array(optionSchema)
+      .nonempty()
       .optional()
       .describe("Lista de opciones para campos tipo 'radio' u 'options'"),
     min: z
@@ -68,7 +69,7 @@ export const sectionSchema = z.object({
   fields: z
     .array(fieldSchema)
     .nonempty()
-    .describe("Lista de campos agrupados en la seccion")
+    .describe("Lista de campos agrupados en la seccion"),
 });
 
 export const generatedFormSchema = z
