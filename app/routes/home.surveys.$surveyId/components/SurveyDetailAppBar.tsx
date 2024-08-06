@@ -6,11 +6,15 @@ import type { ReactElement } from "react";
 import { useState } from "react";
 import CloseSurveyDialog from "~/components/CloseSurveyDialog";
 import { calculateOriginCoordsPercentageFromElement } from "~/components/Animations";
+import InputShareLink from "./InputShareLink";
 
 function SurveyDetailAppBar() {
   const loaderData = useLoaderData<typeof loader>();
+  const isSurveyOpen = loaderData.surveyDetails.data!.survey_status === "open";
+
   const [currentOverlayAction, setCurrentOverlayAction] =
     useState<ReactElement | null>(null);
+
   const handleClose = (e) => {
     const originElement = e.currentTarget;
     const originCoordsPercentage = calculateOriginCoordsPercentageFromElement({
@@ -33,6 +37,7 @@ function SurveyDetailAppBar() {
       />
     );
   };
+
   return (
     <>
       {currentOverlayAction}
@@ -52,6 +57,7 @@ function SurveyDetailAppBar() {
             <Button onClick={handleClose} size="small" color="primary">
               Close Survey
             </Button>
+            {isSurveyOpen ? <InputShareLink /> : null}
           </Box>
         </Box>
       </AppAppBar>
