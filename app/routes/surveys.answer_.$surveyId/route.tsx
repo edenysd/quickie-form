@@ -64,8 +64,6 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       supabaseClient: privateSupabase,
     });
 
-    const;
-
     const baseSummaryFormObject = createSummaryFormObject(formConfig!);
     const updatedSumaryFormObjectFrequencies = addFormObjectToSummaryObject(
       formConfig!,
@@ -102,8 +100,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const surveyLabel = surveyDetails.data?.survey_label;
 
   if (surveyDetails.data?.survey_status == "closed") {
-    redirect;
+    return redirect(`/surveys/closed/${params.surveyId}`);
   }
+
   return json({ formConfig, surveyLabel });
 }
 
