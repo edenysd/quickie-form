@@ -112,10 +112,12 @@ export default function Hero() {
             width: "100%",
             backgroundImage:
               theme.palette.mode === "light"
-                ? 'url("https://mui.com/static/images/templates/templates-images/hero-light.png")'
-                : 'url("https://mui.com/static/images/templates/templates-images/hero-dark.png")',
-            backgroundSize: "cover",
+                ? 'url("/public/snapshot-light.png")'
+                : 'url("/public/snapshot-dark.png")',
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
             borderRadius: "10px",
+            backgroundPosition: "center",
             outline: "1px solid",
             outlineColor:
               theme.palette.mode === "light"
