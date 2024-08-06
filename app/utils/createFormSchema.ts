@@ -37,7 +37,10 @@ export const createFormValidationSchema = (
                 validation.max(fieldConfigSchema.max || 300);
                 break;
               case "radio":
-                validation = z.any();
+                if (fieldConfigSchema.options!.length > 0)
+                  validation = z.enum(
+                    fieldConfigSchema.options!.map((option) => option.id)
+                  );
                 break;
               case "checkbox":
                 validation = z
@@ -49,6 +52,9 @@ export const createFormValidationSchema = (
                 validation = z.number();
                 validation.max(
                   fieldConfigSchema.max || Number.MAX_SAFE_INTEGER
+                );
+                validation.min(
+                  fieldConfigSchema.min || Number.MIN_SAFE_INTEGER
                 );
                 break;
               case "tel":
