@@ -4,6 +4,19 @@ import { json, redirect, useLoaderData } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import DashboardAppBar from "./components/DashboardAppBar";
+import {
+  getAllComunityFormTemplates,
+  getAllUserFormTemplates,
+} from "~/supabase/models/form-templates/forms";
+import { Masonry } from "@mui/lab";
+import TotalTemplatesCard from "./components/cards/TotalTemplatesCard";
+import TotalCommunityTemplatesCard from "./components/cards/TotalCommunityTemplatesCard";
+import {
+  getAllUserClosedSurveys,
+  getAllUserRunningSurveys,
+} from "~/supabase/models/surveys/surveys";
+import RunningSurveysCard from "./components/cards/RunningSurveysCard";
+import ClosedSurveysCard from "./components/cards/ClosedSurveysCard";
 
 export const meta: MetaFunction = () => {
   return [
@@ -56,7 +69,30 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/sign-in");
   }
 
+  const userFormTemplates = await getAllUserFormTemplates({
+    supabaseClient: supabase,
+    user,
+  });
+
+  const comunityFormTemplates = await getAllComunityFormTemplates({
+    supabaseClient: supabase,
+  });
+
+  const userRunningSurveys = await getAllUserRunningSurveys({
+    supabaseClient: supabase,
+    user,
+  });
+
+  const userClosedSurveys = await getAllUserClosedSurveys({
+    supabaseClient: supabase,
+    user,
+  });
+
   return json({
+    userFormTemplates,
+    userRunningSurveys,
+    comunityFormTemplates,
+    userClosedSurveys,
     user,
   });
 }
