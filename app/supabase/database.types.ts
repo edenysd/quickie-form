@@ -104,6 +104,38 @@ export type Database = {
           },
         ]
       }
+      Survey_Summaries: {
+        Row: {
+          created_at: string
+          id: number
+          sumary_data: Json | null
+          survey_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          sumary_data?: Json | null
+          survey_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          sumary_data?: Json | null
+          survey_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Survey_Summaries_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "Surveys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Surveys: {
         Row: {
           closed_at: string | null
