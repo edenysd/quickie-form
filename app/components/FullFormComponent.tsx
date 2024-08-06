@@ -242,7 +242,7 @@ function FormField({
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
               defaultValue={dayjs()}
-              format="hh:mm:ss"
+              format="HH:mm:ss"
               sx={{ width: "100%" }}
               name={finalFieldName}
               label={fieldConfig.label}
@@ -394,8 +394,6 @@ function FullFormComponent({
     onValidate({ formData }) {
       const parse = parseWithZod(formData, { schema: formValidationSchema });
 
-      const r = formValidationSchema.safeParse(parse.payload);
-      console.log(r);
       return parse;
     },
     onSubmit(e) {
@@ -435,6 +433,8 @@ function FullFormComponent({
         {!hideSubmitButton ? (
           <Button
             variant="outlined"
+            name="_action"
+            value="finish-survey"
             type="submit"
             form={form.id}
             sx={{ mt: 2 }}
