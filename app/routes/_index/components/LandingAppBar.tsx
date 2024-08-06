@@ -214,9 +214,8 @@ function LandingAppBar() {
                     <Button
                       color="primary"
                       variant="contained"
-                      component="a"
-                      href="/material-ui/getting-started/templates/sign-up/"
-                      target="_blank"
+                      component={Link}
+                      to="/sign-up"
                       sx={{ width: "100%" }}
                     >
                       Sign up
@@ -226,9 +225,8 @@ function LandingAppBar() {
                     <Button
                       color="primary"
                       variant="outlined"
-                      component="a"
-                      href="/material-ui/getting-started/templates/sign-in/"
-                      target="_blank"
+                      component={Link}
+                      to="/sign-in"
                       sx={{ width: "100%" }}
                     >
                       Sign in
