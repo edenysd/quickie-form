@@ -40,9 +40,9 @@ export default function ClosedSurveysCard() {
                   component={Link}
                   color="info"
                   variant="outlined"
-                  to={"/home/ongoing"}
+                  to={"/home/records"}
                 >
-                  SURVEYS
+                  RECORDS
                 </Button>
               </Box>
             </CardActions>

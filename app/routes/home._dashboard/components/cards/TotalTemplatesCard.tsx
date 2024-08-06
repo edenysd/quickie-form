@@ -40,9 +40,9 @@ export default function TotalTemplatesCard() {
                   component={Link}
                   color="primary"
                   variant="outlined"
-                  to={"/home/records"}
+                  to={"/home/templates"}
                 >
-                  Records
+                  TEMPLATES
                 </Button>
               </Box>
             </CardActions>
