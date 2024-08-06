@@ -384,8 +384,8 @@ function FullFormComponent({
   hideSubmitButton = false,
 }: {
   formConfig: z.infer<typeof generatedFormSchema> | null;
-  onlyValidationNoSubmitAction: boolean;
-  hideSubmitButton: boolean;
+  onlyValidationNoSubmitAction?: boolean;
+  hideSubmitButton?: boolean;
   action?: string;
 }) {
   const formValidationSchema = createFormValidationSchema(formConfig!);
@@ -394,7 +394,7 @@ function FullFormComponent({
     onValidate({ formData }) {
       const parse = parseWithZod(formData, { schema: formValidationSchema });
 
-      const r = formValidationSchema.parse(parse.payload);
+      const r = formValidationSchema.safeParse(parse.payload);
       console.log(r);
       return parse;
     },
@@ -406,40 +406,44 @@ function FullFormComponent({
   if (!formConfig) return;
 
   return (
-    <>
-      <Paper elevation={3} sx={{ width: "100%" }}>
-        <Box
-          {...getFormProps(form)}
-          component={Form}
-          method="POST"
-          display={"flex"}
-          width={"100%"}
-          action={action}
-          p={3}
-          flexDirection={"column"}
-          gap={2}
-          sx={(theme) => ({
-            [theme.breakpoints.down("sm")]: {
-              p: 0,
-            },
-          })}
-        >
-          <FormProvider context={form.context}>
-            {formConfig.map((sectionConfig) => (
-              <FormSection
-                key={sectionConfig.name}
-                sectionConfig={sectionConfig}
-              />
-            ))}
-          </FormProvider>
-        </Box>
-      </Paper>
-      {!hideSubmitButton ? (
-        <Button variant="outlined" type="submit" form={form.id}>
-          Finish Form
-        </Button>
-      ) : null}
-    </>
+    <Paper elevation={3} sx={{ width: "100%" }}>
+      <Box
+        {...getFormProps(form)}
+        component={Form}
+        method="POST"
+        display={"flex"}
+        width={"100%"}
+        action={action}
+        p={3}
+        flexDirection={"column"}
+        gap={2}
+        m={0}
+        sx={(theme) => ({
+          [theme.breakpoints.down("sm")]: {
+            p: 0,
+          },
+        })}
+      >
+        <FormProvider context={form.context}>
+          {formConfig.map((sectionConfig) => (
+            <FormSection
+              key={sectionConfig.name}
+              sectionConfig={sectionConfig}
+            />
+          ))}
+        </FormProvider>
+        {!hideSubmitButton ? (
+          <Button
+            variant="outlined"
+            type="submit"
+            form={form.id}
+            sx={{ mt: 2 }}
+          >
+            Finish Form
+          </Button>
+        ) : null}
+      </Box>
+    </Paper>
   );
 }
 
