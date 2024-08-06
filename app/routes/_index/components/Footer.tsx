@@ -5,8 +5,6 @@ import {
   Container,
   Box,
   Stack,
-  TextField,
-  Button,
   IconButton,
 } from "@mui/material";
 import Copyright from "~/components/Copyright";
@@ -47,41 +45,11 @@ export default function Footer() {
           <Box sx={{ width: { xs: "100%", sm: "60%" } }}>
             <Box sx={{ ml: "-15px" }}>
               <img
-                src={
-                  "https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg"
-                }
+                src={"/public/logo.svg"}
                 style={logoStyle}
-                alt="logo of sitemark"
+                alt="logo of quickieform"
               />
             </Box>
-            <Typography variant="body2" fontWeight={600} gutterBottom>
-              Newsletter
-            </Typography>
-            <Typography variant="body2" color="text.secondary" mb={2}>
-              Subscribe to our newsletter for weekly updates and promotions.
-            </Typography>
-            <Stack direction="row" spacing={1} useFlexGap>
-              <TextField
-                id="outlined-basic"
-                hiddenLabel
-                size="small"
-                variant="outlined"
-                fullWidth
-                aria-label="Enter your email address"
-                placeholder="Your email address"
-                inputProps={{
-                  autoComplete: "off",
-                  "aria-label": "Enter your email address",
-                }}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ flexShrink: 0 }}
-              >
-                Subscribe
-              </Button>
-            </Stack>
           </Box>
         </Box>
         <Box
@@ -184,7 +152,7 @@ export default function Footer() {
         >
           <IconButton
             color="inherit"
-            href="https://github.com/mui"
+            href="https://github.com/edenysd"
             aria-label="GitHub"
             sx={{ alignSelf: "center" }}
           >
@@ -192,7 +160,7 @@ export default function Footer() {
           </IconButton>
           <IconButton
             color="inherit"
-            href="https://x.com/MaterialUI"
+            href="https://x.com/denizedenis99"
             aria-label="X"
             sx={{ alignSelf: "center" }}
           >
@@ -200,7 +168,7 @@ export default function Footer() {
           </IconButton>
           <IconButton
             color="inherit"
-            href="https://www.linkedin.com/company/mui/"
+            href="https://www.linkedin.com/in/edenys-deniz-gonzalez/"
             aria-label="LinkedIn"
             sx={{ alignSelf: "center" }}
           >
