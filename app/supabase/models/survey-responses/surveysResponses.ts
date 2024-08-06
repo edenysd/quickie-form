@@ -10,11 +10,9 @@ export const insertSurveyResponse = async ({
   dataEntry: Json;
   supabaseClient: MySupabaseClient;
 }) => {
-  console.log(surveyId);
   const response = await supabaseClient.from("Survey_Responses").insert({
     survey_id: surveyId,
     data_entry: dataEntry,
   });
-  console.log(response);
   return response;
 };
