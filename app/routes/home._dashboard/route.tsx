@@ -112,6 +112,24 @@ export default function Home() {
       gap={3}
     >
       <DashboardAppBar />
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        justifyContent={"center"}
+        width={"100%"}
+        maxWidth={"1200px"}
+        gap={1}
+        sx={{
+          px: 1,
+        }}
+      >
+        <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={2}>
+          <TotalTemplatesCard />
+          <RunningSurveysCard />
+          <TotalCommunityTemplatesCard />
+          <ClosedSurveysCard />
+        </Masonry>
+      </Box>
     </Box>
   );
 }
