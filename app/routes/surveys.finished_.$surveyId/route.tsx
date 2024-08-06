@@ -4,11 +4,10 @@ import { Link } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Reset Password" },
+    { title: "Survey Closed" },
     {
       name: "description",
-      content:
-        "Do you forget your password? No problem, you can reset it here.",
+      content: "The desired survey was already closed.",
     },
   ];
 };
@@ -24,12 +23,11 @@ export default function ResetPassword() {
       justifyContent={"center"}
       gap={2}
     >
-      <Typography variant="h2" textAlign={"center"} fontFamily={"Virgil"}>
-        In working progress
+      <Typography variant="h3" textAlign={"center"} fontFamily={"Virgil"}>
+        Thank you for complete the survey
       </Typography>
-      <Typography variant="body1">Thank you for your patience</Typography>
-      <Link to="/sign-in">
-        <Button size="large">Go Back</Button>
+      <Link to="/">
+        <Button size="large">Go back</Button>
       </Link>
     </Box>
   );

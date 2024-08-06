@@ -22,7 +22,9 @@ export default function ValidateAccount() {
       justifyContent={"center"}
       gap={2}
     >
-      <Typography variant="h2">Account created</Typography>
+      <Typography variant="h2" textAlign={"center"} fontFamily={"Virgil"}>
+        Account created
+      </Typography>
       <Typography variant="body1">
         Check you email for a verification step
       </Typography>

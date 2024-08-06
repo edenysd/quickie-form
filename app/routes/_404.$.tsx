@@ -24,7 +24,7 @@ export default function NotFound404() {
       justifyContent={"center"}
       gap={1}
     >
-      <Typography variant="h1" textAlign={"center"}>
+      <Typography variant="h1" textAlign={"center"} fontFamily={"Virgil"}>
         404
         <br />
         NOT FOUND

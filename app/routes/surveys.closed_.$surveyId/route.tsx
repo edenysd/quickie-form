@@ -23,7 +23,9 @@ export default function ResetPassword() {
       justifyContent={"center"}
       gap={2}
     >
-      <Typography variant="h2">This survey is closed</Typography>
+      <Typography variant="h2" textAlign={"center"} fontFamily={"Virgil"}>
+        This survey is closed
+      </Typography>
       <Link to="/">
         <Button size="large">Go back</Button>
       </Link>

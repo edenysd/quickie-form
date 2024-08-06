@@ -1,6 +1,14 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect, useLoaderData } from "@remix-run/react";
+import {
+  json,
+  Link,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useParams,
+} from "@remix-run/react";
 import { getSurveyById } from "~/supabase/models/surveys/surveys";
 import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
@@ -8,11 +16,18 @@ import FullFormComponent from "../../components/FullFormComponent";
 import { parseWithZod } from "@conform-to/zod";
 import { createFormValidationSchema } from "~/utils/createFormSchema";
 import { fromFormPlainNamesToObject } from "~/utils/fromFormPlainNamesToObject";
-import { createSummaryFormObject } from "~/utils/createSummaryFormObject";
+import {
+  createSummaryFormObject,
+  SummaryFormObjectType,
+} from "~/utils/createSummaryFormObject";
 import { addFormObjectToSummaryObject } from "~/utils/addFormObjectToSummaryObject";
 import { insertSurveyResponse } from "~/supabase/models/survey-responses/surveysResponses";
 import type { Json } from "~/supabase/database.types";
-import { insertSurveySummary } from "~/supabase/models/survey-summaries/surveysSummaries";
+import {
+  getSurveySummaryBySurveyId,
+  upsertSurveySummary,
+} from "~/supabase/models/survey-summaries/surveysSummaries";
+import { useEffect, useState } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -64,23 +79,35 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       supabaseClient: privateSupabase,
     });
 
-    const baseSummaryFormObject = createSummaryFormObject(formConfig!);
-    const updatedSumaryFormObjectFrequencies = addFormObjectToSummaryObject(
-      formConfig!,
-      baseSummaryFormObject,
-      structuredFormData
-    );
-
-    insertSurveySummary({
+    const surveySummaryResponse = await getSurveySummaryBySurveyId({
       surveyId: params.surveyId!,
-      dataResume: baseSummaryFormObject as Json,
       supabaseClient: privateSupabase,
     });
 
-    console.log(JSON.stringify(updatedSumaryFormObjectFrequencies));
+    const surveySummary =
+      surveySummaryResponse.data === null
+        ? createSummaryFormObject(formConfig!)
+        : surveySummaryResponse.data.summary_data;
+
+    const updatedSummaryFormObjectFrequencies = addFormObjectToSummaryObject(
+      formConfig!,
+      surveySummary as SummaryFormObjectType,
+      structuredFormData
+    );
+
+    await upsertSurveySummary({
+      surveyId: params.surveyId!,
+      surveySummaryId: surveySummaryResponse.data?.id,
+      dataResume: updatedSummaryFormObjectFrequencies as Json,
+      supabaseClient: privateSupabase,
+    });
+
+    return json({
+      surveyFinished: true,
+    });
   }
 
-  return null;
+  null;
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
@@ -108,6 +135,26 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export default function Templates() {
   const loaderData = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
+  const params = useParams();
+  const navigate = useNavigate();
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    const surveyFinished =
+      actionData?.surveyFinished ||
+      localStorage.getItem(`finished-${params.surveyId}`);
+
+    if (actionData?.surveyFinished) {
+      localStorage.setItem(`finished-${params.surveyId}`, "true");
+    }
+    if (surveyFinished) {
+      navigate(`/surveys/finished/${params.surveyId}`);
+    }
+
+    setIsFinished(surveyFinished);
+  }, [actionData, navigate, params.surveyId]);
+
   return (
     <Box
       display={"flex"}
@@ -141,7 +188,9 @@ export default function Templates() {
         >
           {loaderData.surveyLabel}
         </Typography>
-        <FullFormComponent formConfig={loaderData.formConfig} />
+        {!isFinished ? (
+          <FullFormComponent formConfig={loaderData.formConfig} />
+        ) : null}
       </Box>
     </Box>
   );
