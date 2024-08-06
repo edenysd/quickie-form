@@ -1,14 +1,17 @@
 import { Box, Typography } from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
-import {
-  closeSurveyById,
-  getSurveyById,
-} from "~/supabase/models/surveys/surveys";
+import { getSurveyById } from "~/supabase/models/surveys/surveys";
 import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
-import { CLOSE_SURVEY_BY_ID_ACTION } from "~/components/CloseSurveyDialog";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
 import FullFormComponent from "../../components/FullFormComponent";
+import { parseWithZod } from "@conform-to/zod";
+import { createFormValidationSchema } from "~/utils/createFormSchema";
+import { fromFormPlainNamesToObject } from "~/utils/fromFormPlainNamesToObject";
+import { createSummaryFormObject } from "~/utils/createSummaryFormObject";
+import { addFormObjectToSummaryObject } from "~/utils/addFormObjectToSummaryObject";
+import { insertSurveyResponse } from "~/supabase/models/survey-responses/surveysResponses";
+import type { Json } from "~/supabase/database.types";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,9 +23,7 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export async function action({ request }: LoaderFunctionArgs) {
-  const supabase = supabasePrivateServerClient();
-
+export async function action({ request, params }: LoaderFunctionArgs) {
   const formData = await request.formData();
   const _action = formData.get("_action") as string;
 
@@ -30,30 +31,46 @@ export async function action({ request }: LoaderFunctionArgs) {
     return null;
   }
 
-  if (_action === CLOSE_SURVEY_BY_ID_ACTION) {
-    const surveyId = formData.get("surveyId") as string;
+  if (_action === "finish-survey") {
+    const privateSupabase = supabasePrivateServerClient();
 
-    if (surveyId) {
-      const response = await closeSurveyById({
-        surveyId,
-        supabaseClient: supabase,
-        user,
-      });
+    const surveyDetails = await getSurveyById({
+      supabaseClient: privateSupabase,
+      surveyId: params.surveyId!,
+    });
 
-      return json({
-        error: response.error,
-        sucess: true,
-        _action: CLOSE_SURVEY_BY_ID_ACTION,
-        surveyId,
-      });
-    } else {
-      return json({
-        error: TypeError("empty surveyId field not allowed"),
-        sucess: false,
-        _action: CLOSE_SURVEY_BY_ID_ACTION,
-        surveyId,
-      });
+    const formTemplate = await getFormTemplateById({
+      supabaseClient: privateSupabase,
+      templateId: surveyDetails.data!.template_id!.toString(),
+    });
+
+    const formConfig = formTemplate.data?.config;
+    const formValidationSchema = createFormValidationSchema(formConfig!);
+
+    const data = parseWithZod<typeof formValidationSchema>(formData, {
+      schema: formValidationSchema,
+    });
+    if (data.status !== "success") {
+      return data.reply();
     }
+    const structuredFormData = fromFormPlainNamesToObject(
+      data.value,
+      formConfig!
+    );
+    await insertSurveyResponse({
+      surveyId: params.surveyId!,
+      dataEntry: structuredFormData as Json,
+      supabaseClient: privateSupabase,
+    });
+    const baseSummaryFormObject = createSummaryFormObject(formConfig!);
+
+    const updatedSumaryFormObjectFrequencies = addFormObjectToSummaryObject(
+      formConfig!,
+      baseSummaryFormObject,
+      structuredFormData
+    );
+
+    console.log(JSON.stringify(updatedSumaryFormObjectFrequencies));
   }
 
   return null;
