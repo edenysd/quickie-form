@@ -23,10 +23,8 @@ const items = [
     title: "Dashboard",
     description:
       "This item could provide a snapshot of the most important metrics or data points related to the product.",
-    imageLight:
-      'url("https://mui.com/static/images/templates/templates-images/dash-light.png")',
-    imageDark:
-      'url("https://mui.com/static/images/templates/templates-images/dash-dark.png")',
+    imageLight: 'url("/public/dashboard-light.png")',
+    imageDark: 'url("/public/dashboard-dark.png")',
   },
   {
     icon: <EdgesensorHighRounded />,
@@ -89,6 +87,8 @@ export default function Features() {
                 label={title}
                 onClick={() => handleItemClick(index)}
                 sx={{
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                   borderColor: (theme) => {
                     if (theme.palette.mode === "light") {
                       return selectedItemIndex === index ? "primary.light" : "";
@@ -124,6 +124,7 @@ export default function Features() {
                   theme.palette.mode === "light"
                     ? items[selectedItemIndex].imageLight
                     : items[selectedItemIndex].imageDark,
+                backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 minHeight: 280,
@@ -178,6 +179,8 @@ export default function Features() {
                 component={Button}
                 onClick={() => handleItemClick(index)}
                 sx={{
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                   p: 3,
                   height: "fit-content",
                   width: "100%",
@@ -281,6 +284,8 @@ export default function Features() {
             <Box
               sx={{
                 m: "auto",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
                 width: 420,
                 height: 500,
                 backgroundSize: "contain",
