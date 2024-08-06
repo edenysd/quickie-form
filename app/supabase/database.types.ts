@@ -108,21 +108,21 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          sumary_data: Json | null
+          summary_data: Json | null
           survey_id: string | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string
           id?: number
-          sumary_data?: Json | null
+          summary_data?: Json | null
           survey_id?: string | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string
           id?: number
-          sumary_data?: Json | null
+          summary_data?: Json | null
           survey_id?: string | null
           updated_at?: string | null
         }
