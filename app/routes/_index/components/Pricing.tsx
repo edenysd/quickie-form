@@ -66,8 +66,25 @@ export default function Pricing() {
         flexDirection: "column",
         alignItems: "center",
         gap: { xs: 3, sm: 6 },
+        overflow: "hidden",
       }}
     >
+      <Box
+        width={"100%"}
+        height={"100%"}
+        display={"flex"}
+        justifyContent={"center"}
+        position={"absolute"}
+        alignItems={"center"}
+        zIndex={10}
+        sx={{
+          backdropFilter: "blur(10px)",
+        }}
+      >
+        <Typography fontFamily={"Virgil"} variant="h1">
+          Coming Soon ;)
+        </Typography>
+      </Box>
       <Box
         sx={{
           width: { sm: "100%", md: "60%" },
