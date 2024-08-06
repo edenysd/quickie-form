@@ -116,6 +116,7 @@ export default function Home() {
         display={"flex"}
         flexDirection={"column"}
         justifyContent={"center"}
+        alignItems={"center"}
         width={"100%"}
         maxWidth={"1200px"}
         gap={1}
