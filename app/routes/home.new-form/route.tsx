@@ -25,11 +25,11 @@ import FullFormComponent from "~/components/FullFormComponent";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Template Form Creation" },
+    { title: "Form Template Creation" },
     {
       name: "description",
       content:
-        "Template form creation tool for an eazy configuration and deployment.",
+        "Form Template creation tool for an eazy configuration and deployment.",
     },
   ];
 };
@@ -159,7 +159,9 @@ export default function NewForm() {
             gap={1}
             color={"InfoText"}
           >
-            <Typography variant="h5">Template form creation tool</Typography>
+            <Typography variant="h5" fontFamily={"Virgil"}>
+              Form Template creation tool
+            </Typography>
             <Typography variant="body1">
               Simply type what you want and then publish your form template.
             </Typography>

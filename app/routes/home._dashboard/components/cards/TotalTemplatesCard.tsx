@@ -20,7 +20,7 @@ export default function TotalTemplatesCard() {
           <Card>
             <CardHeader
               sx={{ overflow: "hidden", textAlign: "center" }}
-              title={"User Total Templates"}
+              title={"User Templates"}
             />
             <CardContent sx={{ py: 0 }}>
               <Box
