@@ -22,6 +22,8 @@ import {
   Rating,
   Slider,
   Button,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import {
   DatePicker,
@@ -29,15 +31,20 @@ import {
   TimePicker,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useMemo } from "react";
+import { useMemo, useReducer } from "react";
 import {
   createFormValidationSchema,
   getFinalFieldName,
 } from "../utils/createFormSchema";
 import { parseWithZod } from "@conform-to/zod";
-import { useForm } from "@conform-to/react";
+import { FormProvider, useField, useForm } from "@conform-to/react";
 import { Form } from "@remix-run/react";
-import { getFormProps } from "node_modules/@conform-to/react/helpers";
+import {
+  getFormProps,
+  getInputProps,
+} from "node_modules/@conform-to/react/helpers";
+import dayjs from "dayjs";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 function FormField({
   fieldConfig,
@@ -50,12 +57,19 @@ function FormField({
     fieldConfig.name,
     sectionConfig.name
   );
+  const [meta, form] = useField(finalFieldName);
+
+  const [showPassword, toggleShowPassword] = useReducer((b) => !b, false);
 
   switch (fieldConfig.type) {
     case "text":
       return (
         <Grid item xs={12} md={6}>
           <TextField
+            {...getInputProps(meta, { type: "text" })}
+            key={meta.key}
+            helperText={meta.errors?.at(0)}
+            error={!!meta.errors?.length}
             required={fieldConfig.required}
             fullWidth
             label={fieldConfig.label}
@@ -63,13 +77,48 @@ function FormField({
           />
         </Grid>
       );
+    case "password":
+      return (
+        <Grid item xs={12} md={6}>
+          <TextField
+            {...getInputProps(meta, {
+              type: showPassword ? "text" : "password",
+            })}
+            key={meta.key}
+            helperText={meta.errors?.at(0)}
+            error={!!meta.errors?.length}
+            required={fieldConfig.required}
+            fullWidth
+            label={fieldConfig.label}
+            placeholder={fieldConfig.placeholder}
+            autoComplete={finalFieldName}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={toggleShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+      );
     case "textarea":
       return (
         <Grid item xs={12} md={6}>
           <TextField
+            {...getInputProps(meta, { type: "text" })}
+            key={meta.key}
+            helperText={meta.errors?.at(0)}
+            error={!!meta.errors?.length}
+            required={fieldConfig.required}
             multiline
             minRows={3}
-            required={fieldConfig.required}
             fullWidth
             label={fieldConfig.label}
             placeholder={fieldConfig.placeholder}
@@ -79,18 +128,19 @@ function FormField({
     case "radio":
       return (
         <Grid item xs={12} md={6}>
-          <FormControl>
+          <FormControl required={fieldConfig.required}>
             <Tooltip describeChild title={fieldConfig.placeholder} followCursor>
               <FormLabel>{fieldConfig.label}</FormLabel>
             </Tooltip>
             <RadioGroup
               defaultValue={fieldConfig.options?.at(0)?.id}
-              name={fieldConfig.name}
+              name={finalFieldName}
             >
               {fieldConfig.options?.map((option) => (
                 <FormControlLabel
                   key={option.id}
-                  value={fieldConfig.name + "." + option.id}
+                  name={finalFieldName}
+                  value={option.id}
                   control={<Radio />}
                   label={option.label}
                 />
@@ -102,7 +152,7 @@ function FormField({
     case "checkbox":
       return (
         <Grid item xs={12} md={6}>
-          <FormControl>
+          <FormControl required={fieldConfig.required}>
             <Tooltip describeChild title={fieldConfig.placeholder} followCursor>
               <FormLabel>{fieldConfig.label}</FormLabel>
             </Tooltip>
@@ -110,7 +160,8 @@ function FormField({
               {fieldConfig.options?.map((option) => (
                 <FormControlLabel
                   key={option.id}
-                  value={fieldConfig.name + "." + option.id}
+                  name={finalFieldName}
+                  value={option.id}
                   control={<Checkbox />}
                   label={option.label}
                 />
@@ -123,9 +174,13 @@ function FormField({
       return (
         <Grid item xs={12} md={6}>
           <TextField
+            {...getInputProps(meta, { type: "number" })}
+            key={meta.key}
+            helperText={meta.errors?.at(0)}
+            error={!!meta.errors?.length}
+            required={fieldConfig.required}
             type="number"
             inputMode="decimal"
-            required={fieldConfig.required}
             fullWidth
             label={fieldConfig.label}
             placeholder={fieldConfig.placeholder}
@@ -140,9 +195,12 @@ function FormField({
       return (
         <Grid item xs={12} md={6}>
           <TextField
-            type="tel"
-            inputMode="tel"
+            {...getInputProps(meta, { type: "tel" })}
+            key={meta.key}
+            helperText={meta.errors?.at(0)}
+            error={!!meta.errors?.length}
             required={fieldConfig.required}
+            inputMode="tel"
             fullWidth
             label={fieldConfig.label}
             placeholder={fieldConfig.placeholder}
@@ -153,9 +211,12 @@ function FormField({
       return (
         <Grid item xs={12} md={6}>
           <TextField
-            type="email"
-            inputMode="email"
+            {...getInputProps(meta, { type: "email" })}
+            key={meta.key}
+            helperText={meta.errors?.at(0)}
+            error={!!meta.errors?.length}
             required={fieldConfig.required}
+            inputMode="email"
             fullWidth
             label={fieldConfig.label}
             placeholder={fieldConfig.placeholder}
@@ -167,8 +228,9 @@ function FormField({
         <Grid item xs={12} md={6}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+              defaultValue={dayjs()}
               sx={{ width: "100%" }}
-              name={fieldConfig.name}
+              name={finalFieldName}
               label={fieldConfig.label}
             />
           </LocalizationProvider>
@@ -179,8 +241,10 @@ function FormField({
         <Grid item xs={12} md={6}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <TimePicker
+              defaultValue={dayjs()}
+              format="hh:mm:ss"
               sx={{ width: "100%" }}
-              name={fieldConfig.name}
+              name={finalFieldName}
               label={fieldConfig.label}
             />
           </LocalizationProvider>
@@ -188,7 +252,7 @@ function FormField({
       );
     case "file":
       return (
-        <Grid item container xs={12} spacing={2} position={"relative"}>
+        <Grid item container xs={12} spacing={2} position={"relative"} my={2}>
           {/* @TODO remove this overlay when file fields is enabled and remove disabled state*/}
           <Grid
             item
@@ -211,7 +275,7 @@ function FormField({
               disabled
               fullWidth
               type="file"
-              name={fieldConfig.name}
+              name={finalFieldName}
               helperText={fieldConfig.placeholder}
             />
           </Grid>
@@ -221,9 +285,12 @@ function FormField({
       return (
         <Grid item xs={12} md={6}>
           <TextField
-            type="url"
-            inputMode="url"
+            {...getInputProps(meta, { type: "url" })}
+            key={meta.key}
+            helperText={meta.errors?.at(0)}
+            error={!!meta.errors?.length}
             required={fieldConfig.required}
+            inputMode="url"
             fullWidth
             label={fieldConfig.label}
             placeholder={fieldConfig.placeholder}
@@ -234,7 +301,14 @@ function FormField({
       return (
         <Grid item xs={12} md={6}>
           <Typography component="legend">{fieldConfig.label}</Typography>
-          <Rating name={fieldConfig.name} max={fieldConfig.max || 5} />
+          <Rating
+            {...getInputProps(meta, { type: "number", value: false })}
+            key={meta.key}
+            defaultValue={Math.round((fieldConfig.max || 5) / 2)}
+            value={undefined}
+            name={finalFieldName}
+            max={fieldConfig.max || 5}
+          />
         </Grid>
       );
     case "range":
@@ -243,12 +317,10 @@ function FormField({
           <Typography component="legend">{fieldConfig.label}</Typography>
           <Box px={1}>
             <Slider
-              name={fieldConfig.name}
+              name={finalFieldName}
               getAriaLabel={() => fieldConfig.label}
               valueLabelDisplay="auto"
               defaultValue={[fieldConfig.min || 0, fieldConfig.max || 0]}
-              // marks
-              // step={1}
               min={fieldConfig.min || 0}
               max={fieldConfig.max || 0}
             />
@@ -261,7 +333,7 @@ function FormField({
           <Typography component="legend">{fieldConfig.label}</Typography>
           <Box px={1}>
             <Slider
-              name={fieldConfig.name}
+              name={finalFieldName}
               aria-label={fieldConfig.label}
               valueLabelDisplay="auto"
               // marks
@@ -290,7 +362,7 @@ function FormSection({
           sectionConfig={sectionConfig}
         />
       )),
-    [sectionConfig.fields]
+    [sectionConfig]
   );
   return (
     <Box display={"flex"} flexDirection={"column"} p={2} gap={1}>
@@ -308,42 +380,66 @@ function FormSection({
 function FullFormComponent({
   formConfig = [],
   action,
+  onlyValidationNoSubmitAction = false,
+  hideSubmitButton = false,
 }: {
   formConfig: z.infer<typeof generatedFormSchema> | null;
-  action: string;
+  onlyValidationNoSubmitAction: boolean;
+  hideSubmitButton: boolean;
+  action?: string;
 }) {
-  const formValidationSchema = createFormValidationSchema(formConfig);
+  const formValidationSchema = createFormValidationSchema(formConfig!);
 
   const [form, fields] = useForm({
     onValidate({ formData }) {
-      return parseWithZod(formData, { schema: formValidationSchema });
+      const parse = parseWithZod(formData, { schema: formValidationSchema });
+
+      const r = formValidationSchema.parse(parse.payload);
+      console.log(r);
+      return parse;
+    },
+    onSubmit(e) {
+      if (onlyValidationNoSubmitAction) e.preventDefault();
     },
   });
 
   if (!formConfig) return;
+
   return (
-    <Paper elevation={3} sx={{ width: "100%" }}>
-      <Box
-        {...getFormProps(form)}
-        component={Form}
-        method="POST"
-        display={"flex"}
-        width={"100%"}
-        p={3}
-        flexDirection={"column"}
-        gap={2}
-        sx={(theme) => ({
-          [theme.breakpoints.down("sm")]: {
-            p: 0,
-          },
-        })}
-      >
-        {formConfig.map((sectionConfig) => (
-          <FormSection key={sectionConfig.name} sectionConfig={sectionConfig} />
-        ))}
-        <Button type="submit">Submit</Button>
-      </Box>
-    </Paper>
+    <>
+      <Paper elevation={3} sx={{ width: "100%" }}>
+        <Box
+          {...getFormProps(form)}
+          component={Form}
+          method="POST"
+          display={"flex"}
+          width={"100%"}
+          action={action}
+          p={3}
+          flexDirection={"column"}
+          gap={2}
+          sx={(theme) => ({
+            [theme.breakpoints.down("sm")]: {
+              p: 0,
+            },
+          })}
+        >
+          <FormProvider context={form.context}>
+            {formConfig.map((sectionConfig) => (
+              <FormSection
+                key={sectionConfig.name}
+                sectionConfig={sectionConfig}
+              />
+            ))}
+          </FormProvider>
+        </Box>
+      </Paper>
+      {!hideSubmitButton ? (
+        <Button variant="outlined" type="submit" form={form.id}>
+          Finish Form
+        </Button>
+      ) : null}
+    </>
   );
 }
 
