@@ -89,6 +89,11 @@ export async function action({ request, params }: LoaderFunctionArgs) {
         ? createSummaryFormObject(formConfig!)
         : surveySummaryResponse.data.summary_data;
 
+    const summaryTotalEntries =
+      surveySummaryResponse.data === null
+        ? 0
+        : surveySummaryResponse.data.total_entries;
+
     const updatedSummaryFormObjectFrequencies = addFormObjectToSummaryObject(
       formConfig!,
       surveySummary as SummaryFormObjectType,
@@ -100,6 +105,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       surveySummaryId: surveySummaryResponse.data?.id,
       dataResume: updatedSummaryFormObjectFrequencies as Json,
       supabaseClient: privateSupabase,
+      totalEntries: summaryTotalEntries! + 1,
     });
 
     return json({

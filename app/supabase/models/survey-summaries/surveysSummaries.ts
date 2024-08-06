@@ -5,17 +5,20 @@ export const upsertSurveySummary = async ({
   surveyId,
   surveySummaryId,
   dataResume,
+  totalEntries,
   supabaseClient,
 }: {
   surveyId: string;
   dataResume: Json;
   surveySummaryId?: number;
+  totalEntries: number;
   supabaseClient: MySupabaseClient;
 }) => {
   const response = await supabaseClient.from("Survey_Summaries").upsert({
     id: surveySummaryId,
     survey_id: surveyId,
     summary_data: dataResume,
+    total_entries: totalEntries,
     updated_at: new Date().toUTCString(),
   });
   return response;
