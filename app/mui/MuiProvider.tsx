@@ -4,7 +4,7 @@ import type { PaletteMode } from "@mui/material";
 import { CssBaseline, ThemeProvider, useMediaQuery } from "@mui/material";
 import initTheme from "./theme";
 import createCache from "@emotion/cache";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import ColorModeContext from "./ColorModeContext";
 
 function createEmotionCache() {
@@ -15,13 +15,24 @@ export function MuiProvider({ children }: { children: React.ReactNode }) {
   const cache = createEmotionCache();
 
   const prefersLight = useMediaQuery("(prefers-color-scheme: light)");
+
   // @TODO load preferences
   const [mode, setMode] = React.useState<PaletteMode>(
     prefersLight ? "light" : "dark"
   );
   const toggleColorMode = useCallback(() => {
-    setMode((prev) => (prev === "dark" ? "light" : "dark"));
-    // @TODO save preferences
+    setMode((prev) => {
+      const newPref = prev === "dark" ? "light" : "dark";
+      window.localStorage.setItem("prefer-mode", newPref);
+      return newPref;
+    });
+  }, []);
+
+  useEffect(() => {
+    const storagePreferMode = window.localStorage.getItem(
+      "prefer-mode"
+    ) as PaletteMode | null;
+    setMode(() => storagePreferMode || "dark");
   }, []);
   const theme = useMemo(() => initTheme({ mode }), [mode]);
 
