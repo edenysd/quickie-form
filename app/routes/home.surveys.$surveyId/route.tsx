@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
@@ -10,8 +10,11 @@ import {
 } from "~/supabase/models/surveys/surveys";
 import HeaderSurveyDetail from "./components/HeaderSurveyDetail";
 import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
-import FormTemplateCard from "./components/FormTemplateCard";
+import FormTemplateCard from "./components/cards/FormTemplateCard";
 import { CLOSE_SURVEY_BY_ID_ACTION } from "~/components/CloseSurveyDialog";
+import { getSurveySummaryBySurveyId } from "~/supabase/models/survey-summaries/surveysSummaries";
+import TotalSurveyCard from "./components/cards/TotalSurveyCard";
+import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
 
 export const meta: MetaFunction = () => {
   return [
@@ -79,7 +82,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const cookies = parse(request.headers.get("Cookie") ?? "");
 
   const supabase = supabaseServerClient(cookies, headers);
-
+  const superSupabase = supabasePrivateServerClient();
   const {
     error,
     data: { user },
@@ -99,7 +102,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     templateId: surveyDetails.data!.template_id!.toString(),
   });
 
-  return json({ surveyDetails, formTemplate, user });
+  const surveySummary = await getSurveySummaryBySurveyId({
+    surveyId: params.surveyId!,
+    supabaseClient: superSupabase,
+  });
+
+  return json({ surveyDetails, surveySummary, formTemplate, user });
 }
 
 export default function Templates() {
@@ -131,7 +139,11 @@ export default function Templates() {
         }}
       >
         <HeaderSurveyDetail />
-        <FormTemplateCard />
+
+        <Grid container spacing={2}>
+          <FormTemplateCard />
+          <TotalSurveyCard />
+        </Grid>
       </Box>
     </Box>
   );
