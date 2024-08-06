@@ -21,7 +21,7 @@ import {
   resetDraftedForm,
 } from "~/supabase/models/form-templates/drafted/status";
 import { createHistoryFetcher } from "~/supabase/models/form-templates/drafted/history";
-import FormAssistedPreview from "~/components/FormAssistedPreview";
+import FullFormComponent from "~/components/FullFormComponent";
 
 export const meta: MetaFunction = () => {
   return [
@@ -143,7 +143,10 @@ export default function NewForm() {
         })}
       >
         {existsFormConfig ? (
-          <FormAssistedPreview formConfig={validatedFormConfig.data} />
+          <FullFormComponent
+            formConfig={validatedFormConfig.data}
+            hideSubmitButton={true}
+          />
         ) : (
           <Box
             component={Paper}

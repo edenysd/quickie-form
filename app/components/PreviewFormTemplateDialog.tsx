@@ -2,8 +2,8 @@ import type { DialogProps, GrowProps } from "@mui/material";
 import { Alert, Dialog, DialogContent } from "@mui/material";
 import { forwardRef, useMemo } from "react";
 import { TransitionGrowFromElementId } from "~/components/Animations";
-import FormAssistedPreview from "~/components/FormAssistedPreview";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
+import FullFormComponent from "./FullFormComponent";
 
 export default function PreviewFormTemplateDialog({
   formTemplateRow,
@@ -38,7 +38,10 @@ export default function PreviewFormTemplateDialog({
         This is a preview form templatea in safe enviroment
       </Alert>
       <DialogContent sx={{ p: 0 }}>
-        <FormAssistedPreview formConfig={formTemplateRow.config} />
+        <FullFormComponent
+          formConfig={formTemplateRow.config}
+          onlyValidationNoSubmitAction={true}
+        />
       </DialogContent>
     </Dialog>
   );
