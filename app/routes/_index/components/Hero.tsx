@@ -87,8 +87,8 @@ export default function Hero() {
             width: "100%",
             backgroundImage:
               theme.palette.mode === "light"
-                ? 'url("/public/snapshot-light.png")'
-                : 'url("/public/snapshot-dark.png")',
+                ? 'url("/snapshot-light.png")'
+                : 'url("/snapshot-dark.png")',
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
             borderRadius: "10px",

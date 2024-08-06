@@ -23,8 +23,8 @@ const items = [
     title: "Dashboard",
     description:
       "This item could provide a snapshot of the most important metrics or data points related to the product.",
-    imageLight: 'url("/public/dashboard-light.png")',
-    imageDark: 'url("/public/dashboard-dark.png")',
+    imageLight: 'url("/dashboard-light.png")',
+    imageDark: 'url("/dashboard-dark.png")',
   },
   {
     icon: <EdgesensorHighRounded />,

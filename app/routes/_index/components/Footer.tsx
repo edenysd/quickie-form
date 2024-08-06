@@ -45,7 +45,7 @@ export default function Footer() {
           <Box sx={{ width: { xs: "100%", sm: "60%" } }}>
             <Box sx={{ ml: "-15px" }}>
               <img
-                src={"/public/logo.svg"}
+                src={"/logo.svg"}
                 style={logoStyle}
                 alt="logo of quickieform"
               />

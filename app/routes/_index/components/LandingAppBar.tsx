@@ -95,7 +95,7 @@ function LandingAppBar() {
             >
               <img
                 width={"100%"}
-                src={"/public/logo.svg"}
+                src={"/logo.svg"}
                 style={logoStyle}
                 alt="logo of sitemark"
               />
