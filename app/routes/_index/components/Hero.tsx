@@ -41,6 +41,7 @@ export default function Hero() {
           >
             <Typography
               variant="h1"
+              fontFamily={"Virgil"}
               sx={{
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
@@ -50,10 +51,11 @@ export default function Hero() {
                 whiteSpace: "break-spaces",
               }}
             >
-              Our latest{" "}
+              Quickie{" "}
             </Typography>
             <Typography
               component="span"
+              fontFamily={"Virgil"}
               variant="h1"
               sx={{
                 fontSize: "clamp(3rem, 10vw, 4rem)",
@@ -63,7 +65,7 @@ export default function Hero() {
                     : "primary.light",
               }}
             >
-              products
+              Form
             </Typography>
           </Box>
           <Typography
