@@ -5,28 +5,34 @@ import type {
   sectionSchema,
 } from "~/bot/schemas";
 
-type SummaryEntryObjectType =
-  | {
-      hourFrequency: { [k: string]: number };
-    }
-  | {
-      datesFrequency: { [k: string]: number };
-      daysOfTheWeekFrequency: { [k: string]: number };
-    }
-  | {
-      valueFrequency: { [k: string]: number };
-    }
-  | {
-      startFrequency?: { [k: string]: number };
-      endFrequency?: { [k: string]: number };
-    }
+export type SummaryTime = {
+  hourFrequency: { [k: string]: number };
+};
+export type SummaryDate = {
+  datesOfTheMonthFrequency: { [k: string]: number };
+  daysOfTheWeekFrequency: { [k: string]: number };
+  fullDateFrequency: { [k: string]: number };
+};
+export type SummarySingleValue = {
+  valueFrequency: { [k: string]: number };
+};
+export type SummaryRange = {
+  startFrequency: { [k: string]: number };
+  endFrequency: { [k: string]: number };
+};
+
+export type SummaryEntryObjectType =
+  | SummaryTime
+  | SummaryDate
+  | SummarySingleValue
+  | SummaryRange
   | null;
 
 type SummarySectionObjectType = {
   [k: string]: SummaryEntryObjectType;
 };
 
-type SummaryFormObjectType = {
+export type SummaryFormObjectType = {
   [k: string]: SummarySectionObjectType;
 };
 
@@ -60,7 +66,8 @@ export const createSummaryFormObject = (
                     break;
                   case "date":
                     value = {
-                      datesFrequency: {},
+                      datesOfTheMonthFrequency: {},
+                      fullDateFrequency: {},
                       daysOfTheWeekFrequency: {},
                     };
                     break;
