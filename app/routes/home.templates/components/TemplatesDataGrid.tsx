@@ -23,6 +23,7 @@ import { calculateOriginCoordsPercentageFromElement } from "~/components/Animati
 import PreviewFormTemplateDialog from "../../../components/PreviewFormTemplateDialog";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 import RunSurveyWithFormTemplateDialog from "./dialogs/RunSurveyWithFormTemplateDialog";
+import dayjs from "dayjs";
 
 const GridActions = ({ row }: { row: FormTemplateRow }) => {
   const [anchorEl, setAnchorEl] = useState<null | Element>(null);
@@ -158,8 +159,8 @@ const columns: GridColDef[] = [
     field: "updated_at",
     headerName: "Last Update",
     flex: 1,
-    valueGetter: (value) => new Date(value),
-    type: "dateTime",
+    valueGetter: (value) => dayjs(value).format("D/M/YYYY, h:mm:ss A"),
+    type: "string",
   },
   {
     field: "actions",

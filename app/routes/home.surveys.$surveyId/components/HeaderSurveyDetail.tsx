@@ -3,6 +3,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import type { loader } from "../route";
 import { SURVEY_CONFIGS } from "~/routes/home.templates/components/dialogs/RunSurveyWithFormTemplateDialog";
 import { KeyboardArrowLeftOutlined } from "@mui/icons-material";
+import dayjs from "dayjs";
 
 export default function HeaderSurveyDetail() {
   const loaderData = useLoaderData<typeof loader>();
@@ -67,16 +68,18 @@ export default function HeaderSurveyDetail() {
       <Typography variant="body1">
         Created at{" "}
         <b>
-          {new Date(loaderData.surveyDetails.data!.created_at).toLocaleString()}
+          {dayjs(loaderData.surveyDetails.data!.created_at).format(
+            "D/M/YYYY, h:mm:ss A"
+          )}
         </b>
       </Typography>
       {!isSurveyOpen ? (
         <Typography variant="body1">
           Closed at{" "}
           <b>
-            {new Date(
-              loaderData.surveyDetails.data!.closed_at!
-            ).toLocaleString()}
+            {dayjs(loaderData.surveyDetails.data!.closed_at!).format(
+              "D/M/YYYY, h:mm:ss A"
+            )}
           </b>
         </Typography>
       ) : null}

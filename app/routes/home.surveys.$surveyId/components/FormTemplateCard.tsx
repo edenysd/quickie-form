@@ -18,6 +18,7 @@ import { useState } from "react";
 import { calculateOriginCoordsPercentageFromElement } from "~/components/Animations";
 import PreviewFormTemplateDialog from "~/components/PreviewFormTemplateDialog";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
+import dayjs from "dayjs";
 
 export const meta: MetaFunction = () => {
   return [
@@ -126,9 +127,9 @@ export default function FormTemplateCard() {
             <CardContent sx={{ py: 0 }}>
               <Typography variant="caption">
                 Last Update{" "}
-                {new Date(
-                  loaderData.formTemplate.data!.updated_at!
-                ).toLocaleString()}
+                {dayjs(loaderData.formTemplate.data!.updated_at!).format(
+                  "D/M/YYYY, h:mm:ss A"
+                )}
               </Typography>
             </CardContent>
             <CardActions>

@@ -17,6 +17,7 @@ import type { loader } from "../route";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 import { SURVEY_CONFIGS } from "~/routes/home.templates/components/dialogs/RunSurveyWithFormTemplateDialog";
+import dayjs from "dayjs";
 
 const GridActions = ({ row }: { row: FormTemplateRow }) => {
   const navigate = useNavigate();
@@ -79,8 +80,8 @@ export default function PastSurveysDataGrid() {
         field: "closed_at",
         headerName: "Closed At",
         flex: 1,
-        valueGetter: (value) => new Date(value),
-        type: "dateTime",
+        valueGetter: (value) => dayjs(value).format("D/M/YYYY, h:mm:ss A"),
+        type: "string",
       },
       {
         field: "survey_variant",
