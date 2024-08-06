@@ -55,7 +55,7 @@ const GridActions = ({ row }: { row: FormTemplateRow }) => {
 
   const handleDetails: MouseEventHandler<HTMLLIElement> = (e) => {
     handleCloseMenu();
-    navigate(`/surveys/${row.id}`);
+    navigate(`/home/surveys/${row.id}`);
   };
 
   useEffect(() => {
@@ -140,7 +140,6 @@ const GridActions = ({ row }: { row: FormTemplateRow }) => {
                 inputProps={{
                   style: {
                     fontSize: "12px",
-                    // width: `${surveyShareLink.length}ch`,
                   },
                 }}
                 InputProps={{
