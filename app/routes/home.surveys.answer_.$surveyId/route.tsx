@@ -61,7 +61,6 @@ export async function action({ request }: LoaderFunctionArgs) {
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const privateSupabase = supabasePrivateServerClient();
-  console.log("EEEE");
   const surveyDetails = await getSurveyById({
     supabaseClient: privateSupabase,
     surveyId: params.surveyId!,
@@ -87,7 +86,7 @@ export default function Templates() {
       flexDirection={"column"}
       alignItems={"center"}
       justifyContent={"center"}
-      py={10}
+      py={6}
       width={"100%"}
       gap={3}
     >
