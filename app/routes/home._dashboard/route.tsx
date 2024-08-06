@@ -123,8 +123,15 @@ export default function Home() {
         sx={{
           px: 1,
         }}
+        overflow={"hidden"}
       >
-        <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={2}>
+        <Masonry
+          defaultColumns={3}
+          defaultHeight={200}
+          defaultSpacing={2}
+          columns={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 3 }}
+          spacing={2}
+        >
           <TotalTemplatesCard />
           <RunningSurveysCard />
           <TotalCommunityTemplatesCard />
