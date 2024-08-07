@@ -4,22 +4,34 @@ import type { ChatHistory } from "~/bot/chat";
 import type { generatedFormSchema } from "~/bot/schemas";
 import type { MySupabaseClient } from "~/supabase/supabase.types";
 
-export const createHistoryFetcher = (
+export const getHistoryFromDraftTemplate = async (
   supabase: MySupabaseClient,
   user: User
 ) => {
-  return async () => {
-    const response = await supabase
-      .from("Form_Templates")
-      .select("history")
-      .eq("owner", user.id)
-      .eq("status", "draft")
-      .limit(1)
-      .maybeSingle();
+  const response = await supabase
+    .from("Form_Templates")
+    .select("history")
+    .eq("owner", user.id)
+    .eq("status", "draft")
+    .limit(1)
+    .maybeSingle();
 
-    if (response.error) throw response.error;
-    return (response.data?.history || []) as ChatHistory;
-  };
+  return response;
+};
+
+export const getConfigFromDraftTemplate = async (
+  supabase: MySupabaseClient,
+  user: User
+) => {
+  const response = await supabase
+    .from("Form_Templates")
+    .select("config")
+    .eq("owner", user.id)
+    .eq("status", "draft")
+    .limit(1)
+    .maybeSingle();
+
+  return response;
 };
 
 export const saveHistory = async ({
