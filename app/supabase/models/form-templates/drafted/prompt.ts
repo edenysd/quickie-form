@@ -18,7 +18,7 @@ export const processPrompt = async ({
     messageContent: prompt,
   });
 
-  saveHistory({
+  await saveHistory({
     supabaseClient: supabase,
     user,
     history,
