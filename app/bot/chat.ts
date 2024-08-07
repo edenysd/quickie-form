@@ -21,9 +21,13 @@ export async function sendMessage({
   history: ChatHistory;
   messageContent: string;
 }) {
+  const prefixMessage =
+    history.length === 0
+      ? "Create a form for the next situation, start using the languague of the situation description: "
+      : "";
   const message: CoreUserMessage = {
     role: "user",
-    content: messageContent,
+    content: prefixMessage + messageContent,
   };
 
   let formConfig = [];
@@ -63,7 +67,7 @@ export async function sendMessage({
           })
           .concat({
             role: "assistant",
-            content: `Please, fix the json format in your latest response, this is the error message:\n ${JSON.stringify(
+            content: `Fix the json format in your latest response, this is the error message:\n ${JSON.stringify(
               responseValidation.error
             )}, please infer the language response from the last user interaction.`,
           }),
@@ -74,9 +78,11 @@ export async function sendMessage({
   }
 
   history.push(message);
+
   history.push({
     role: "assistant",
     content: JSON.stringify(formConfig),
   });
+
   return { formConfig, history };
 }
