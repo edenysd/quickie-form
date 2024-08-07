@@ -81,7 +81,7 @@ export default function Pricing() {
           backdropFilter: "blur(10px)",
         }}
       >
-        <Typography fontFamily={"Virgil"} variant="h1">
+        <Typography fontFamily={"Virgil"} variant="h2" textAlign={"center"}>
           Coming Soon ;)
         </Typography>
       </Box>

@@ -122,6 +122,7 @@ export default function Footer() {
       <Box
         sx={{
           display: "flex",
+          flexDirection: "column",
           justifyContent: "space-between",
           pt: { xs: 4, sm: 8 },
           width: "100%",
@@ -129,18 +130,18 @@ export default function Footer() {
           borderColor: "divider",
         }}
       >
-        <div>
+        <Box display={"flex"} alignItems={"start"} flexDirection={"column"}>
           <Link color="text.secondary" href="#">
             Privacy Policy
           </Link>
-          <Typography display="inline" sx={{ mx: 0.5, opacity: 0.5 }}>
-            &nbsp;•&nbsp;
-          </Typography>
+
           <Link color="text.secondary" href="#">
             Terms of Service
           </Link>
-          <Copyright />
-        </div>
+          <Box pt={1}>
+            <Copyright />
+          </Box>
+        </Box>
         <Stack
           direction="row"
           justifyContent="left"

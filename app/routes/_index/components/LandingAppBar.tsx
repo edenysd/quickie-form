@@ -90,7 +90,7 @@ function LandingAppBar() {
                 display: "flex",
                 alignItems: "center",
                 ml: "-18px",
-                px: 0,
+                px: 1,
               }}
             >
               <img
