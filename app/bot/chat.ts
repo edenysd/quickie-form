@@ -1,5 +1,4 @@
 import { generateForm } from "./model";
-import type { User } from "@supabase/supabase-js";
 import type {
   CoreAssistantMessage,
   CoreSystemMessage,
@@ -14,42 +13,14 @@ export type MessageVariant =
   | CoreAssistantMessage
   | CoreToolMessage;
 export type ChatHistory = Array<MessageVariant>;
-interface ChatSessionProps {
-  fetchHistory: () => Promise<ChatHistory>;
-  id: string;
-}
-
-const savedHistory = new Map<string, ChatHistory>();
-
-export const getUserCachedId = (user: User | null) => `local-saved-${user?.id}`;
-
-//@TODO think about changing to a non memory hoisted variant
-export async function getCachedChatHistory(
-  id: string
-): Promise<ChatHistory | undefined> {
-  const history = savedHistory.get(id);
-  return history;
-}
-
-export async function updateCachedChatHistory({
-  fetchHistory,
-  id,
-}: ChatSessionProps) {
-  let history = await getCachedChatHistory(id);
-  if (!history || !history.length) {
-    history = await fetchHistory();
-  }
-  savedHistory.set(id, history);
-
-  return history;
-}
 
 export async function sendMessage({
-  fetchHistory,
-  id,
+  history,
   messageContent,
-}: ChatSessionProps & { messageContent: string }) {
-  const history = await updateCachedChatHistory({ fetchHistory, id });
+}: {
+  history: ChatHistory;
+  messageContent: string;
+}) {
   const message: CoreUserMessage = { role: "user", content: messageContent };
 
   let formConfig = [];
@@ -66,8 +37,8 @@ export async function sendMessage({
      */
     let errorDataValue = null;
     if (e.name === "AI_APICallError") {
-      errorDataValue = JSON.parse(e.responseBody).candidates[0].content.parts[0]
-        .text;
+      errorDataValue = JSON.parse(e.responseBody).candidates[0].content
+        ?.parts[0].text;
       if (!errorDataValue || errorDataValue?.length == 0) errorDataValue = [];
       console.log(errorDataValue, errorDataValue.length);
     } else if (e.cause) {
@@ -105,16 +76,4 @@ export async function sendMessage({
     content: JSON.stringify(formConfig),
   });
   return { formConfig, history };
-}
-
-export async function removeCachedChatSession({ id }: { id: string }) {
-  return savedHistory.delete(id);
-}
-
-export async function getLastMessageFromCachedChatSession(
-  id: string
-): Promise<MessageVariant> {
-  return JSON.parse(
-    ((await getCachedChatHistory(id))?.at(-1)?.content as string) || "[]"
-  );
 }
