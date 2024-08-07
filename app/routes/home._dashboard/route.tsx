@@ -8,15 +8,12 @@ import {
   getAllComunityFormTemplates,
   getAllUserFormTemplates,
 } from "~/supabase/models/form-templates/forms";
-import { Masonry } from "@mui/lab";
-import TotalTemplatesCard from "./components/cards/TotalTemplatesCard";
-import TotalCommunityTemplatesCard from "./components/cards/TotalCommunityTemplatesCard";
 import {
   getAllUserClosedSurveys,
   getAllUserRunningSurveys,
 } from "~/supabase/models/surveys/surveys";
-import RunningSurveysCard from "./components/cards/RunningSurveysCard";
-import ClosedSurveysCard from "./components/cards/ClosedSurveysCard";
+import TutorialSteps from "./components/TutorialSteps";
+import Dashboard from "./components/Dashboard";
 
 export const meta: MetaFunction = () => {
   return [
@@ -109,6 +106,10 @@ export default function Home() {
       pt={10}
       pb={6}
       width={"100%"}
+      px={{
+        xs: 1,
+        sm: 2,
+      }}
       gap={3}
     >
       <DashboardAppBar />
@@ -119,24 +120,11 @@ export default function Home() {
         alignItems={"center"}
         width={"100%"}
         maxWidth={"1200px"}
-        gap={1}
-        sx={{
-          px: 1,
-        }}
+        gap={4}
         overflow={"hidden"}
       >
-        <Masonry
-          defaultColumns={3}
-          defaultHeight={200}
-          defaultSpacing={2}
-          columns={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 3 }}
-          spacing={2}
-        >
-          <TotalTemplatesCard />
-          <RunningSurveysCard />
-          <TotalCommunityTemplatesCard />
-          <ClosedSurveysCard />
-        </Masonry>
+        <TutorialSteps />
+        <Dashboard />
       </Box>
     </Box>
   );

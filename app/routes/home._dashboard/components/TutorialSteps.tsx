@@ -3,8 +3,8 @@ import { Link } from "@remix-run/react";
 
 export default function TutorialSteps() {
   return (
-    <Box display={"flex"} flexDirection={"column"} width={"100%"} gap={1}>
-      <Typography variant="h2" fontFamily={"Virgil"}>
+    <Box p={1} display={"flex"} flexDirection={"column"} width={"100%"} gap={1}>
+      <Typography variant="h3" fontFamily={"Virgil"}>
         Quickie Form Flow
       </Typography>
       <Grid container spacing={2}>

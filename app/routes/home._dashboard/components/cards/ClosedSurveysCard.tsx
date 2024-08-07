@@ -38,7 +38,7 @@ export default function ClosedSurveysCard() {
               <Box width={"100%"} display={"flex"} justifyContent={"center"}>
                 <Button
                   component={Link}
-                  color="info"
+                  color="success"
                   variant="outlined"
                   to={"/home/records"}
                 >

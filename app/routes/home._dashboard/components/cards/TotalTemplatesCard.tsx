@@ -38,7 +38,7 @@ export default function TotalTemplatesCard() {
               <Box width={"100%"} display={"flex"} justifyContent={"center"}>
                 <Button
                   component={Link}
-                  color="primary"
+                  color="secondary"
                   variant="outlined"
                   to={"/home/templates"}
                 >

@@ -38,7 +38,7 @@ export default function RunningSurveysCard() {
               <Box width={"100%"} display={"flex"} justifyContent={"center"}>
                 <Button
                   component={Link}
-                  color="secondary"
+                  color="info"
                   variant="outlined"
                   to={"/home/ongoing"}
                 >
