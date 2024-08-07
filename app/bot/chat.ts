@@ -21,7 +21,12 @@ export async function sendMessage({
   history: ChatHistory;
   messageContent: string;
 }) {
-  const message: CoreUserMessage = { role: "user", content: messageContent };
+  const message: CoreUserMessage = {
+    role: "user",
+    content:
+      "Generate a form or improve the last one using the next statement, infer the best languaje response:" +
+      messageContent,
+  };
 
   let formConfig = [];
 
