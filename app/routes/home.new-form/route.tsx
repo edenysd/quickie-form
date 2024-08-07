@@ -6,13 +6,6 @@ import supabaseServerClient from "~/supabase/supabaseServerClient";
 import AppAppBar from "./components/NewFormAppBar";
 import ChatBox, { promptSchema } from "./components/ChatBox";
 import { parseWithZod } from "@conform-to/zod";
-import {
-  getCachedChatHistory,
-  getLastMessageFromCachedChatSession,
-  getUserCachedId,
-  removeCachedChatSession,
-  updateCachedChatHistory,
-} from "../../bot/chat";
 import { generatedFormSchema } from "../../bot/schemas";
 import { processPrompt } from "~/supabase/models/form-templates/drafted/prompt";
 import { publishDialogActionContent } from "./components/PublishDialog";
@@ -20,7 +13,10 @@ import {
   publishDraftedForm,
   resetDraftedForm,
 } from "~/supabase/models/form-templates/drafted/status";
-import { createHistoryFetcher } from "~/supabase/models/form-templates/drafted/history";
+import {
+  getConfigFromDraftTemplate,
+  getHistoryFromDraftTemplate,
+} from "~/supabase/models/form-templates/drafted/history";
 import FullFormComponent from "~/components/FullFormComponent";
 
 export const meta: MetaFunction = () => {
@@ -73,12 +69,9 @@ export async function action({ request }: LoaderFunctionArgs) {
       templateName: data.value.templateName,
       user,
     });
-    removeCachedChatSession({ id: getUserCachedId(user) });
-
     return redirect("/home/templates");
   } else if (_action === "reset") {
     await resetDraftedForm({ supabaseClient: supabase, user });
-    removeCachedChatSession({ id: getUserCachedId(user) });
     return json({});
   }
   await new Promise((resolve) => setTimeout(resolve, 4000));
@@ -100,20 +93,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/sign-in");
   }
 
-  const fetchHistory = createHistoryFetcher(supabase, user);
-  await updateCachedChatHistory({
-    fetchHistory,
-    id: getUserCachedId(user),
-  });
+  const fetchHistory = await getHistoryFromDraftTemplate(supabase, user);
 
-  const formConfig = await getLastMessageFromCachedChatSession(
-    getUserCachedId(user)
-  );
+  const formConfig = await getConfigFromDraftTemplate(supabase, user);
 
   return json({
     user,
-    formConfig,
-    history: await getCachedChatHistory(getUserCachedId(user)),
+    formConfig: formConfig.data?.config,
+    history: fetchHistory.data?.history,
   });
 }
 

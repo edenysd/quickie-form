@@ -1,6 +1,6 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { getUserCachedId, sendMessage } from "~/bot/chat";
-import { createHistoryFetcher, saveHistory } from "./history";
+import { sendMessage } from "~/bot/chat";
+import { getHistoryFromDraftTemplate, saveHistory } from "./history";
 
 export const processPrompt = async ({
   prompt,
@@ -11,11 +11,10 @@ export const processPrompt = async ({
   supabase: SupabaseClient;
   user: User;
 }) => {
-  const fetchHistory = createHistoryFetcher(supabase, user);
-  const userCachedId = getUserCachedId(user);
+  const draftHistory = await getHistoryFromDraftTemplate(supabase, user);
+
   const { formConfig, history } = await sendMessage({
-    fetchHistory,
-    id: userCachedId,
+    history: draftHistory.data?.history ?? [],
     messageContent: prompt,
   });
 
