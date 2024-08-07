@@ -1,9 +1,10 @@
 import type { DialogProps, GrowProps } from "@mui/material";
-import { Alert, Dialog, DialogContent } from "@mui/material";
+import { Alert, Dialog, DialogContent, IconButton } from "@mui/material";
 import { forwardRef, useMemo } from "react";
 import { TransitionGrowFromElementId } from "~/components/Animations";
 import type { FormTemplateRow } from "~/supabase/supabase.types";
 import FullFormComponent from "./FullFormComponent";
+import { CloseOutlined } from "@mui/icons-material";
 
 export default function PreviewFormTemplateDialog({
   formTemplateRow,
@@ -34,7 +35,18 @@ export default function PreviewFormTemplateDialog({
       maxWidth={"md"}
       fullWidth
     >
-      <Alert variant="filled" severity="info">
+      <Alert
+        variant="filled"
+        severity="info"
+        action={
+          <IconButton
+            size="small"
+            onClick={() => params.onClose({}, "backdropClick")}
+          >
+            <CloseOutlined fontSize="small" />
+          </IconButton>
+        }
+      >
         This is a preview form templatea in safe enviroment
       </Alert>
       <DialogContent sx={{ p: 0 }}>
