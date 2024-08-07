@@ -23,9 +23,7 @@ export async function sendMessage({
 }) {
   const message: CoreUserMessage = {
     role: "user",
-    content:
-      "Generate a form or improve the last one using the next statement, infer the best languaje response:" +
-      messageContent,
+    content: messageContent,
   };
 
   let formConfig = [];
@@ -64,10 +62,10 @@ export async function sendMessage({
             content: JSON.stringify(errorDataValue),
           })
           .concat({
-            role: "user",
+            role: "assistant",
             content: `Please, fix the json format in your latest response, this is the error message:\n ${JSON.stringify(
               responseValidation.error
-            )}`,
+            )}, please infer the language response from the last user interaction.`,
           }),
       });
 
