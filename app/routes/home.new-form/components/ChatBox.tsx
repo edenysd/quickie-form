@@ -12,6 +12,7 @@ import { getFormProps, getInputProps, useForm } from "@conform-to/react";
 import type { KeyboardEvent } from "react";
 import { useCallback, useEffect, useRef } from "react";
 import { z } from "zod";
+import { useSnackbar } from "notistack";
 
 export const promptSchema = z.object({
   prompt: z.string({ required_error: "Prompt is required" }),
@@ -24,7 +25,7 @@ function ChatBox() {
   const chatFetcher = useFetcher({ key: "chat" });
   const publishFetcher = useFetcher({ key: "publish" });
   const resetFetcher = useFetcher({ key: "reset" });
-
+  const { enqueueSnackbar } = useSnackbar();
   const [form, fields] = useForm({
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: promptSchema });
@@ -48,6 +49,15 @@ function ChatBox() {
   const isPublishing = publishFetcher.state !== "idle";
 
   const isReseting = resetFetcher.state !== "idle";
+
+  useEffect(() => {
+    if (chatFetcher.data?.unnespectedError) {
+      enqueueSnackbar({
+        message: "Error during proccesing",
+        variant: "error",
+      });
+    }
+  }, [chatFetcher.data?.unnespectedError, enqueueSnackbar]);
 
   useEffect(() => {
     if (!isAddingPrompt) {

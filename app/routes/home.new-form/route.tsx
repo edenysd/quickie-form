@@ -1,6 +1,6 @@
 import { Box, Paper, Typography } from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect, useLoaderData } from "@remix-run/react";
+import { json, redirect, useActionData, useLoaderData } from "@remix-run/react";
 import { parse } from "@supabase/ssr";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import AppAppBar from "./components/NewFormAppBar";
@@ -47,35 +47,37 @@ export async function action({ request }: LoaderFunctionArgs) {
 
   const formData = await request.formData();
   const _action = formData.get("_action");
+  try {
+    if (_action === "add-prompt") {
+      const data = parseWithZod(formData, { schema: promptSchema });
+      if (data.status !== "success") {
+        return data.reply();
+      }
+      const prompt = data.value.prompt;
+      const result = await processPrompt({ prompt, supabase, user });
 
-  if (_action === "add-prompt") {
-    const data = parseWithZod(formData, { schema: promptSchema });
-    if (data.status !== "success") {
-      return data.reply();
+      return json(result);
+    } else if (_action === "publish") {
+      const data = parseWithZod(formData, {
+        schema: publishDialogActionContent,
+      });
+      if (data.status !== "success") {
+        return data.reply();
+      }
+      await publishDraftedForm({
+        supabaseClient: supabase,
+        templateName: data.value.templateName,
+        user,
+      });
+      return redirect("/home/templates");
+    } else if (_action === "reset") {
+      await resetDraftedForm({ supabaseClient: supabase, user });
+      return json({});
     }
-    const prompt = data.value.prompt;
-    const result = await processPrompt({ prompt, supabase, user });
-
-    return json(result);
-  } else if (_action === "publish") {
-    const data = parseWithZod(formData, {
-      schema: publishDialogActionContent,
-    });
-    if (data.status !== "success") {
-      return data.reply();
-    }
-    await publishDraftedForm({
-      supabaseClient: supabase,
-      templateName: data.value.templateName,
-      user,
-    });
-    return redirect("/home/templates");
-  } else if (_action === "reset") {
-    await resetDraftedForm({ supabaseClient: supabase, user });
-    return json({});
+  } catch (e) {
+    return json({ unnespectedError: true });
   }
-  await new Promise((resolve) => setTimeout(resolve, 4000));
-  return null;
+  return json({});
 }
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -106,6 +108,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function NewForm() {
   const loaderData = useLoaderData<typeof loader>();
+
   const validatedFormConfig = generatedFormSchema.safeParse(
     loaderData.formConfig
   );
