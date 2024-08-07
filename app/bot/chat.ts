@@ -61,7 +61,7 @@ export async function sendMessage({
           .concat({
             role: "user",
             content: `Please, fix the json format in your latest response, this is the error message:\n ${JSON.stringify(
-              e.cause
+              responseValidation.error
             )}`,
           }),
       });
