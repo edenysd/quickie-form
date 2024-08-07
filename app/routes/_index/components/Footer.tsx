@@ -42,8 +42,18 @@ export default function Footer() {
             minWidth: { xs: "100%", sm: "60%" },
           }}
         >
-          <Box sx={{ width: { xs: "100%", sm: "60%" } }}>
-            <Box sx={{ ml: "-15px" }}>
+          <Box
+            display={"flex"}
+            alignItems={"center"}
+            sx={{
+              width: { xs: "100%", sm: "60%" },
+              justifyContent: {
+                xs: "center",
+                sm: "start",
+              },
+            }}
+          >
+            <Box>
               <img
                 src={"/logo.svg"}
                 style={logoStyle}
