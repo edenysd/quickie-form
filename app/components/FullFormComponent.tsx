@@ -437,7 +437,7 @@ function FullFormComponent({
             value="finish-survey"
             type="submit"
             form={form.id}
-            sx={{ mt: 2 }}
+            sx={{ m: 2 }}
           >
             Finish Form
           </Button>
