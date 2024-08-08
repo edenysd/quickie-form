@@ -8,14 +8,14 @@ import ClosedSurveysCard from "./cards/ClosedSurveysCard";
 export default function Dashboard() {
   return (
     <Box width={"100%"} p={1}>
-      <Typography variant="h3" fontFamily={"Virgil"}>
-        Dashboard
+      <Typography variant="h4" fontFamily={"Virgil"} color={"GrayText"}>
+        Resume
       </Typography>
       <Masonry
         defaultColumns={3}
         defaultHeight={200}
         defaultSpacing={2}
-        columns={{ xs: 2, sm: 3, md: 4, lg: 4, xl: 4 }}
+        columns={{ xs: 1, sm: 2, md: 3, lg: 5, xl: 5 }}
         sx={{ m: 0, width: "100%" }}
         spacing={2}
       >

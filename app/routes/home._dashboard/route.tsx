@@ -120,7 +120,7 @@ export default function Home() {
         alignItems={"center"}
         width={"100%"}
         maxWidth={"1200px"}
-        gap={4}
+        gap={7}
         overflow={"hidden"}
       >
         <TutorialSteps />
