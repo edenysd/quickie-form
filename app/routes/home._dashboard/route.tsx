@@ -13,7 +13,7 @@ import {
   getAllUserRunningSurveys,
 } from "~/supabase/models/surveys/surveys";
 import TutorialSteps from "./components/TutorialSteps";
-import Dashboard from "./components/Dashboard";
+import Status from "./components/Status";
 
 export const meta: MetaFunction = () => {
   return [
@@ -117,14 +117,12 @@ export default function Home() {
         display={"flex"}
         flexDirection={"column"}
         justifyContent={"center"}
-        alignItems={"center"}
         width={"100%"}
         maxWidth={"1200px"}
         gap={7}
-        overflow={"hidden"}
       >
         <TutorialSteps />
-        <Dashboard />
+        <Status />
       </Box>
     </Box>
   );

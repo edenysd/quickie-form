@@ -16,8 +16,8 @@ export default function TotalTemplatesCard() {
   return (
     <>
       {loaderData.userFormTemplates.data !== null ? (
-        <Grid item md={3} xs={12} sm={6}>
-          <Card>
+        <Grid item md={3} xs={12} sm={6} sx={{ m: 0 }}>
+          <Card elevation={2}>
             <CardHeader
               sx={{ overflow: "hidden", textAlign: "center" }}
               title={"User Templates"}
@@ -29,7 +29,7 @@ export default function TotalTemplatesCard() {
                 justifyContent={"center"}
                 gap={0.5}
               >
-                <Typography variant="h2" fontFamily={"Virgil"}>
+                <Typography variant="h2" fontWeight={"400"}>
                   {loaderData.userFormTemplates.data.length}
                 </Typography>
               </Box>

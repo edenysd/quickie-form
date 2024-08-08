@@ -17,7 +17,7 @@ export default function ClosedSurveysCard() {
     <>
       {loaderData.userFormTemplates.data !== null ? (
         <Grid item md={3} xs={12} sm={6}>
-          <Card>
+          <Card elevation={2}>
             <CardHeader
               sx={{ overflow: "hidden", textAlign: "center" }}
               title={"Closed Surveys"}
@@ -29,7 +29,7 @@ export default function ClosedSurveysCard() {
                 justifyContent={"center"}
                 gap={0.5}
               >
-                <Typography variant="h2" fontFamily={"Virgil"}>
+                <Typography variant="h3">
                   {loaderData.userClosedSurveys.data?.length}
                 </Typography>
               </Box>
