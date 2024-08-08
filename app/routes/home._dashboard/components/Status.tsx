@@ -1,4 +1,4 @@
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import TotalTemplatesCard from "./cards/TotalTemplatesCard";
 import { Masonry } from "@mui/lab";
 import RunningSurveysCard from "./cards/RunningSurveysCard";
@@ -17,9 +17,9 @@ export default function Status() {
         Status
       </Typography>
       <Masonry
-        defaultColumns={3}
+        defaultColumns={2}
         defaultHeight={200}
-        defaultSpacing={2}
+        defaultSpacing={1}
         columns={{ xs: 2, sm: 3, md: 2, lg: 2, xl: 2 }}
         sx={{ m: 0, width: "100%" }}
         spacing={1}
