@@ -8,9 +8,6 @@ import ClosedSurveysCard from "./cards/ClosedSurveysCard";
 export default function Dashboard() {
   return (
     <Box width={"100%"} p={1}>
-      <Typography variant="h4" fontFamily={"Virgil"} color={"GrayText"}>
-        Status
-      </Typography>
       <Masonry
         defaultColumns={3}
         defaultHeight={200}

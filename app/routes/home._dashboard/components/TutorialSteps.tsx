@@ -4,9 +4,6 @@ import { Link } from "@remix-run/react";
 export default function TutorialSteps() {
   return (
     <Box p={1} display={"flex"} flexDirection={"column"} width={"100%"} gap={1}>
-      <Typography variant="h3" fontFamily={"Virgil"} color={"GrayText"}>
-        Quickie Form Flow
-      </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} lg={6}>
           <Paper
