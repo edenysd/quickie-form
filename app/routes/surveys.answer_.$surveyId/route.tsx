@@ -1,8 +1,7 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import {
   json,
-  Link,
   redirect,
   useActionData,
   useLoaderData,
@@ -16,10 +15,8 @@ import FullFormComponent from "../../components/FullFormComponent";
 import { parseWithZod } from "@conform-to/zod";
 import { createFormValidationSchema } from "~/utils/createFormSchema";
 import { fromFormPlainNamesToObject } from "~/utils/fromFormPlainNamesToObject";
-import {
-  createSummaryFormObject,
-  SummaryFormObjectType,
-} from "~/utils/createSummaryFormObject";
+import type { SummaryFormObjectType } from "~/utils/createSummaryFormObject";
+import { createSummaryFormObject } from "~/utils/createSummaryFormObject";
 import { addFormObjectToSummaryObject } from "~/utils/addFormObjectToSummaryObject";
 import { insertSurveyResponse } from "~/supabase/models/survey-responses/surveysResponses";
 import type { Json } from "~/supabase/database.types";
@@ -29,12 +26,12 @@ import {
 } from "~/supabase/models/survey-summaries/surveysSummaries";
 import { useEffect, useState } from "react";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ data }) => {
   return [
-    { title: "Survey" },
+    { title: `Quickie Form Survey` },
     {
       name: "description",
-      content: "Answer the current survey",
+      content: `Help us to complete the ${data?.surveyLabel} survey.`,
     },
   ];
 };

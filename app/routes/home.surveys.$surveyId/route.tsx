@@ -17,9 +17,9 @@ import TotalSurveyCard from "./components/cards/TotalSurveyCard";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
 import LastCompletedCard from "./components/cards/LastCompletedCard";
 
-export const meta: MetaFunction = () => {
+export const meta: MetaFunction = ({ data }) => {
   return [
-    { title: "Survey Detail" },
+    { title: `Survey Detail | ${data.surveyDetails.data.survey_label}` },
     {
       name: "description",
       content: "Details about a specific running survey",
