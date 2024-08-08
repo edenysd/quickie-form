@@ -16,12 +16,10 @@ export default function TutorialSteps() {
               p: 2,
             }}
           >
-            <Box display={"flex"} gap={2} alignItems={"center"} width={"100%"}>
-              <Avatar>
-                <Typography variant="h4" fontFamily={"Virgil"}>
-                  1
-                </Typography>
-              </Avatar>
+            <Box display={"flex"} gap={1} alignItems={"center"} width={"100%"}>
+              <Typography variant="h4" fontFamily={"Virgil"}>
+                1.
+              </Typography>
               <Typography variant="h6" fontWeight={"100"}>
                 Create a Form Template and publish it
               </Typography>
@@ -42,12 +40,10 @@ export default function TutorialSteps() {
               p: 2,
             }}
           >
-            <Box display={"flex"} gap={2} alignItems={"center"} width={"100%"}>
-              <Avatar>
-                <Typography variant="h4" fontFamily={"Virgil"}>
-                  2
-                </Typography>
-              </Avatar>
+            <Box display={"flex"} gap={1} alignItems={"center"} width={"100%"}>
+              <Typography variant="h4" fontFamily={"Virgil"}>
+                2.
+              </Typography>
               <Typography variant="h6" fontWeight={"100"}>
                 Launch a survey with your form template
               </Typography>
@@ -68,12 +64,10 @@ export default function TutorialSteps() {
               p: 2,
             }}
           >
-            <Box display={"flex"} gap={2} alignItems={"center"} width={"100%"}>
-              <Avatar>
-                <Typography variant="h4" fontFamily={"Virgil"}>
-                  3
-                </Typography>
-              </Avatar>
+            <Box display={"flex"} gap={1} alignItems={"center"} width={"100%"}>
+              <Typography variant="h4" fontFamily={"Virgil"}>
+                3.
+              </Typography>
               <Typography variant="h6" fontWeight={"100"}>
                 Manage your surveys and collect data
               </Typography>
@@ -94,12 +88,10 @@ export default function TutorialSteps() {
               p: 2,
             }}
           >
-            <Box display={"flex"} gap={2} alignItems={"center"} width={"100%"}>
-              <Avatar>
-                <Typography variant="h4" fontFamily={"Virgil"}>
-                  4
-                </Typography>
-              </Avatar>
+            <Box display={"flex"} gap={1} alignItems={"center"} width={"100%"}>
+              <Typography variant="h4" fontFamily={"Virgil"}>
+                4.
+              </Typography>
               <Typography variant="h6" fontWeight={"100"}>
                 Get better insights on finished surveys
               </Typography>
