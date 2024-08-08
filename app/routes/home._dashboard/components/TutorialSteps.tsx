@@ -4,7 +4,7 @@ import { Link } from "@remix-run/react";
 export default function TutorialSteps() {
   return (
     <Box p={1} display={"flex"} flexDirection={"column"} width={"100%"} gap={1}>
-      <Typography variant="h3" fontFamily={"Virgil"}>
+      <Typography variant="h3" fontFamily={"Virgil"} color={"GrayText"}>
         Quickie Form Flow
       </Typography>
       <Grid container spacing={2}>
@@ -25,7 +25,7 @@ export default function TutorialSteps() {
                   1
                 </Typography>
               </Avatar>
-              <Typography variant="h6">
+              <Typography variant="h6" fontWeight={"100"}>
                 Create a Form Template and publish it
               </Typography>
             </Box>
@@ -51,7 +51,7 @@ export default function TutorialSteps() {
                   2
                 </Typography>
               </Avatar>
-              <Typography variant="h6">
+              <Typography variant="h6" fontWeight={"100"}>
                 Launch a survey with your form template
               </Typography>
             </Box>
@@ -77,7 +77,7 @@ export default function TutorialSteps() {
                   3
                 </Typography>
               </Avatar>
-              <Typography variant="h6">
+              <Typography variant="h6" fontWeight={"100"}>
                 Manage your surveys and collect data
               </Typography>
             </Box>
@@ -103,7 +103,7 @@ export default function TutorialSteps() {
                   4
                 </Typography>
               </Avatar>
-              <Typography variant="h6">
+              <Typography variant="h6" fontWeight={"100"}>
                 Get better insights on finished surveys
               </Typography>
             </Box>
