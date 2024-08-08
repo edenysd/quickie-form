@@ -11,7 +11,6 @@ export default function TutorialSteps() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 3,
               alignItems: "end",
               p: 2,
             }}
@@ -35,7 +34,6 @@ export default function TutorialSteps() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 3,
               alignItems: "end",
               p: 2,
             }}
@@ -59,7 +57,6 @@ export default function TutorialSteps() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 3,
               alignItems: "end",
               p: 2,
             }}
@@ -83,7 +80,6 @@ export default function TutorialSteps() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              gap: 3,
               alignItems: "end",
               p: 2,
             }}
