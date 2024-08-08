@@ -1,24 +1,31 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import TotalTemplatesCard from "./cards/TotalTemplatesCard";
 import { Masonry } from "@mui/lab";
 import RunningSurveysCard from "./cards/RunningSurveysCard";
-import TotalCommunityTemplatesCard from "./cards/TotalCommunityTemplatesCard";
 import ClosedSurveysCard from "./cards/ClosedSurveysCard";
 
-export default function Dashboard() {
+export default function Status() {
   return (
-    <Box width={"100%"} p={1}>
+    <Box
+      width={{
+        xs: "100%",
+        md: "50%",
+      }}
+      pr={1}
+    >
+      <Typography variant="h5" fontFamily={"Virgil"}>
+        Status
+      </Typography>
       <Masonry
         defaultColumns={3}
         defaultHeight={200}
         defaultSpacing={2}
-        columns={{ xs: 1, sm: 2, md: 3, lg: 5, xl: 5 }}
+        columns={{ xs: 2, sm: 3, md: 2, lg: 2, xl: 2 }}
         sx={{ m: 0, width: "100%" }}
-        spacing={2}
+        spacing={1}
       >
         <TotalTemplatesCard />
         <RunningSurveysCard />
-        <TotalCommunityTemplatesCard />
         <ClosedSurveysCard />
       </Masonry>
     </Box>
