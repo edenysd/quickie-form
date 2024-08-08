@@ -54,8 +54,8 @@ function SurveyDetailAppBar() {
             }
             gap={1}
           >
-            <Button onClick={handleClose} size="small" color="primary">
-              Close Survey
+            <Button onClick={handleClose} size="small" color="secondary">
+              Close
             </Button>
             {isSurveyOpen ? <InputShareLink /> : null}
           </Box>
