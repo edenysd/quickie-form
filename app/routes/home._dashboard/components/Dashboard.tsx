@@ -9,7 +9,7 @@ export default function Dashboard() {
   return (
     <Box width={"100%"} p={1}>
       <Typography variant="h4" fontFamily={"Virgil"} color={"GrayText"}>
-        Resume
+        Status
       </Typography>
       <Masonry
         defaultColumns={3}
