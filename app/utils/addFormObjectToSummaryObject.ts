@@ -19,7 +19,7 @@ export const addFormObjectToSummaryObject = (
   formConfigSchema: z.infer<typeof generatedFormSchema>,
   summaryFormOject: SummaryFormObjectType,
   formDataEntry: StructuredFormDataEntry
-) => {
+): SummaryFormObjectType => {
   const summaryFormObject = Object.fromEntries(
     formConfigSchema.map(
       (sectionConfigSchema: z.infer<typeof sectionSchema>) => {
