@@ -8,7 +8,7 @@ const HeroBox = (props: BoxProps) => {
       {...props}
       sx={(theme) => ({
         alignSelf: "center",
-        height: { xs: 200, sm: 700 },
+        height: { xs: 300, sm: 500, md: 800, lg: 500 },
         width: "100%",
         backgroundColor: theme.palette.background.default,
         backgroundSize: "contain",
