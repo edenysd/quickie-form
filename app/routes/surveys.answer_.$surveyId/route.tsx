@@ -133,7 +133,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
     return redirect(`/surveys/closed/${params.surveyId}`);
   }
 
-  return json({ formConfig, surveyLabel });
+  return json({
+    formConfig:
+      surveyDetails.data?.survey_status === "open" ? formConfig : null,
+    surveyLabel,
+    isClosed: surveyDetails.data?.survey_status !== "open",
+  });
 }
 
 export default function Templates() {
@@ -141,7 +146,8 @@ export default function Templates() {
   const actionData = useActionData<typeof action>();
   const params = useParams();
   const navigate = useNavigate();
-  const [isFinished, setIsFinished] = useState(false);
+  const [isFinished, setIsFinished] = useState(loaderData.isClosed);
+  const [previousCompleted, setPreviousCompleted] = useState(true);
 
   useEffect(() => {
     const surveyFinished =
@@ -151,10 +157,12 @@ export default function Templates() {
     if (actionData?.surveyFinished) {
       localStorage.setItem(`finished-${params.surveyId}`, "true");
     }
+
     if (surveyFinished) {
       navigate(`/surveys/finished/${params.surveyId}`);
     }
 
+    setPreviousCompleted(surveyFinished);
     setIsFinished(surveyFinished);
   }, [actionData, navigate, params.surveyId]);
 
@@ -183,16 +191,18 @@ export default function Templates() {
           },
         }}
       >
-        <Typography
-          variant="h3"
-          fontFamily={"Virgil"}
-          overflow={"hidden"}
-          textOverflow={"ellipsis"}
-        >
-          {loaderData.surveyLabel}
-        </Typography>
-        {!isFinished ? (
-          <FullFormComponent formConfig={loaderData.formConfig} />
+        {!isFinished && !previousCompleted ? (
+          <>
+            <Typography
+              variant="h3"
+              fontFamily={"Virgil"}
+              overflow={"hidden"}
+              textOverflow={"ellipsis"}
+            >
+              {loaderData.surveyLabel}
+            </Typography>
+            <FullFormComponent formConfig={loaderData.formConfig} />
+          </>
         ) : null}
       </Box>
     </Box>
