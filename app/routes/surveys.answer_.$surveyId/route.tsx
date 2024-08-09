@@ -159,7 +159,7 @@ export default function Templates() {
     }
 
     if (surveyFinished) {
-      navigate(`/surveys/finished/${params.surveyId}`);
+      navigate(`/surveys/finished/${params.surveyId}`, { replace: true });
     }
 
     setPreviousCompleted(surveyFinished);
