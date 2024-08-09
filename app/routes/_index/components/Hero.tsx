@@ -181,8 +181,8 @@ export default function Hero() {
               sx={(theme) => ({
                 backgroundImage:
                   theme.palette.mode === "light"
-                    ? 'url("/ongoing-light.png")'
-                    : 'url("/ongoing-dark.png")',
+                    ? 'url("/survey-details-light.png")'
+                    : 'url("/survey-details-dark.png")',
               })}
             />
           </Grid>
