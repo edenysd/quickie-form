@@ -22,15 +22,17 @@ const items = [
     icon: <ViewQuiltRounded />,
     title: "Dashboard",
     description:
-      "This item could provide a snapshot of the most important metrics or data points related to the product.",
-    imageLight: 'url("/dashboard-light.png")',
-    imageDark: 'url("/dashboard-dark.png")',
+      "A simple but powerfull Dashboard to keep track your work status.",
+    imageLight:
+      'url("https://mui.com/static/images/templates/templates-images/dash-light.png")',
+    imageDark:
+      'url("https://mui.com/static/images/templates/templates-images/dash-dark.png")',
   },
   {
     icon: <EdgesensorHighRounded />,
-    title: "Mobile integration",
+    title: "Parallel Work Support",
     description:
-      "This item could provide information about the mobile app version of the product.",
+      "You can work in multiple devices with your same account, be free to be your own.",
     imageLight:
       'url("https://mui.com/static/images/templates/templates-images/mobile-light.png")',
     imageDark:
@@ -40,7 +42,7 @@ const items = [
     icon: <DevicesRounded />,
     title: "Available on all platforms",
     description:
-      "This item could let users know the product is available on all platforms, such as web, mobile, and desktop.",
+      "We adapt the product experience to match your device features.",
     imageLight:
       'url("https://mui.com/static/images/templates/templates-images/devices-light.png")',
     imageDark:
@@ -63,16 +65,16 @@ export default function Features() {
         <Grid item xs={12} md={6}>
           <div>
             <Typography component="h2" variant="h4" color="text.primary">
-              Product features
+              Aditional features
             </Typography>
             <Typography
               variant="body1"
               color="text.secondary"
               sx={{ mb: { xs: 2, sm: 4 } }}
             >
-              Here you can provide a brief overview of the key features of the
-              product. For example, you could list the number of features, the
-              types of features, add-ons, or the benefits of the features.
+              We provide an aditional set of features to make even more easy to
+              use our plataform and empowering you to be more productive with
+              your ideas.
             </Typography>
           </div>
           <Grid
