@@ -162,7 +162,17 @@ function LandingAppBar() {
                 </Button>
               </Link>
             </Box>
-            <Box sx={{ display: { sm: "", md: "none" } }}>
+            <Box sx={{ display: { xs: "flex", md: "none" } }} gap={1}>
+              <Link to="/sign-in">
+                <Button color="primary" variant="text" size="small">
+                  Sign in
+                </Button>
+              </Link>
+              <Link to="/sign-up">
+                <Button color="primary" variant="contained" size="small">
+                  Sign up
+                </Button>
+              </Link>
               <Button
                 variant="text"
                 color="primary"
