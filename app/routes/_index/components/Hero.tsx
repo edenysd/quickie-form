@@ -1,5 +1,4 @@
-import { Theme } from "@emotion/react";
-import type { BoxProps, SxProps, ThemedProps } from "@mui/material";
+import type { BoxProps, SxProps } from "@mui/material";
 import { Box, Container, Grid, Stack, Typography, alpha } from "@mui/material";
 
 const HeroBox = (props: BoxProps) => {
