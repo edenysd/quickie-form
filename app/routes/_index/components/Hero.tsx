@@ -91,17 +91,17 @@ export default function Hero() {
               Form
             </Typography>
           </Box>
-          {/* <Typography
+          <Typography
             textAlign="center"
             color="text.secondary"
+            variant="h5"
             sx={{ alignSelf: "center", width: { sm: "100%", md: "80%" } }}
           >
-            Explore our cutting-edge dashboard, delivering high-quality surveys
-            tailored to your needs. Elevate your experience with top-tier
-            features and services.
-          </Typography> */}
+            Deliver high-quality surveys tailored to your needs, collect data
+            and get deep AI/ML powered insights. <b>Simple</b> and <b>Fast</b>.
+          </Typography>
         </Stack>
-        <Grid container spacing={2} mt={5}>
+        <Grid container spacing={4} mt={5}>
           <Grid
             item
             xs={12}
