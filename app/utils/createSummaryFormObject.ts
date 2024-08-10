@@ -5,21 +5,25 @@ import type {
   sectionSchema,
 } from "~/bot/schemas";
 
+type AssistedSummary = {
+  sumaryMessage: string | null;
+};
+
 export type SummaryTime = {
   hourFrequency: { [k: string]: number };
-};
+} & AssistedSummary;
 export type SummaryDate = {
   datesOfTheMonthFrequency: { [k: string]: number };
   daysOfTheWeekFrequency: { [k: string]: number };
   fullDateFrequency: { [k: string]: number };
-};
+} & AssistedSummary;
 export type SummarySingleValue = {
   valueFrequency: { [k: string]: number };
-};
+} & AssistedSummary;
 export type SummaryRange = {
   startFrequency: { [k: string]: number };
   endFrequency: { [k: string]: number };
-};
+} & AssistedSummary;
 
 export type SummaryEntryObjectType =
   | SummaryTime
@@ -57,25 +61,25 @@ export const createSummaryFormObject = (
                   case "file":
                   case "url":
                   case "text":
-                    value = null;
+                    value = {};
                     break;
                   case "time":
                     value = {
                       hourFrequency: {},
-                    };
+                    } as SummaryTime;
                     break;
                   case "date":
                     value = {
                       datesOfTheMonthFrequency: {},
                       fullDateFrequency: {},
                       daysOfTheWeekFrequency: {},
-                    };
+                    } as SummaryDate;
                     break;
                   case "range":
                     value = {
                       startFrequency: {},
                       endFrequency: {},
-                    };
+                    } as SummaryRange;
                     break;
                   case "number":
                   case "rating":
@@ -84,8 +88,11 @@ export const createSummaryFormObject = (
                   case "slider":
                     value = {
                       valueFrequency: {},
-                    };
+                    } as SummarySingleValue;
+                    break;
                 }
+                //
+                value.sumaryMessage = null;
                 return [fieldConfigSchema.name, value];
               }
             )
