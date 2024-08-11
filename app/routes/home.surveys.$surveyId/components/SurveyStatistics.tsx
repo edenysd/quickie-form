@@ -84,7 +84,7 @@ function FieldStatistics({
             },
           ];
 
-        return (
+          return (
             <BarChart
               height={300}
               margin={{
@@ -291,6 +291,7 @@ export default function SurveyStatistics() {
   const surveySummaryData = loaderData.surveySummary.data
     ?.summary_data as SummaryFormObjectType;
   const formTemplateConfig = loaderData.formTemplate.data?.config;
+  console.log(surveySummaryData);
   return (
     <Box
       display={"flex"}
@@ -315,15 +316,19 @@ export default function SurveyStatistics() {
         >
           Results
         </Typography>
-        {formTemplateConfig?.map(
-          (sectionConfig: z.infer<typeof sectionSchema>) => (
-            <SectionStatistics
-              key={sectionConfig.name}
-              isSurveyOpen={isSurveyOpen}
-              sectionConfig={sectionConfig}
-              sectionSummary={surveySummaryData[sectionConfig.name]}
-            />
+        {surveySummaryData ? (
+          formTemplateConfig?.map(
+            (sectionConfig: z.infer<typeof sectionSchema>) => (
+              <SectionStatistics
+                key={sectionConfig.name}
+                isSurveyOpen={isSurveyOpen}
+                sectionConfig={sectionConfig}
+                sectionSummary={surveySummaryData[sectionConfig.name]}
+              />
+            )
           )
+        ) : (
+          <Alert severity="info">No data collected</Alert>
         )}
       </Box>
     </Box>
