@@ -10,7 +10,7 @@ type AssistedSummary = {
 };
 
 export type SummaryTime = {
-  hourFrequency?: { [k: string]: number };
+  timeFrequency?: { [k: string]: number };
 } & AssistedSummary;
 export type SummaryDate = {
   datesOfTheMonthFrequency?: { [k: string]: number };
@@ -65,7 +65,7 @@ export const createSummaryFormObject = (
                     break;
                   case "time":
                     value = {
-                      hourFrequency: {},
+                      timeFrequency: {},
                     } as SummaryTime;
                     break;
                   case "date":
