@@ -6,7 +6,7 @@ import type {
 } from "~/bot/schemas";
 import type {
   SummaryDate,
-  SummaryEntryObjectType,
+  SummaryFieldObjectType,
   SummaryFormObjectType,
   SummaryRange,
   SummarySingleValue,
@@ -34,7 +34,7 @@ export const addFormObjectToSummaryObject = (
                 const summaryField =
                   summaryFormOject[sectionName][fieldConfigSchema.name];
 
-                let returnedSummaryValue: SummaryEntryObjectType = null;
+                let returnedSummaryValue: SummaryFieldObjectType = null;
                 switch (fieldConfigSchema.type) {
                   case "password":
                   case "textarea":
