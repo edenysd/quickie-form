@@ -47,25 +47,33 @@ function FieldStatistics({
       case "time": {
         const summaryTime = fieldSummary as SummaryTime;
         return (
-          <Alert>Fields of type {fieldConfig.type} do not plot any data</Alert>
+          <Alert severity="warning">
+            Resumes for fields of type {fieldConfig.type} will be coming soon
+          </Alert>
         );
       }
       case "date": {
         const summaryDate = fieldSummary as SummaryDate;
         return (
-          <Alert>Fields of type {fieldConfig.type} do not plot any data</Alert>
+          <Alert severity="warning">
+            Resumes for fields of type {fieldConfig.type} will be coming soon
+          </Alert>
         );
       }
       case "range": {
         const summaryRange = fieldSummary as SummaryRange;
         return (
-          <Alert>Fields of type {fieldConfig.type} do not plot any data</Alert>
+          <Alert severity="warning">
+            Resumes for fields of type {fieldConfig.type} will be coming soon
+          </Alert>
         );
       }
       case "number": {
         const summarySingleValue = fieldSummary as SummarySingleValue;
         return (
-          <Alert>Fields of type {fieldConfig.type} do not plot any data</Alert>
+          <Alert severity="warning">
+            Resumes for fields of type {fieldConfig.type} will be coming soon
+          </Alert>
         );
       }
       case "slider": {
