@@ -19,6 +19,7 @@
     "@mui/icons-material": "^5.15.20",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.20",
+    "@mui/x-charts": "^7.12.1",
     "@mui/x-data-grid": "^7.8.0",
     "@mui/x-date-pickers": "^7.9.0",
     "@remix-run/node": "^2.9.2",
