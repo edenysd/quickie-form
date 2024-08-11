@@ -16,6 +16,7 @@ import { getSurveySummaryBySurveyId } from "~/supabase/models/survey-summaries/s
 import TotalSurveyCard from "./components/cards/TotalSurveyCard";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
 import LastCompletedCard from "./components/cards/LastCompletedCard";
+import SurveyStatistics from "./components/SurveyStatistics";
 
 export const meta: MetaFunction = ({ data }) => {
   return [
@@ -130,7 +131,7 @@ export default function Templates() {
         justifyContent={"center"}
         width={"100%"}
         maxWidth={"1200px"}
-        gap={3}
+        gap={8}
         sx={{
           px: {
             md: 5,
@@ -139,13 +140,16 @@ export default function Templates() {
           },
         }}
       >
-        <HeaderSurveyDetail />
+        <Box display={"flex"} flexDirection={"column"} gap={3}>
+          <HeaderSurveyDetail />
 
-        <Grid container spacing={2}>
-          <FormTemplateCard />
-          <TotalSurveyCard />
-          <LastCompletedCard />
-        </Grid>
+          <Grid container spacing={2}>
+            <FormTemplateCard />
+            <TotalSurveyCard />
+            <LastCompletedCard />
+          </Grid>
+        </Box>
+        <SurveyStatistics />
       </Box>
     </Box>
   );
