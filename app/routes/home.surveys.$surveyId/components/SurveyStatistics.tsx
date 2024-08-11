@@ -70,11 +70,32 @@ function FieldStatistics({
       }
       case "number": {
         const summarySingleValue = fieldSummary as SummarySingleValue;
+
+        if (summarySingleValue.valueFrequency) {
+          const xAxisData = Object.entries(
+            summarySingleValue.valueFrequency
+          ).map((entrie) => entrie[0]);
+
+          const series = [
+            {
+              data: Object.entries(summarySingleValue.valueFrequency).map(
+                (entrie) => entrie[1]
+              ),
+            },
+          ];
+
         return (
-          <Alert severity="warning">
-            Resumes for fields of type {fieldConfig.type} will be coming soon
-          </Alert>
-        );
+            <BarChart
+              height={300}
+              margin={{
+                right: 100,
+              }}
+              series={series}
+              xAxis={[{ data: xAxisData, scaleType: "band" }]}
+            />
+          );
+        }
+        return null;
       }
       case "slider": {
         const summarySingleValue = fieldSummary as SummarySingleValue;
