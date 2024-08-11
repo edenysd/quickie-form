@@ -53,11 +53,192 @@ function FieldStatistics({
         );
       }
       case "date": {
-        const summaryDate = fieldSummary as SummaryDate;
+        const summaryDate = structuredClone(fieldSummary) as SummaryDate;
+
+        let DaysOfTheWeekChart = null;
+        if (summaryDate.daysOfTheWeekFrequency) {
+          for (let i = 0; i < 7; i++) {
+            if (
+              summaryDate.daysOfTheWeekFrequency &&
+              !summaryDate.daysOfTheWeekFrequency[i]
+            ) {
+              summaryDate.daysOfTheWeekFrequency[i] = 0;
+            }
+          }
+
+          const xAxisData = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+          ];
+
+          const series = [
+            {
+              label: "Day of the week frequency",
+              color: "blue",
+              data: Object.entries(summaryDate.daysOfTheWeekFrequency).map(
+                (entrie) => entrie[1]
+              ),
+            },
+          ];
+
+          DaysOfTheWeekChart = (
+            <BarChart
+              margin={{ left: 80, right: 80 }}
+              layout="horizontal"
+              height={300}
+              series={series}
+              yAxis={[
+                {
+                  data: xAxisData,
+                  scaleType: "band",
+                },
+              ]}
+            />
+          );
+        }
+
+        let DaysOfTheMonthChart = null;
+        if (summaryDate.datesOfTheMonthFrequency) {
+          for (let i = 1; i <= 31; i++) {
+            if (
+              summaryDate.datesOfTheMonthFrequency &&
+              !summaryDate.datesOfTheMonthFrequency[i]
+            ) {
+              summaryDate.datesOfTheMonthFrequency[i] = 0;
+            }
+          }
+
+          const xAxisData = Object.entries(
+            summaryDate.datesOfTheMonthFrequency
+          ).map((entrie) => entrie[0]);
+
+          const series = [
+            {
+              label: "Day of the month frequency",
+              color: "red",
+              data: Object.entries(summaryDate.datesOfTheMonthFrequency).map(
+                (entrie) => entrie[1]
+              ),
+            },
+          ];
+
+          DaysOfTheMonthChart = (
+            <BarChart
+              height={300}
+              series={series}
+              xAxis={[
+                {
+                  data: xAxisData,
+                  scaleType: "band",
+                },
+              ]}
+            />
+          );
+        }
+
+        let MonthsChart = null;
+        if (summaryDate.fullDateFrequency) {
+          const monthsSummary: { [k: string]: number } = {};
+          for (let i = 1; i <= 12; i++) {
+            monthsSummary[i] = 0;
+          }
+
+          const xAxisData: string[] = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+          ];
+
+          Object.entries(summaryDate.fullDateFrequency).forEach((entrie) => {
+            const month = entrie[0].split("/")[1];
+            monthsSummary[month] += entrie[1];
+          });
+
+          const series = [
+            {
+              label: "Month frequency",
+              color: "green",
+              data: Object.entries(monthsSummary).map((entrie) => entrie[1]),
+            },
+          ];
+
+          MonthsChart = (
+            <BarChart
+              margin={{ left: 80, right: 80 }}
+              layout="horizontal"
+              height={300}
+              series={series}
+              yAxis={[
+                {
+                  data: xAxisData,
+                  scaleType: "band",
+                },
+              ]}
+            />
+          );
+        }
+
+        let FullDateChart = null;
+        if (summaryDate.fullDateFrequency) {
+          dayjs.extend(customParseFormat);
+
+          const sortedFullDates: string[] = Object.entries(
+            summaryDate.fullDateFrequency
+          ).map((entrie) => {
+            return entrie[0];
+          });
+          sortedFullDates.sort((a, b) => {
+            const diff = dayjs(a, "D/M/YYYY").diff(dayjs(b, "D/M/YYYY"));
+            return diff;
+          });
+
+          const xAxisData = sortedFullDates.map((strDate) =>
+            dayjs(strDate, "D/M/YYYY").format("D MMM YYYY")
+          );
+          const series = [
+            {
+              label: "Date frequency",
+              data: sortedFullDates.map(
+                (fullDate) => summaryDate.fullDateFrequency![fullDate]
+              ),
+            },
+          ];
+
+          FullDateChart = (
+            <BarChart
+              height={300}
+              series={series}
+              xAxis={[
+                {
+                  data: xAxisData,
+                  scaleType: "band",
+                },
+              ]}
+            />
+          );
+        }
+
         return (
-          <Alert severity="warning">
-            Resumes for fields of type {fieldConfig.type} will be coming soon
-          </Alert>
+          <Box>
+            <Box>{DaysOfTheWeekChart}</Box>
+            <Box>{DaysOfTheMonthChart}</Box>
+            <Box>{MonthsChart}</Box>
+            <Box>{FullDateChart}</Box>
+          </Box>
         );
       }
       case "range": {
