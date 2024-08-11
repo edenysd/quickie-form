@@ -61,11 +61,134 @@ function FieldStatistics({
         );
       }
       case "range": {
-        const summaryRange = fieldSummary as SummaryRange;
+        const summaryRangeValue = structuredClone(fieldSummary) as SummaryRange;
+        let MinChart = null;
+
+        if (summaryRangeValue.startFrequency) {
+          for (let i = fieldConfig.min || 0; i <= (fieldConfig.max || 5); i++) {
+            if (
+              summaryRangeValue.startFrequency &&
+              !summaryRangeValue.startFrequency[i]
+            ) {
+              summaryRangeValue.startFrequency[i] = 0;
+            }
+          }
+
+          const xAxisData = Object.entries(
+            summaryRangeValue.startFrequency
+          ).map((entrie) => entrie[0]);
+
+          const series = [
+            {
+              label: "Total in Minimum",
+              color: "blue",
+              data: Object.entries(summaryRangeValue.startFrequency).map(
+                (entrie) => entrie[1]
+              ),
+            },
+          ];
+
+          MinChart = (
+            <BarChart
+              height={300}
+              series={series}
+              xAxis={[
+                {
+                  data: xAxisData,
+                  scaleType: "band",
+                },
+              ]}
+            />
+          );
+        }
+        let MaxChart = null;
+        if (summaryRangeValue.endFrequency) {
+          for (let i = fieldConfig.min || 0; i <= (fieldConfig.max || 5); i++) {
+            if (
+              summaryRangeValue.endFrequency &&
+              !summaryRangeValue.endFrequency[i]
+            ) {
+              summaryRangeValue.endFrequency[i] = 0;
+            }
+          }
+
+          const xAxisData = Object.entries(summaryRangeValue.endFrequency).map(
+            (entrie) => entrie[0]
+          );
+
+          const series = [
+            {
+              label: "Total in Max",
+              color: "red",
+              data: Object.entries(summaryRangeValue.endFrequency).map(
+                (entrie) => entrie[1]
+              ),
+            },
+          ];
+
+          MaxChart = (
+            <BarChart
+              height={300}
+              series={series}
+              xAxis={[
+                {
+                  data: xAxisData,
+                  scaleType: "band",
+                },
+              ]}
+            />
+          );
+        }
+        let CumulativeChart = null;
+        if (
+          summaryRangeValue.endFrequency &&
+          summaryRangeValue.startFrequency
+        ) {
+          const cumulativeValue = structuredClone(
+            summaryRangeValue.startFrequency
+          );
+
+          //start acum table
+          for (let i = fieldConfig.min || 0; i <= (fieldConfig.max || 5); i++) {
+            if (cumulativeValue && !cumulativeValue[i]) {
+              cumulativeValue[i] = 0;
+            }
+            cumulativeValue[i] =
+              (cumulativeValue[i - 1] || 0) +
+              cumulativeValue[i] -
+              (summaryRangeValue.endFrequency[i - 1] || 0);
+          }
+
+          const xAxisData = Object.entries(cumulativeValue).map(
+            (entrie) => entrie[0]
+          );
+
+          const series = [
+            {
+              label: "Total in Range",
+              data: Object.entries(cumulativeValue).map((entrie) => entrie[1]),
+            },
+          ];
+
+          CumulativeChart = (
+            <BarChart
+              height={300}
+              series={series}
+              xAxis={[
+                {
+                  data: xAxisData,
+                  scaleType: "band",
+                },
+              ]}
+            />
+          );
+        }
         return (
-          <Alert severity="warning">
-            Resumes for fields of type {fieldConfig.type} will be coming soon
-          </Alert>
+          <Box>
+            <Box>{MinChart}</Box>
+            <Box>{MaxChart}</Box>
+            <Box>{CumulativeChart}</Box>
+          </Box>
         );
       }
       case "number": {
@@ -87,9 +210,6 @@ function FieldStatistics({
           return (
             <BarChart
               height={300}
-              margin={{
-                right: 100,
-              }}
               series={series}
               xAxis={[{ data: xAxisData, scaleType: "band" }]}
             />
@@ -125,9 +245,6 @@ function FieldStatistics({
           return (
             <BarChart
               height={300}
-              margin={{
-                right: 100,
-              }}
               series={series}
               xAxis={[{ data: xAxisData, scaleType: "band" }]}
             />
@@ -162,9 +279,6 @@ function FieldStatistics({
           return (
             <PieChart
               height={300}
-              margin={{
-                right: 100,
-              }}
               series={[
                 {
                   highlightScope: { faded: "global", highlighted: "item" },
@@ -211,9 +325,6 @@ function FieldStatistics({
           return (
             <PieChart
               height={300}
-              margin={{
-                right: 100,
-              }}
               series={[
                 {
                   highlightScope: { faded: "global", highlighted: "item" },
@@ -291,7 +402,7 @@ export default function SurveyStatistics() {
   const surveySummaryData = loaderData.surveySummary.data
     ?.summary_data as SummaryFormObjectType;
   const formTemplateConfig = loaderData.formTemplate.data?.config;
-  console.log(surveySummaryData);
+
   return (
     <Box
       display={"flex"}
