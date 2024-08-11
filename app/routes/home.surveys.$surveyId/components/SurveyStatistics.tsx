@@ -80,7 +80,7 @@ function FieldStatistics({
 
           const series = [
             {
-              label: "Total in Minimum",
+              label: "Minimum frequencies",
               color: "blue",
               data: Object.entries(summaryRangeValue.startFrequency).map(
                 (entrie) => entrie[1]
@@ -118,7 +118,7 @@ function FieldStatistics({
 
           const series = [
             {
-              label: "Total in Max",
+              label: "Maximum frequencies",
               color: "red",
               data: Object.entries(summaryRangeValue.endFrequency).map(
                 (entrie) => entrie[1]
@@ -165,7 +165,7 @@ function FieldStatistics({
 
           const series = [
             {
-              label: "Total in Range",
+              label: "Cumulative range frequencies",
               data: Object.entries(cumulativeValue).map((entrie) => entrie[1]),
             },
           ];
