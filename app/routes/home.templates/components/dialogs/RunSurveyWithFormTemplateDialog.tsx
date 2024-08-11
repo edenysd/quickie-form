@@ -144,7 +144,7 @@ export default function RunSurveyWithFormTemplateDialog({
                     {label}
                   </MenuItem>
                 ))}
-                <ListSubheader>Comming Soon</ListSubheader>
+                <ListSubheader>Coming Soon</ListSubheader>
                 {Object.entries(DISABLED_SURVEY_CONFIGS).map(([id, label]) => (
                   <MenuItem key={id} value={id} disabled>
                     {label}
