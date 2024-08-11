@@ -10,30 +10,30 @@ type AssistedSummary = {
 };
 
 export type SummaryTime = {
-  hourFrequency: { [k: string]: number };
+  hourFrequency?: { [k: string]: number };
 } & AssistedSummary;
 export type SummaryDate = {
-  datesOfTheMonthFrequency: { [k: string]: number };
-  daysOfTheWeekFrequency: { [k: string]: number };
-  fullDateFrequency: { [k: string]: number };
+  datesOfTheMonthFrequency?: { [k: string]: number };
+  daysOfTheWeekFrequency?: { [k: string]: number };
+  fullDateFrequency?: { [k: string]: number };
 } & AssistedSummary;
 export type SummarySingleValue = {
-  valueFrequency: { [k: string]: number };
+  valueFrequency?: { [k: string]: number };
 } & AssistedSummary;
 export type SummaryRange = {
-  startFrequency: { [k: string]: number };
-  endFrequency: { [k: string]: number };
+  startFrequency?: { [k: string]: number };
+  endFrequency?: { [k: string]: number };
 } & AssistedSummary;
 
-export type SummaryEntryObjectType =
+export type SummaryFieldObjectType =
   | SummaryTime
   | SummaryDate
   | SummarySingleValue
   | SummaryRange
   | null;
 
-type SummarySectionObjectType = {
-  [k: string]: SummaryEntryObjectType;
+export type SummarySectionObjectType = {
+  [k: string]: SummaryFieldObjectType;
 };
 
 export type SummaryFormObjectType = {
@@ -52,7 +52,7 @@ export const createSummaryFormObject = (
           Object.fromEntries(
             sectionConfigSchema.fields.map(
               (fieldConfigSchema: z.infer<typeof fieldSchema>) => {
-                let value: SummaryEntryObjectType;
+                let value: SummaryFieldObjectType;
                 switch (fieldConfigSchema.type) {
                   case "password":
                   case "textarea":
