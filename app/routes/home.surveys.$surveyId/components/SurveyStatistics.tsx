@@ -13,7 +13,8 @@ import type {
 import type { z } from "zod";
 import type { fieldSchema, sectionSchema } from "~/bot/schemas";
 import { BarChart, PieChart } from "@mui/x-charts";
-
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 function FieldStatistics({
   fieldSummary,
   fieldConfig,
@@ -45,11 +46,60 @@ function FieldStatistics({
           </Alert>
         ) : null;
       case "time": {
-        const summaryTime = fieldSummary as SummaryTime;
+        const summaryTime = structuredClone(fieldSummary) as SummaryTime;
+
+        let TimeChart = null;
+        if (summaryTime.timeFrequency) {
+          dayjs.extend(customParseFormat);
+
+          const HourMinutesObjectFrequencies: { [k: string]: number } = {};
+
+          for (let hour = 0; hour < 24; hour++) {
+            const hourString = hour < 10 ? `0${hour}` : hour.toString();
+            for (let minutes = 0; minutes < 60; minutes += 10) {
+              const minutesString =
+                minutes < 10 ? `0${minutes}` : minutes.toString();
+              HourMinutesObjectFrequencies[
+                `${hourString}:${minutesString}`
+              ] = 0;
+            }
+          }
+          Object.entries(summaryTime.timeFrequency).forEach((entrie) => {
+            HourMinutesObjectFrequencies[`${entrie[0].slice(0, 4)}0`] +=
+              entrie[1];
+          });
+
+          const series = [
+            {
+              label: "Approximate time frequency",
+              data: Object.entries(HourMinutesObjectFrequencies).map(
+                (entrie) => entrie[1]
+              ),
+            },
+          ];
+
+          const xAxisData = Object.entries(HourMinutesObjectFrequencies).map(
+            (entrie) => entrie[0]
+          );
+
+          TimeChart = (
+            <BarChart
+              height={300}
+              series={series}
+              xAxis={[
+                {
+                  data: xAxisData,
+                  scaleType: "band",
+                },
+              ]}
+            />
+          );
+        }
+
         return (
-          <Alert severity="warning">
-            Resumes for fields of type {fieldConfig.type} will be coming soon
-          </Alert>
+          <Box>
+            <Box>{TimeChart}</Box>
+          </Box>
         );
       }
       case "date": {
