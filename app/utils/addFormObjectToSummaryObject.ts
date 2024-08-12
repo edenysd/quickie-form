@@ -45,9 +45,13 @@ export const addFormObjectToSummaryObject = (
                   case "text":
                     break;
                   case "time": {
-                    const hour = (fieldDataEntryValue as string).split(":")[0];
+                    const hour = fieldDataEntryValue;
 
                     returnedSummaryValue = summaryField as SummaryTime;
+                    if (!returnedSummaryValue["timeFrequency"]) {
+                      returnedSummaryValue["timeFrequency"] = {};
+                    }
+
                     if (!returnedSummaryValue["timeFrequency"][hour]) {
                       returnedSummaryValue["timeFrequency"][hour] = 1;
                     } else {
