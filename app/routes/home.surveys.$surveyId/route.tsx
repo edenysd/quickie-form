@@ -17,6 +17,8 @@ import TotalSurveyCard from "./components/cards/TotalSurveyCard";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
 import LastCompletedCard from "./components/cards/LastCompletedCard";
 import SurveyStatistics from "./components/SurveyStatistics";
+import SurveyResponses from "./components/SurveysResponses";
+import { getAllSurveyResponseForSurveyId } from "~/supabase/models/survey-responses/surveysResponses";
 
 export const meta: MetaFunction = ({ data }) => {
   return [
@@ -109,7 +111,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     supabaseClient: superSupabase,
   });
 
-  return json({ surveyDetails, surveySummary, formTemplate, user });
+  const surveyResponses = await getAllSurveyResponseForSurveyId({
+    surveyId: params.surveyId!,
+    supabaseClient: superSupabase,
+  });
+
+  return json({
+    surveyDetails,
+    surveySummary,
+    formTemplate,
+    user,
+    surveyResponses,
+  });
 }
 
 export default function Templates() {
@@ -150,6 +163,7 @@ export default function Templates() {
           </Grid>
         </Box>
         <SurveyStatistics />
+        <SurveyResponses />
       </Box>
     </Box>
   );
