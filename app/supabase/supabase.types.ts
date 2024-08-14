@@ -35,4 +35,7 @@ export type SurveyVariant = Database["public"]["Enums"]["Survey Variants"];
 
 export type SurveyStatus = Database["public"]["Enums"]["Survey Status"];
 
+export type SurveyResponseRow =
+  Database["public"]["Tables"]["Survey_Responses"]["Row"];
+
 export type MySupabaseClient = SupabaseClient<Database>;
