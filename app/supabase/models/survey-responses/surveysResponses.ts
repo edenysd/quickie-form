@@ -16,3 +16,17 @@ export const insertSurveyResponse = async ({
   });
   return response;
 };
+
+export const getAllSurveyResponseForSurveyId = async ({
+  surveyId,
+  supabaseClient,
+}: {
+  surveyId: string;
+  supabaseClient: MySupabaseClient;
+}) => {
+  const response = await supabaseClient
+    .from("Survey_Responses")
+    .select()
+    .eq("survey_id", surveyId);
+  return response;
+};
