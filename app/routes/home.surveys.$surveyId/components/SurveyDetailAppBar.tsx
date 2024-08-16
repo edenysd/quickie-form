@@ -6,7 +6,7 @@ import type { ReactElement } from "react";
 import { useState } from "react";
 import CloseSurveyDialog from "~/components/CloseSurveyDialog";
 import { calculateOriginCoordsPercentageFromElement } from "~/components/Animations";
-import InputShareLink from "./InputShareLink";
+import InputShareSurveyLink from "./InputShareSurveyLink";
 
 function SurveyDetailAppBar() {
   const loaderData = useLoaderData<typeof loader>();
@@ -57,7 +57,7 @@ function SurveyDetailAppBar() {
             <Button onClick={handleClose} size="small" color="secondary">
               Close
             </Button>
-            {isSurveyOpen ? <InputShareLink /> : null}
+            {isSurveyOpen ? <InputShareSurveyLink /> : null}
           </Box>
         </Box>
       </AppAppBar>

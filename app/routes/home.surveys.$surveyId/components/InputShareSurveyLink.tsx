@@ -17,7 +17,7 @@ import {
 } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 
-export default function InputShareLink() {
+export default function InputShareSurveyLink() {
   const params = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const [shareLink, setShareLink] = useState<string | null>(null);
