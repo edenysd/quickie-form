@@ -15,6 +15,7 @@ import type { fieldSchema, sectionSchema } from "~/bot/schemas";
 import { BarChart, PieChart } from "@mui/x-charts";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { memo } from "react";
 function FieldStatistics({
   fieldSummary,
   fieldConfig,
@@ -625,7 +626,9 @@ const SectionStatistics = memo(function SectionStatistics({
       })}
     </Box>
   );
-}
+});
+
+export const TOOGLE_SHARE_STATISTICS_ACTION = "toggle-share-statistics-action";
 
 export default function SurveyStatistics() {
   const loaderData = useLoaderData<typeof loader>();
@@ -642,37 +645,20 @@ export default function SurveyStatistics() {
       width={"100%"}
       gap={1}
     >
-      <Box
-        width={"100%"}
-        display={"flex"}
-        flexDirection={"column"}
-        justifyContent={"space-between"}
-        flexWrap={"wrap"}
-        gap={2}
-      >
-        <Typography
-          variant="h4"
-          fontFamily={"Virgil"}
-          overflow={"hidden"}
-          textOverflow={"ellipsis"}
-        >
-          Results
-        </Typography>
-        {surveySummaryData ? (
-          formTemplateConfig?.map(
-            (sectionConfig: z.infer<typeof sectionSchema>) => (
-              <SectionStatistics
-                key={sectionConfig.name}
-                isSurveyOpen={isSurveyOpen}
-                sectionConfig={sectionConfig}
-                sectionSummary={surveySummaryData[sectionConfig.name]}
-              />
-            )
+      {surveySummaryData ? (
+        formTemplateConfig?.map(
+          (sectionConfig: z.infer<typeof sectionSchema>) => (
+            <SectionStatistics
+              key={sectionConfig.name}
+              isSurveyOpen={isSurveyOpen}
+              sectionConfig={sectionConfig}
+              sectionSummary={surveySummaryData[sectionConfig.name]}
+            />
           )
-        ) : (
-          <Alert severity="info">No data collected</Alert>
-        )}
-      </Box>
+        )
+      ) : (
+        <Alert severity="info">No data collected</Alert>
+      )}
     </Box>
   );
 }
