@@ -590,7 +590,7 @@ function FieldStatistics({
   );
 }
 
-function SectionStatistics({
+const SectionStatistics = memo(function SectionStatistics({
   sectionSummary,
   sectionConfig,
   isSurveyOpen,
