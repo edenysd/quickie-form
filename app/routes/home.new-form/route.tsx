@@ -6,7 +6,7 @@ import supabaseServerClient from "~/supabase/supabaseServerClient";
 import AppAppBar from "./components/NewFormAppBar";
 import ChatBox, { promptSchema } from "./components/ChatBox";
 import { parseWithZod } from "@conform-to/zod";
-import { generatedFormSchema } from "../../bot/schemas";
+import { generatedFormSchema } from "../../generative-models/form-template/schemas";
 import { processPrompt } from "~/supabase/models/form-templates/drafted/prompt";
 import { publishDialogActionContent } from "./components/PublishDialog";
 import {

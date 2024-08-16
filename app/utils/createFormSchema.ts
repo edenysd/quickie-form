@@ -4,7 +4,7 @@ import type {
   fieldSchema,
   generatedFormSchema,
   sectionSchema,
-} from "~/bot/schemas";
+} from "~/generative-models/form-template/schemas";
 
 export const getFinalFieldName = (fieldName: string, sectionName: string) =>
   sectionName + "#" + fieldName;

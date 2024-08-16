@@ -11,7 +11,10 @@ import type {
   SummaryTime,
 } from "~/utils/createSummaryFormObject";
 import type { z } from "zod";
-import type { fieldSchema, sectionSchema } from "~/bot/schemas";
+import type {
+  fieldSchema,
+  sectionSchema,
+} from "~/generative-models/form-template/schemas";
 import { BarChart, PieChart } from "@mui/x-charts";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";

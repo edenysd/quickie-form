@@ -3,7 +3,7 @@ import type {
   fieldSchema,
   generatedFormSchema,
   sectionSchema,
-} from "~/bot/schemas";
+} from "~/generative-models/form-template/schemas";
 import { getFinalFieldName } from "./createFormSchema";
 
 export type StructuredFormDataEntry = {

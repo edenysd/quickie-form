@@ -1,9 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { MergeDeep } from "type-fest";
 import type { Database as DatabaseGenerated } from "./database.types";
-import type { ChatHistory } from "~/bot/chat";
+import type { ChatHistory } from "~/generative-models/form-template/chat";
 import type { z } from "zod";
-import type { generatedFormSchema } from "~/bot/schemas";
+import type { generatedFormSchema } from "~/generative-models/form-template/schemas";
 
 type InjectionTypesToFormTemplates = {
   config: z.infer<typeof generatedFormSchema>;

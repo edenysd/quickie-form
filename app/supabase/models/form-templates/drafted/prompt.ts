@@ -1,5 +1,5 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { sendMessage } from "~/bot/chat";
+import { sendMessage } from "~/generative-models/form-template/chat";
 import { getHistoryFromDraftTemplate, saveHistory } from "./history";
 
 export const processPrompt = async ({

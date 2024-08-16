@@ -18,7 +18,10 @@ import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 import type { SurveyResponseRow } from "~/supabase/supabase.types";
 import { DoubleArrowTwoTone, VisibilityOutlined } from "@mui/icons-material";
-import type { fieldSchema, sectionSchema } from "~/bot/schemas";
+import type {
+  fieldSchema,
+  sectionSchema,
+} from "~/generative-models/form-template/schemas";
 import type { z } from "zod";
 
 function FieldResponse({

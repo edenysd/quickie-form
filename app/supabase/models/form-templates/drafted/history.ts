@@ -1,7 +1,7 @@
 import type { User } from "@supabase/supabase-js";
 import type { z } from "zod";
-import type { ChatHistory } from "~/bot/chat";
-import type { generatedFormSchema } from "~/bot/schemas";
+import type { ChatHistory } from "~/generative-models/form-template/chat";
+import type { generatedFormSchema } from "~/generative-models/form-template/schemas";
 import type { MySupabaseClient } from "~/supabase/supabase.types";
 
 export const getHistoryFromDraftTemplate = async (

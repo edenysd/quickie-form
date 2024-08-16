@@ -9,7 +9,7 @@ import SurveyStatistics from "../home.surveys.$surveyId/components/SurveyStatist
 
 export const meta: MetaFunction = ({ data }) => {
   return [
-    { title: `Survey Statistics | ${data.surveyDetails.data.survey_label}` },
+    { title: `Survey Results | ${data.surveyDetails.data.survey_label}` },
     {
       name: "description",
       content: "See all statistics about a specific survey",
@@ -87,7 +87,7 @@ export default function SharedSurveyStatistics() {
             overflow={"hidden"}
             textOverflow={"ellipsis"}
           >
-            {loaderData.surveyDetails.data?.survey_label}{" "}
+            Results {loaderData.surveyDetails.data?.survey_label}{" "}
           </Typography>
         </Box>
 
