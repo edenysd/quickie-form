@@ -1,4 +1,4 @@
-import { Box, Chip, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import type { loader } from "../route";
 import InputShareStatisticsLink from "./InputShareStatisticsLink";
@@ -47,32 +47,23 @@ export default function SurveyStatisticsWithActions() {
             >
               Results
             </Typography>
-            {loaderData.user ? (
-              <Chip
-                label={isResultShared ? "Shared" : "Private"}
-                variant="outlined"
-                onDelete={() => {}}
-                deleteIcon={<InputShareStatisticsLink />}
-              />
-            ) : null}
+            <InputShareStatisticsLink />
           </Box>
 
-          {loaderData.user ? (
-            <Box component={fetcher.Form} method="POST" m={0}>
-              <LoadingButton
-                loading={isPublishingSomeAction}
-                size="small"
-                variant="outlined"
-                name="_action"
-                value={TOOGLE_SHARE_STATISTICS_ACTION}
-                type="submit"
-                startIcon={<ShareOutlined />}
-                color={isResultShared ? "error" : "primary"}
-              >
-                {isResultShared ? "Stop Sharing" : "Share Satistics"}
-              </LoadingButton>
-            </Box>
-          ) : null}
+          <Box component={fetcher.Form} method="POST" m={0}>
+            <LoadingButton
+              loading={isPublishingSomeAction}
+              size="small"
+              variant="outlined"
+              name="_action"
+              value={TOOGLE_SHARE_STATISTICS_ACTION}
+              type="submit"
+              startIcon={<ShareOutlined />}
+              color={isResultShared ? "error" : "primary"}
+            >
+              {isResultShared ? "Stop Sharing Results" : "Share Results"}
+            </LoadingButton>
+          </Box>
         </Box>
         <SurveyStatistics />
       </Box>

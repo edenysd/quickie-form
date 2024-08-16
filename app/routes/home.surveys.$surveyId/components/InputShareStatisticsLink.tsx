@@ -58,15 +58,14 @@ export default function InputShareStatisticsLink(componentParams) {
     <>
       <IconButton
         {...componentParams}
-        size="small"
         color="primary"
         disabled={!isResultShared}
         onClick={handleOpenMenu}
       >
         {isResultShared ? (
-          <SendOutlined fontSize="small" color="primary" />
+          <SendOutlined color="primary" />
         ) : (
-          <CancelScheduleSend fontSize="small" />
+          <CancelScheduleSend />
         )}
       </IconButton>
       <Menu
