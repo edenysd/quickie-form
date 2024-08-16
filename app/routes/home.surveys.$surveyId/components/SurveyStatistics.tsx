@@ -16,6 +16,7 @@ import { BarChart, PieChart } from "@mui/x-charts";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { memo } from "react";
+import { isDeepEqual } from "@mui/x-data-grid/internals";
 function FieldStatistics({
   fieldSummary,
   fieldConfig,
@@ -623,7 +624,8 @@ const SectionStatistics = memo(function SectionStatistics({
       })}
     </Box>
   );
-});
+},
+isDeepEqual);
 
 export const TOOGLE_SHARE_STATISTICS_ACTION = "toggle-share-statistics-action";
 
