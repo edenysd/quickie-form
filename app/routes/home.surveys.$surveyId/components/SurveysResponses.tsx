@@ -268,7 +268,10 @@ export default function SurveyResponses() {
             disableColumnSelector
             disableColumnSorting
             disableDensitySelector
-            hideFooter
+            initialState={{
+              pagination: { paginationModel: { pageSize: 5 } },
+            }}
+            pageSizeOptions={[5, 10, 25, 50]}
           />
         ) : (
           <Alert severity="info">No data collected</Alert>
