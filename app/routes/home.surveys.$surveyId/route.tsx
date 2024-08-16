@@ -17,11 +17,10 @@ import { getSurveySummaryBySurveyId } from "~/supabase/models/survey-summaries/s
 import TotalSurveyCard from "./components/cards/TotalSurveyCard";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
 import LastCompletedCard from "./components/cards/LastCompletedCard";
-import SurveyStatistics, {
-  TOOGLE_SHARE_STATISTICS_ACTION,
-} from "./components/SurveyStatistics";
+import { TOOGLE_SHARE_STATISTICS_ACTION } from "./components/SurveyStatistics";
 import SurveyResponses from "./components/SurveysResponses";
 import { getAllSurveyResponseForSurveyId } from "~/supabase/models/survey-responses/surveysResponses";
+import SurveyStatisticsWithActions from "./components/SurveyStatisticsWithActions";
 
 export const meta: MetaFunction = ({ data }) => {
   return [
@@ -185,7 +184,7 @@ export default function Templates() {
             <LastCompletedCard />
           </Grid>
         </Box>
-        <SurveyStatistics />
+        <SurveyStatisticsWithActions />
         <SurveyResponses />
       </Box>
     </Box>
