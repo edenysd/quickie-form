@@ -7,6 +7,7 @@ import SurveyDetailAppBar from "./components/SurveyDetailAppBar";
 import {
   closeSurveyById,
   getSurveyById,
+  setSurveyShareStatisticsById,
 } from "~/supabase/models/surveys/surveys";
 import HeaderSurveyDetail from "./components/HeaderSurveyDetail";
 import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
@@ -16,7 +17,9 @@ import { getSurveySummaryBySurveyId } from "~/supabase/models/survey-summaries/s
 import TotalSurveyCard from "./components/cards/TotalSurveyCard";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
 import LastCompletedCard from "./components/cards/LastCompletedCard";
-import SurveyStatistics from "./components/SurveyStatistics";
+import SurveyStatistics, {
+  TOOGLE_SHARE_STATISTICS_ACTION,
+} from "./components/SurveyStatistics";
 import SurveyResponses from "./components/SurveysResponses";
 import { getAllSurveyResponseForSurveyId } from "~/supabase/models/survey-responses/surveysResponses";
 
@@ -30,7 +33,7 @@ export const meta: MetaFunction = ({ data }) => {
   ];
 };
 
-export async function action({ request }: LoaderFunctionArgs) {
+export async function action({ request, params }: LoaderFunctionArgs) {
   const headers = new Headers();
   const cookies = parse(request.headers.get("Cookie") ?? "");
 
@@ -52,8 +55,10 @@ export async function action({ request }: LoaderFunctionArgs) {
     return null;
   }
 
+  const routeSurveyId = params.surveyId!;
+
   if (_action === CLOSE_SURVEY_BY_ID_ACTION) {
-    const surveyId = formData.get("surveyId") as string;
+    const surveyId = (formData.get("surveyId") as string) || routeSurveyId;
 
     if (surveyId) {
       const response = await closeSurveyById({
@@ -76,6 +81,24 @@ export async function action({ request }: LoaderFunctionArgs) {
         surveyId,
       });
     }
+  } else if (_action === TOOGLE_SHARE_STATISTICS_ACTION) {
+    const surveyDetails = await getSurveyById({
+      supabaseClient: supabase,
+      surveyId: params.surveyId!,
+    });
+
+    const response = await setSurveyShareStatisticsById({
+      surveyId: routeSurveyId,
+      supabaseClient: supabase,
+      user,
+      newShareStatisticsValue: !surveyDetails.data?.is_statistics_shared,
+    });
+    return json({
+      error: response.error,
+      sucess: true,
+      _action: TOOGLE_SHARE_STATISTICS_ACTION,
+      surveyId: routeSurveyId,
+    });
   }
 
   return null;
