@@ -5,7 +5,6 @@ import { getSurveyById } from "~/supabase/models/surveys/surveys";
 import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
 import { getSurveySummaryBySurveyId } from "~/supabase/models/survey-summaries/surveysSummaries";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
-import { getAllSurveyResponseForSurveyId } from "~/supabase/models/survey-responses/surveysResponses";
 import SurveyStatistics from "../home.surveys.$surveyId/components/SurveyStatistics";
 
 export const meta: MetaFunction = ({ data }) => {
@@ -36,11 +35,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
     supabaseClient: superSupabase,
   });
 
-  const surveyResponses = await getAllSurveyResponseForSurveyId({
-    surveyId: params.surveyId!,
-    supabaseClient: superSupabase,
-  });
-
   if (!surveyDetails.data?.is_statistics_shared) {
     return redirect("/404");
   }
@@ -49,8 +43,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
     surveyDetails,
     surveySummary,
     formTemplate,
-    surveyResponses,
-    isStatisticsShared: !!surveyDetails.data?.is_statistics_shared,
   });
 }
 
