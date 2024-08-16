@@ -17,7 +17,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 import type { SurveyResponseRow } from "~/supabase/supabase.types";
-import { DoubleArrowTwoTone, VisibilityOutlined } from "@mui/icons-material";
+import {
+  CloseOutlined,
+  DoubleArrowTwoTone,
+  VisibilityOutlined,
+} from "@mui/icons-material";
 import type {
   fieldSchema,
   sectionSchema,
@@ -150,7 +154,17 @@ const GridActions = ({ row }: { row: SurveyResponseRow }) => {
         fullWidth
         maxWidth={"sm"}
       >
-        <DialogTitle>Response {row.id}</DialogTitle>
+        <DialogTitle
+          display={"flex"}
+          alignItems={"center"}
+          width={"100%"}
+          justifyContent={"space-between"}
+        >
+          Response {row.id}
+          <IconButton onClick={() => setOpen(false)}>
+            <CloseOutlined />
+          </IconButton>
+        </DialogTitle>
         <Box
           display={"flex"}
           flexDirection={"column"}
