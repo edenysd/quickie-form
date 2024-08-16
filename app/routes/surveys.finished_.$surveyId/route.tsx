@@ -1,6 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
-import { type MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import type { LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import { json, Link, useLoaderData, useParams } from "@remix-run/react";
+import { getSurveyById } from "~/supabase/models/surveys/surveys";
+import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
 
 export const meta: MetaFunction = () => {
   return [
@@ -12,7 +14,23 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export async function loader({ params }: LoaderFunctionArgs) {
+  const superSupabase = supabasePrivateServerClient();
+
+  const surveyDetails = await getSurveyById({
+    supabaseClient: superSupabase,
+    surveyId: params.surveyId!,
+  });
+
+  return json({
+    isStatisticsShared: surveyDetails.data?.is_statistics_shared,
+  });
+}
+
 export default function ResetPassword() {
+  const loaderData = useLoaderData<typeof loader>();
+
+  const params = useParams();
   return (
     <Box
       width={"100%"}
@@ -26,6 +44,13 @@ export default function ResetPassword() {
       <Typography variant="h3" textAlign={"center"} fontFamily={"Virgil"}>
         Thank you for complete the survey
       </Typography>
+      {loaderData.isStatisticsShared ? (
+        <Link to={`/surveys/statistics/${params.surveyId!}`}>
+          <Button variant="outlined" size="large" color="success">
+            See current results
+          </Button>
+        </Link>
+      ) : null}
       <Link to="/">
         <Button size="large">Go back</Button>
       </Link>
