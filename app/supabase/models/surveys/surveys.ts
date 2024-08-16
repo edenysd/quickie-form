@@ -97,3 +97,25 @@ export const closeSurveyById = async ({
 
   return response;
 };
+
+export const setSurveyShareStatisticsById = async ({
+  surveyId,
+  supabaseClient,
+  user,
+  newShareStatisticsValue,
+}: {
+  surveyId: string;
+  supabaseClient: MySupabaseClient;
+  user: User;
+  newShareStatisticsValue: boolean;
+}) => {
+  const response = await supabaseClient
+    ?.from("Surveys")
+    .update({
+      is_statistics_shared: newShareStatisticsValue,
+    })
+    .eq("id", surveyId)
+    .eq("owner", user?.id);
+
+  return response;
+};
