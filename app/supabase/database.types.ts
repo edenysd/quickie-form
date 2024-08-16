@@ -144,6 +144,7 @@ export type Database = {
           closed_at: string | null
           created_at: string
           id: string
+          is_statistics_shared: boolean | null
           owner: string | null
           survey_label: string | null
           survey_status: Database["public"]["Enums"]["Survey Status"] | null
@@ -154,6 +155,7 @@ export type Database = {
           closed_at?: string | null
           created_at?: string
           id?: string
+          is_statistics_shared?: boolean | null
           owner?: string | null
           survey_label?: string | null
           survey_status?: Database["public"]["Enums"]["Survey Status"] | null
@@ -164,6 +166,7 @@ export type Database = {
           closed_at?: string | null
           created_at?: string
           id?: string
+          is_statistics_shared?: boolean | null
           owner?: string | null
           survey_label?: string | null
           survey_status?: Database["public"]["Enums"]["Survey Status"] | null
