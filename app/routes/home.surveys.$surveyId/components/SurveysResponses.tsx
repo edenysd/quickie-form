@@ -53,6 +53,7 @@ function FieldResponse({
                     color: theme.palette.success.main,
                   },
                 })}
+                readOnly
               ></Rating>
             }
           ></Chip>
