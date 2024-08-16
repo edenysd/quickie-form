@@ -496,9 +496,6 @@ function FieldStatistics({
           }
         }
 
-        const optionIndex = Object.fromEntries(
-          fieldConfig.options?.map((option) => [option.id, option.label]) || []
-        );
         if (summarySingleValue.valueFrequency) {
           const seriesData = Object.entries(
             summarySingleValue.valueFrequency
