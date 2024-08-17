@@ -19,7 +19,6 @@ import { BarChart, PieChart } from "@mui/x-charts";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { memo } from "react";
-import { isDeepEqual } from "@mui/x-data-grid/internals";
 import { AutoAwesomeOutlined } from "@mui/icons-material";
 function FieldStatistics({
   fieldSummary,
@@ -617,54 +616,56 @@ const InsightsAlert = ({
   );
 };
 
-const SectionStatistics = memo(function SectionStatistics({
-  sectionSummary,
-  sectionConfig,
-  isSurveyOpen,
-}: {
-  sectionSummary: SummarySectionObjectType;
-  sectionConfig: z.infer<typeof sectionSchema>;
-  isSurveyOpen: boolean;
-}) {
-  return (
-    <Box
-      component={Paper}
-      variant="outlined"
-      p={{ xs: 1, md: 2 }}
-      display={"flex"}
-      flexDirection={"column"}
-      gap={3}
-    >
-      <Box>
-        <Typography variant="h5">{sectionConfig.label}</Typography>
-        <Typography variant="caption">{sectionConfig.placeholder}</Typography>
-      </Box>
-      {sectionConfig.fields.map((fieldConfig) => {
-        return (
-          <Box
-            key={fieldConfig.name}
-            display={"flex"}
-            flexDirection={"column"}
-            pl={{ xs: 0, md: 2 }}
-            gap={1}
-          >
-            <FieldStatistics
-              fieldConfig={fieldConfig}
-              fieldSummary={sectionSummary[fieldConfig.name]}
-              isSurveyOpen={isSurveyOpen}
-            />
-            {!isSurveyOpen ? (
-              <InsightsAlert
-                summaryFieldObject={sectionSummary[fieldConfig.name]}
+const SectionStatistics = memo(
+  function SectionStatistics({
+    sectionSummary,
+    sectionConfig,
+    isSurveyOpen,
+  }: {
+    sectionSummary: SummarySectionObjectType;
+    sectionConfig: z.infer<typeof sectionSchema>;
+    isSurveyOpen: boolean;
+  }) {
+    return (
+      <Box
+        component={Paper}
+        variant="outlined"
+        p={{ xs: 1, md: 2 }}
+        display={"flex"}
+        flexDirection={"column"}
+        gap={3}
+      >
+        <Box>
+          <Typography variant="h5">{sectionConfig.label}</Typography>
+          <Typography variant="caption">{sectionConfig.placeholder}</Typography>
+        </Box>
+        {sectionConfig.fields.map((fieldConfig) => {
+          return (
+            <Box
+              key={fieldConfig.name}
+              display={"flex"}
+              flexDirection={"column"}
+              pl={{ xs: 0, md: 2 }}
+              gap={1}
+            >
+              <FieldStatistics
+                fieldConfig={fieldConfig}
+                fieldSummary={sectionSummary[fieldConfig.name]}
+                isSurveyOpen={isSurveyOpen}
               />
-            ) : null}
-          </Box>
-        );
-      })}
-    </Box>
-  );
-},
-isDeepEqual);
+              {!isSurveyOpen ? (
+                <InsightsAlert
+                  summaryFieldObject={sectionSummary[fieldConfig.name]}
+                />
+              ) : null}
+            </Box>
+          );
+        })}
+      </Box>
+    );
+  },
+  (a, b) => JSON.stringify(a) === JSON.stringify(b)
+);
 
 export const TOOGLE_SHARE_STATISTICS_ACTION = "toggle-share-statistics-action";
 
