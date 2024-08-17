@@ -124,6 +124,8 @@ function allSummaryFieldsAreAlreadyGenerated(summary: SummaryFormObjectType) {
   return finishedFlag;
 }
 
+const currentCalculatingSurveys = new Set<string>();
+
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const headers = new Headers();
   const cookies = parse(request.headers.get("Cookie") ?? "");
@@ -164,8 +166,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     surveySummary.data?.summary_data &&
     !allSummaryFieldsAreAlreadyGenerated(
       surveySummary.data?.summary_data as SummaryFormObjectType
-    )
+    ) &&
+    !currentCalculatingSurveys.has(surveyDetails.data.id)
   ) {
+    const surveyId = surveyDetails.data.id;
+    currentCalculatingSurveys.add(surveyId);
     const generateAllMissingInsigths = async () => {
       const insightsResponse = await generateInsights({
         summary: surveySummary.data!.summary_data as SummaryFormObjectType,
@@ -214,6 +219,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           totalEntries: surveySummary.data?.total_entries || 0,
         });
       }
+      currentCalculatingSurveys.delete(surveyId);
     };
 
     generateAllMissingInsigths();
