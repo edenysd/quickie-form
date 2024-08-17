@@ -21,7 +21,6 @@ import {
   Grid,
   Rating,
   Slider,
-  Button,
   InputAdornment,
   IconButton,
 } from "@mui/material";
@@ -38,13 +37,14 @@ import {
 } from "../utils/createFormSchema";
 import { parseWithZod } from "@conform-to/zod";
 import { FormProvider, useField, useForm } from "@conform-to/react";
-import { Form } from "@remix-run/react";
+import { Form, useNavigation } from "@remix-run/react";
 import {
   getFormProps,
   getInputProps,
 } from "node_modules/@conform-to/react/helpers";
 import dayjs from "dayjs";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 
 function FormField({
   fieldConfig,
@@ -389,7 +389,7 @@ function FullFormComponent({
   action?: string;
 }) {
   const formValidationSchema = createFormValidationSchema(formConfig!);
-
+  const navigation = useNavigation();
   const [form, fields] = useForm({
     onValidate({ formData }) {
       const parse = parseWithZod(formData, { schema: formValidationSchema });
@@ -431,7 +431,8 @@ function FullFormComponent({
           ))}
         </FormProvider>
         {!hideSubmitButton ? (
-          <Button
+          <LoadingButton
+            loading={navigation.state !== "idle"}
             variant="outlined"
             name="_action"
             value="finish-survey"
@@ -440,7 +441,7 @@ function FullFormComponent({
             sx={{ m: 2 }}
           >
             Finish Form
-          </Button>
+          </LoadingButton>
         ) : null}
       </Box>
     </Paper>
