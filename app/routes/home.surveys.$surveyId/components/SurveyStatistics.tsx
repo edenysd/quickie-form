@@ -89,6 +89,7 @@ function FieldStatistics({
 
           TimeChart = (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={series}
               xAxis={[
@@ -143,6 +144,7 @@ function FieldStatistics({
 
           DaysOfTheWeekChart = (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               margin={{ left: 80, right: 80 }}
               layout="horizontal"
               height={300}
@@ -184,6 +186,7 @@ function FieldStatistics({
 
           DaysOfTheMonthChart = (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={series}
               xAxis={[
@@ -233,6 +236,7 @@ function FieldStatistics({
 
           MonthsChart = (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               margin={{ left: 80, right: 80 }}
               layout="horizontal"
               height={300}
@@ -275,6 +279,7 @@ function FieldStatistics({
 
           FullDateChart = (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={series}
               xAxis={[
@@ -326,6 +331,7 @@ function FieldStatistics({
 
           MinChart = (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={series}
               xAxis={[
@@ -364,6 +370,7 @@ function FieldStatistics({
 
           MaxChart = (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={series}
               xAxis={[
@@ -408,6 +415,7 @@ function FieldStatistics({
 
           CumulativeChart = (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={series}
               xAxis={[
@@ -445,6 +453,7 @@ function FieldStatistics({
 
           return (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={series}
               xAxis={[{ data: xAxisData, scaleType: "band" }]}
@@ -480,6 +489,7 @@ function FieldStatistics({
 
           return (
             <BarChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={series}
               xAxis={[{ data: xAxisData, scaleType: "band" }]}
@@ -511,6 +521,7 @@ function FieldStatistics({
 
           return (
             <PieChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={[
                 {
@@ -559,6 +570,7 @@ function FieldStatistics({
 
           return (
             <PieChart
+              sx={{ "&&": { touchAction: "auto" } }}
               height={300}
               series={[
                 {
