@@ -75,7 +75,20 @@ function FieldResponse({
       case "number":
       case "text":
         return (
-          <Chip variant="outlined" color="success" label={fieldContent}></Chip>
+          <Chip
+            sx={{
+              height: "100%",
+              p: 0.6,
+              "& .MuiChip-label": {
+                display: "flex",
+                whiteSpace: "normal",
+              },
+            }}
+            size="medium"
+            variant="outlined"
+            color="success"
+            label={fieldContent}
+          ></Chip>
         );
       case "range":
         return (
