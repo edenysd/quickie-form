@@ -13,7 +13,7 @@ import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import { MuiProvider } from "./mui/MuiProvider";
 
-const ABORT_DELAY = 5_000;
+const ABORT_DELAY = 30_000;
 
 export default function handleRequest(
   request: Request,
