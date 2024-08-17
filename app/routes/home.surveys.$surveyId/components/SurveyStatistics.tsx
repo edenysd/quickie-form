@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { memo } from "react";
 import { isDeepEqual } from "@mui/x-data-grid/internals";
+import { AutoAwesomeOutlined } from "@mui/icons-material";
 function FieldStatistics({
   fieldSummary,
   fieldConfig,
@@ -592,6 +593,30 @@ function FieldStatistics({
   );
 }
 
+const InsightsAlert = ({
+  summaryFieldObject,
+}: {
+  summaryFieldObject: SummaryFieldObjectType;
+}) => {
+  return (
+    <>
+      {summaryFieldObject?.summaryMessage ? (
+        <Alert severity="info" icon={<AutoAwesomeOutlined />}>
+          <Typography fontStyle={"italic"}>
+            {summaryFieldObject?.summaryMessage}
+          </Typography>
+        </Alert>
+      ) : (
+        <Alert severity="warning" icon={<AutoAwesomeOutlined />}>
+          <Typography fontStyle={"italic"}>
+            Working in your AI powered insights
+          </Typography>
+        </Alert>
+      )}
+    </>
+  );
+};
+
 const SectionStatistics = memo(function SectionStatistics({
   sectionSummary,
   sectionConfig,
@@ -616,12 +641,23 @@ const SectionStatistics = memo(function SectionStatistics({
       </Box>
       {sectionConfig.fields.map((fieldConfig) => {
         return (
-          <Box key={fieldConfig.name} pl={{ xs: 0, md: 2 }}>
+          <Box
+            key={fieldConfig.name}
+            display={"flex"}
+            flexDirection={"column"}
+            pl={{ xs: 0, md: 2 }}
+            gap={1}
+          >
             <FieldStatistics
               fieldConfig={fieldConfig}
               fieldSummary={sectionSummary[fieldConfig.name]}
               isSurveyOpen={isSurveyOpen}
             />
+            {!isSurveyOpen ? (
+              <InsightsAlert
+                summaryFieldObject={sectionSummary[fieldConfig.name]}
+              />
+            ) : null}
           </Box>
         );
       })}
