@@ -6,7 +6,7 @@ import type {
 } from "~/generative-models/form-template/schemas";
 
 type AssistedSummary = {
-  sumaryMessage: string | null;
+  summaryMessage: string | null;
 };
 
 export type SummaryTime = {
@@ -92,7 +92,7 @@ export const createSummaryFormObject = (
                     break;
                 }
                 //
-                value.sumaryMessage = null;
+                value.summaryMessage = null;
                 return [fieldConfigSchema.name, value];
               }
             )
