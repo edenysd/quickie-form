@@ -13,7 +13,10 @@ import HeaderSurveyDetail from "./components/HeaderSurveyDetail";
 import { getFormTemplateById } from "~/supabase/models/form-templates/forms";
 import FormTemplateCard from "./components/cards/FormTemplateCard";
 import { CLOSE_SURVEY_BY_ID_ACTION } from "~/components/CloseSurveyDialog";
-import { getSurveySummaryBySurveyId } from "~/supabase/models/survey-summaries/surveysSummaries";
+import {
+  getSurveySummaryBySurveyId,
+  upsertSurveySummary,
+} from "~/supabase/models/survey-summaries/surveysSummaries";
 import TotalSurveyCard from "./components/cards/TotalSurveyCard";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
 import LastCompletedCard from "./components/cards/LastCompletedCard";
@@ -21,6 +24,11 @@ import { TOOGLE_SHARE_STATISTICS_ACTION } from "./components/SurveyStatistics";
 import SurveyResponses from "./components/SurveysResponses";
 import { getAllSurveyResponseForSurveyId } from "~/supabase/models/survey-responses/surveysResponses";
 import SurveyStatisticsWithActions from "./components/SurveyStatisticsWithActions";
+import { generateInsights } from "~/generative-models/resume-insights/model";
+import type { SummaryFormObjectType } from "~/utils/createSummaryFormObject";
+import type { z } from "zod";
+import type { generatedFormSchema } from "~/generative-models/form-template/schemas";
+import type { StructuredFormDataEntry } from "~/utils/fromFormPlainNamesToObject";
 
 export const meta: MetaFunction = ({ data }) => {
   return [
@@ -103,6 +111,19 @@ export async function action({ request, params }: LoaderFunctionArgs) {
   return null;
 }
 
+function allSummaryFieldsAreAlreadyGenerated(summary: SummaryFormObjectType) {
+  let finishedFlag = true;
+  Object.entries(summary).forEach((entrieSection) => {
+    Object.entries(entrieSection[1]).forEach((entrieField) => {
+      if (!entrieField[1]?.summaryMessage) {
+        finishedFlag = false;
+      }
+    });
+  });
+
+  return finishedFlag;
+}
+
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const headers = new Headers();
   const cookies = parse(request.headers.get("Cookie") ?? "");
@@ -128,7 +149,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     templateId: surveyDetails.data!.template_id!.toString(),
   });
 
-  const surveySummary = await getSurveySummaryBySurveyId({
+  let surveySummary = await getSurveySummaryBySurveyId({
     surveyId: params.surveyId!,
     supabaseClient: superSupabase,
   });
@@ -138,6 +159,65 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     supabaseClient: superSupabase,
   });
 
+  if (
+    surveyDetails.data?.survey_status === "closed" &&
+    surveySummary.data?.summary_data &&
+    !allSummaryFieldsAreAlreadyGenerated(
+      surveySummary.data?.summary_data as SummaryFormObjectType
+    )
+  ) {
+    const insightsResponse = await generateInsights({
+      summary: surveySummary.data!.summary_data as SummaryFormObjectType,
+      formConfig: formTemplate.data?.config as z.infer<
+        typeof generatedFormSchema
+      >,
+      surveyResponses: (surveyResponses.data?.map((surveyResponseRow) => {
+        return surveyResponseRow.data_entry;
+      }) || []) as StructuredFormDataEntry[],
+    });
+
+    const insightsObject = insightsResponse.object;
+
+    const newSummaryData = structuredClone(
+      surveySummary.data?.summary_data
+    ) as SummaryFormObjectType;
+
+    if (newSummaryData && insightsObject) {
+      Object.entries(newSummaryData).forEach((entrieSummarySection) => {
+        Object.entries(entrieSummarySection[1]).forEach(
+          (entrieSummaryField) => {
+            if (
+              newSummaryData[entrieSummarySection[0]]![
+                entrieSummaryField[0]
+              ] === null
+            ) {
+              newSummaryData[entrieSummarySection[0]]![entrieSummaryField[0]] =
+                { summaryMessage: null };
+            }
+
+            newSummaryData[entrieSummarySection[0]]![
+              entrieSummaryField[0]
+            ]!.summaryMessage =
+              insightsObject[entrieSummarySection[0]][
+                entrieSummaryField[0]
+              ].summaryMessage;
+          }
+        );
+      });
+      await upsertSurveySummary({
+        surveyId: params.surveyId!,
+        surveySummaryId: surveySummary.data?.id,
+        dataResume: newSummaryData,
+        supabaseClient: superSupabase,
+        totalEntries: surveySummary.data?.total_entries || 0,
+      });
+
+      surveySummary = await getSurveySummaryBySurveyId({
+        surveyId: params.surveyId!,
+        supabaseClient: superSupabase,
+      });
+    }
+  }
   return json({
     surveyDetails,
     surveySummary,
