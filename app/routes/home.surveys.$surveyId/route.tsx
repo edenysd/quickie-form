@@ -149,7 +149,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     templateId: surveyDetails.data!.template_id!.toString(),
   });
 
-  let surveySummary = await getSurveySummaryBySurveyId({
+  const surveySummary = await getSurveySummaryBySurveyId({
     surveyId: params.surveyId!,
     supabaseClient: superSupabase,
   });
@@ -166,58 +166,59 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       surveySummary.data?.summary_data as SummaryFormObjectType
     )
   ) {
-    const insightsResponse = await generateInsights({
-      summary: surveySummary.data!.summary_data as SummaryFormObjectType,
-      formConfig: formTemplate.data?.config as z.infer<
-        typeof generatedFormSchema
-      >,
-      surveyResponses: (surveyResponses.data?.map((surveyResponseRow) => {
-        return surveyResponseRow.data_entry;
-      }) || []) as StructuredFormDataEntry[],
-    });
+    const generateAllMissingInsigths = async () => {
+      const insightsResponse = await generateInsights({
+        summary: surveySummary.data!.summary_data as SummaryFormObjectType,
+        formConfig: formTemplate.data?.config as z.infer<
+          typeof generatedFormSchema
+        >,
+        surveyResponses: (surveyResponses.data?.map((surveyResponseRow) => {
+          return surveyResponseRow.data_entry;
+        }) || []) as StructuredFormDataEntry[],
+      });
 
-    const insightsObject = insightsResponse.object;
+      const insightsObject = insightsResponse.object;
 
-    const newSummaryData = structuredClone(
-      surveySummary.data?.summary_data
-    ) as SummaryFormObjectType;
+      const newSummaryData = structuredClone(
+        surveySummary.data?.summary_data
+      ) as SummaryFormObjectType;
 
-    if (newSummaryData && insightsObject) {
-      Object.entries(newSummaryData).forEach((entrieSummarySection) => {
-        Object.entries(entrieSummarySection[1]).forEach(
-          (entrieSummaryField) => {
-            if (
+      if (newSummaryData && insightsObject) {
+        Object.entries(newSummaryData).forEach((entrieSummarySection) => {
+          Object.entries(entrieSummarySection[1]).forEach(
+            (entrieSummaryField) => {
+              if (
+                newSummaryData[entrieSummarySection[0]]![
+                  entrieSummaryField[0]
+                ] === null
+              ) {
+                newSummaryData[entrieSummarySection[0]]![
+                  entrieSummaryField[0]
+                ] = { summaryMessage: null };
+              }
+
               newSummaryData[entrieSummarySection[0]]![
                 entrieSummaryField[0]
-              ] === null
-            ) {
-              newSummaryData[entrieSummarySection[0]]![entrieSummaryField[0]] =
-                { summaryMessage: null };
+              ]!.summaryMessage =
+                insightsObject[entrieSummarySection[0]][
+                  entrieSummaryField[0]
+                ].summaryMessage;
             }
+          );
+        });
+        await upsertSurveySummary({
+          surveyId: params.surveyId!,
+          surveySummaryId: surveySummary.data?.id,
+          dataResume: newSummaryData,
+          supabaseClient: superSupabase,
+          totalEntries: surveySummary.data?.total_entries || 0,
+        });
+      }
+    };
 
-            newSummaryData[entrieSummarySection[0]]![
-              entrieSummaryField[0]
-            ]!.summaryMessage =
-              insightsObject[entrieSummarySection[0]][
-                entrieSummaryField[0]
-              ].summaryMessage;
-          }
-        );
-      });
-      await upsertSurveySummary({
-        surveyId: params.surveyId!,
-        surveySummaryId: surveySummary.data?.id,
-        dataResume: newSummaryData,
-        supabaseClient: superSupabase,
-        totalEntries: surveySummary.data?.total_entries || 0,
-      });
-
-      surveySummary = await getSurveySummaryBySurveyId({
-        surveyId: params.surveyId!,
-        supabaseClient: superSupabase,
-      });
-    }
+    generateAllMissingInsigths();
   }
+
   return json({
     surveyDetails,
     surveySummary,
