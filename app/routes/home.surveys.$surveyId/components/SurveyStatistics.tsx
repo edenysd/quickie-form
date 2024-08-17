@@ -514,6 +514,8 @@ function FieldStatistics({
               height={300}
               series={[
                 {
+                  arcLabel: (item) => `${item.label} (${item.value})`,
+                  arcLabelMinAngle: 45,
                   highlightScope: { faded: "global", highlighted: "item" },
                   faded: {
                     innerRadius: 30,
@@ -560,6 +562,8 @@ function FieldStatistics({
               height={300}
               series={[
                 {
+                  arcLabel: (item) => `${item.label} (${item.value})`,
+                  arcLabelMinAngle: 45,
                   highlightScope: { faded: "global", highlighted: "item" },
                   faded: {
                     innerRadius: 30,
