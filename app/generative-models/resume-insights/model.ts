@@ -42,6 +42,7 @@ Return the completed insights allways follow the next directives:
  - Check suspicious inputs
  - Be precise with the stats
  - Make your insights large if there are many things to say
+ - Always use the same languaje that the form template labels and placeholders.
 `;
 
 function generateSurveySummarySchema(summary: SummaryFormObjectType) {
