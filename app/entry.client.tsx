@@ -58,6 +58,7 @@ startTransition(() => {
     {
       //Used to fix hydratation errors with extensions in case that our filter wont work
       onRecoverableError: () => {
+        clearBrowserExtensionInjectionsBeforeHydration();
         console.info("Hydration failed! Attempting recovery...");
         root.render(
           <StrictMode>
