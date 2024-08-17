@@ -42,7 +42,7 @@ Return the completed insights allways follow the next directives:
  - Check suspicious inputs
  - Be precise with the stats
  - Make your insights large if there are many things to say
- - Always use the same languaje that the form template labels and placeholders.
+ - Ignore languaje used before, ALWAYS use the same languaje that the form configuration labels and placeholders, this is mandatory.
 `;
 
 function generateSurveySummarySchema(summary: SummaryFormObjectType) {
