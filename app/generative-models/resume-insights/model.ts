@@ -19,30 +19,31 @@ const createSystemInstruction = (
   surveyResponses: StructuredFormDataEntry[],
   summary: SummaryFormObjectType
 ) =>
-  `The next JSON describes a form configuration:
+  `The next JSON describes a form configuration, all of the insights responses
+must use the same languaje that the informative fields:
 
 ${JSON.stringify(formConfig)}
 
-All the next entries are individual responses to the described form
+All the next entries are individual responses to the described form.
 
 ${JSON.stringify(surveyResponses)}
 
 Your are an expert matematician, the next JSON is a frequency analysis
-calculated by you for every individual field in the form described. Your task is given
-the frequency analisis and all the individual responses to the form, give top
-deep and precise insights for every field in the form completing all the 
-*summaryMessage* values in the frequency analysis and return the frequency analysis
-fully completed.
+calculated by you for every individual field in the form described. 
 
 ${JSON.stringify(summary)}
 
+Your task is given the frequency analisis and all the individual responses 
+to the form, give BEST deep and precise insights for every field in the form completing all the 
+*summaryMessage* values in the frequency analysis. Be expresive in every field.
+
 Return the completed insights allways follow the next directives:
  - Always use proper JSON format
- - Always try to extract all meaningfull insights
- - Check suspicious inputs
+ - Check suspicious inputs and report that cases
  - Be precise with the stats
- - Make your insights large if there are many things to say
- - Ignore languaje used before, ALWAYS use the same languaje that the form configuration labels and placeholders, this is mandatory.
+ - Make your insights as large as possible if there are many things to say
+ - ALWAYS use the same languaje that the form configuration, this is mandatory.
+ Overrride any insights that not comply with this restriction
 `;
 
 function generateSurveySummarySchema(summary: SummaryFormObjectType) {
@@ -85,18 +86,21 @@ export const generateInsights = async ({
       mode: "json",
       model,
       schema: specificSchema,
-      prompt: createSystemInstruction(formConfig, surveyResponses, summary),
+      system: createSystemInstruction(formConfig, surveyResponses, summary),
+      prompt:
+        "Generate all the insights using the same languaje that the JSON form configuration",
     });
     return response;
   } catch (e) {
+    console.log();
     const response = await generateObject({
       ...GENERATION_CONFIG,
       mode: "json",
       model,
       schema: specificSchema,
-      prompt:
-        createSystemInstruction(formConfig, surveyResponses, summary) +
-        `\nThis error needs to be fixed in your response ${e.cause}`,
+      system: createSystemInstruction(formConfig, surveyResponses, summary),
+      prompt: `Generate all the insights using the same languaje that the JSON form configuration. 
+      This error needs to be fixed in your response ${e.cause}, always comply with the directives`,
     });
     return response;
   }
