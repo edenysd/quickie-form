@@ -533,8 +533,6 @@ function FieldStatistics({
                     additionalRadius: -30,
                     color: "gray",
                   },
-                  // arcLabel: (item) => `${item.label} (${item.value})`,
-                  arcLabelMinAngle: 45,
                   data: seriesData,
                 },
               ]}
@@ -582,8 +580,6 @@ function FieldStatistics({
                     additionalRadius: -30,
                     color: "gray",
                   },
-                  // arcLabel: (item) => `${item.label} (${item.value})`,
-                  arcLabelMinAngle: 45,
                   data: seriesData,
                 },
               ]}
