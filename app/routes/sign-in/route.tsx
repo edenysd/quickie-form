@@ -18,7 +18,7 @@ import { LoadingButton } from "@mui/lab";
 import z from "zod";
 import { getInputProps, useForm } from "@conform-to/react";
 import { getZodConstraint, parseWithZod } from "@conform-to/zod";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@vercel/remix";
 import supabaseServerClient from "~/supabase/supabaseServerClient";
 import { parse } from "@supabase/ssr";
 

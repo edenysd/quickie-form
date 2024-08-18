@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@vercel/remix";
 import {
   json,
   redirect,

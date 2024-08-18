@@ -7,7 +7,7 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { MuiMeta } from "./mui/MuiMeta";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@vercel/remix";
 import { getMuiLinks } from "./mui/getMuiLinks";
 import { createBrowserClient } from "@supabase/ssr";
 import SupabaseBrowserClientContext from "./supabase/SupabaseBrowserClientContext";

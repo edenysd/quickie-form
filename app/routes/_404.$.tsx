@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
-import { json, type MetaFunction } from "@remix-run/node";
+import { json, type MetaFunction } from "@vercel/remix";
 import { Link } from "@remix-run/react";
 
 export const loader = () => {

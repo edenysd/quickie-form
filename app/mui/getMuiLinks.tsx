@@ -1,4 +1,4 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@vercel/remix";
 
 export const getMuiLinks: LinksFunction = () => [
   // Google Fonts for MUI

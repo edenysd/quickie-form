@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
-import type { LoaderFunctionArgs, type MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, type MetaFunction } from "@vercel/remix";
 import { json, Link, useLoaderData, useParams } from "@remix-run/react";
 import { getSurveyById } from "~/supabase/models/surveys/surveys";
 import supabasePrivateServerClient from "~/supabase/supabasePrivateServerClient";
