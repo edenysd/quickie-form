@@ -9,6 +9,7 @@ import {
 import { MuiMeta } from "./mui/MuiMeta";
 import type { LinksFunction } from "@vercel/remix";
 import { getMuiLinks } from "./mui/getMuiLinks";
+import { Analytics } from "@vercel/analytics/react";
 import { createBrowserClient } from "@supabase/ssr";
 import SupabaseBrowserClientContext from "./supabase/SupabaseBrowserClientContext";
 import { useMemo } from "react";
@@ -42,6 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div id="root">{children}</div>
         <ScrollRestoration />
         <Scripts />
+        <Analytics />
       </body>
     </html>
   );
