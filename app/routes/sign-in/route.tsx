@@ -9,7 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Link, redirect, useNavigate } from "@remix-run/react";
+import { Form, Link, redirect, useNavigate } from "@remix-run/react";
 import Copyright from "~/components/Copyright";
 import type { FormEvent } from "react";
 import { useCallback, useContext, useReducer, useState } from "react";
@@ -96,7 +96,6 @@ export default function SignInSide() {
   );
 
   const [form, fields] = useForm({
-    id: "sign-in",
     constraint: getZodConstraint(formSchema),
     // Then, revalidate field as user types again
     shouldRevalidate: "onInput",
@@ -206,20 +205,51 @@ export default function SignInSide() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
             >
               Sign In
             </LoadingButton>
-            <Grid container>
-              <Grid item xs>
-                <Link to="/reset-password">Forgot password?</Link>
-              </Grid>
-              <Grid item>
-                <Link to="/sign-up">{"Don't have an account? Sign Up"}</Link>
-              </Grid>
-            </Grid>
-            <Copyright sx={{ mt: 5 }} />
           </Box>
+          <Box
+            noValidate
+            width={"100%"}
+            display={"flex"}
+            flexDirection={"column"}
+            component={"form"}
+            name="sign-in-demo"
+            id={"sign-in-demo"}
+            onSubmit={tryToSignIn}
+          >
+            <input
+              name="email"
+              type="hidden"
+              id="demo-email"
+              value={"test@email.com"}
+            />
+            <input
+              name="password"
+              type="hidden"
+              id="demo-password"
+              value={"12345678"}
+            />
+            <LoadingButton
+              loading={isLoading}
+              type="submit"
+              color="secondary"
+              fullWidth
+              variant="contained"
+            >
+              Use demo account
+            </LoadingButton>
+          </Box>
+          <Grid container>
+            <Grid item xs>
+              <Link to="/reset-password">Forgot password?</Link>
+            </Grid>
+            <Grid item>
+              <Link to="/sign-up">{"Don't have an account? Sign Up"}</Link>
+            </Grid>
+          </Grid>
+          <Copyright sx={{ mt: 5 }} />
         </Box>
       </Grid>
     </Grid>
