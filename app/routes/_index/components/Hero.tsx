@@ -126,7 +126,7 @@ export default function Hero() {
             item
             xs={12}
             lg={6}
-            direction={"column"}
+            flexDirection={"column"}
             display={"flex"}
             gap={1}
           >
@@ -147,7 +147,7 @@ export default function Hero() {
             item
             xs={12}
             lg={6}
-            direction={"column"}
+            flexDirection={"column"}
             display={"flex"}
             gap={1}
           >
@@ -168,7 +168,7 @@ export default function Hero() {
             item
             xs={12}
             lg={6}
-            direction={"column"}
+            flexDirection={"column"}
             display={"flex"}
             gap={1}
           >
