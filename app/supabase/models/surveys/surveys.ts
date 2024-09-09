@@ -119,3 +119,15 @@ export const setSurveyShareStatisticsById = async ({
 
   return response;
 };
+
+export const getTotalRunningSurveys = async ({
+  supabaseClient,
+}: {
+  supabaseClient: MySupabaseClient;
+}) => {
+  const response = await supabaseClient
+    ?.from("Surveys")
+    .select("*", { count: "exact", head: true })
+    .eq("survey_status", "open");
+  return response;
+};
