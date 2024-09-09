@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/chron-jobs/get-status",
+      "schedule": "0 10 * * *"
+    }
+  ]
+}
