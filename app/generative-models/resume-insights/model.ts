@@ -1,17 +1,17 @@
-import { google } from "@ai-sdk/google";
-import { generateObject } from "ai";
-import type { SummaryFormObjectType } from "~/utils/createSummaryFormObject";
-import type { generatedFormSchema } from "../form-template/schemas";
-import { z } from "zod";
-import type { StructuredFormDataEntry } from "~/utils/fromFormPlainNamesToObject";
+import {google} from '@ai-sdk/google';
+import {generateObject} from 'ai';
+import type {SummaryFormObjectType} from '~/utils/createSummaryFormObject';
+import type {generatedFormSchema} from '../form-template/schemas';
+import {z} from 'zod';
+import type {StructuredFormDataEntry} from '~/utils/fromFormPlainNamesToObject';
 
 export const GENERATION_CONFIG = {
   topP: 0.95,
-  frequencyPenalty: 0,
+  frequencyPenalty: 0
 };
 
-export const model = google("models/gemini-1.5-flash-latest", {
-  topK: 64,
+export const model = google('models/gemini-2-flash-latest', {
+  topK: 64
 });
 
 const createSystemInstruction = (
@@ -58,12 +58,12 @@ function generateSurveySummarySchema(summary: SummaryFormObjectType) {
                 return [
                   entrieField[0],
                   z.object({
-                    summaryMessage: z.string().min(30),
-                  }),
+                    summaryMessage: z.string().min(30)
+                  })
                 ];
               })
             )
-          ),
+          )
         ];
       })
     )
@@ -73,7 +73,7 @@ function generateSurveySummarySchema(summary: SummaryFormObjectType) {
 export const generateInsights = async ({
   summary,
   surveyResponses,
-  formConfig,
+  formConfig
 }: {
   summary: SummaryFormObjectType;
   surveyResponses: StructuredFormDataEntry[];
@@ -83,24 +83,24 @@ export const generateInsights = async ({
   try {
     const response = await generateObject({
       ...GENERATION_CONFIG,
-      mode: "json",
+      mode: 'json',
       model,
       schema: specificSchema,
       system: createSystemInstruction(formConfig, surveyResponses, summary),
       prompt:
-        "Generate all the insights using the same languaje that the JSON form configuration",
+        'Generate all the insights using the same languaje that the JSON form configuration'
     });
     return response;
   } catch (e) {
     console.log();
     const response = await generateObject({
       ...GENERATION_CONFIG,
-      mode: "json",
+      mode: 'json',
       model,
       schema: specificSchema,
       system: createSystemInstruction(formConfig, surveyResponses, summary),
       prompt: `Generate all the insights using the same languaje that the JSON form configuration. 
-      This error needs to be fixed in your response ${e.cause}, always comply with the directives`,
+      This error needs to be fixed in your response ${e.cause}, always comply with the directives`
     });
     return response;
   }
