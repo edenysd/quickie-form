@@ -1,11 +1,12 @@
-import { generateForm } from "./model";
+import {generateForm} from './model';
 import type {
   CoreAssistantMessage,
   CoreSystemMessage,
   CoreToolMessage,
-  CoreUserMessage,
-} from "ai";
-import { generatedFormSchema } from "./schemas";
+  CoreUserMessage
+} from 'ai';
+import {generatedFormSchema} from './schemas';
+import {google} from '@ai-sdk/google';
 
 export type MessageVariant =
   | CoreSystemMessage
@@ -16,24 +17,24 @@ export type ChatHistory = Array<MessageVariant>;
 
 export async function sendMessage({
   history,
-  messageContent,
+  messageContent
 }: {
   history: ChatHistory;
   messageContent: string;
 }) {
   const prefixMessage =
     history.length === 0
-      ? "Create a form for the next situation, start using the languague of the situation description: "
-      : "";
+      ? 'Create a form for the next situation, start using the languague of the situation description: '
+      : '';
   const message: CoreUserMessage = {
-    role: "user",
-    content: prefixMessage + messageContent,
+    role: 'user',
+    content: prefixMessage + messageContent
   };
 
   let formConfig = [];
 
   try {
-    const response = await generateForm({ history: history.concat(message) });
+    const response = await generateForm({history: history.concat(message)});
     formConfig = response.object;
   } catch (e) {
     /* 
@@ -42,8 +43,10 @@ export async function sendMessage({
       Ex: When error name is "AI_APICallError" the Zod schema throw a non useful error
       then we decide to manually extract the response and validate in a more lean process
      */
+
+    console.error('Error: ', e);
     let errorDataValue = null;
-    if (e.name === "AI_APICallError") {
+    if (e.name === 'AI_APICallError') {
       errorDataValue = JSON.parse(e.responseBody).candidates[0].content
         ?.parts[0].text;
       if (!errorDataValue || errorDataValue?.length == 0) errorDataValue = [];
@@ -62,17 +65,16 @@ export async function sendMessage({
         history: history
           .concat(message)
           .concat({
-            role: "assistant",
-            content: JSON.stringify(errorDataValue),
+            role: 'assistant',
+            content: JSON.stringify(errorDataValue)
           })
           .concat({
-            role: "assistant",
+            role: 'assistant',
             content: `Fix the json format in your latest response, this is the error message:\n ${JSON.stringify(
               responseValidation.error
-            )}, please infer the language response from the last user interaction.`,
-          }),
+            )}, please infer the language response from the last user interaction.`
+          })
       });
-
       formConfig = response.object;
     }
   }
@@ -80,9 +82,9 @@ export async function sendMessage({
   history.push(message);
 
   history.push({
-    role: "assistant",
-    content: JSON.stringify(formConfig),
+    role: 'assistant',
+    content: JSON.stringify(formConfig)
   });
 
-  return { formConfig, history };
+  return {formConfig, history};
 }

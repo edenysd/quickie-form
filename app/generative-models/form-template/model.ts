@@ -12,7 +12,7 @@ export const GENERATION_CONFIG = {
 
 export const systemInstruction = baseAgentInstruction;
 
-export const model = google('models/gemini-2-flash-latest', {
+export const model = google('models/gemini-2.0-flash-001', {
   topK: 64
 });
 

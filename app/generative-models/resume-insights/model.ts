@@ -10,7 +10,7 @@ export const GENERATION_CONFIG = {
   frequencyPenalty: 0
 };
 
-export const model = google('models/gemini-2-flash-latest', {
+export const model = google('models/gemini-2.0-flash-001', {
   topK: 64
 });
 
